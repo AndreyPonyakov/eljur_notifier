@@ -9,7 +9,7 @@ namespace Eljur
 {
     class Firebird
     {
-        public static void Do_something()
+        public static void DoSomething()
         {
             System.Console.WriteLine("HELLO");
 
@@ -17,7 +17,6 @@ namespace Eljur
                 "User=SYSDBA;" +
                 "Password=masterkey;" +
                 "Database=D:/School/Backup_PERCo_04.10.18/Backup_PERCo_04.10.18/4.10.18_9.23/NEWBASE.FDB;" +
-                //"DataSource=roman-book;" +
                 "Port=3050;" +
                 "Dialect=3;" +
                 "Charset=WIN1251;" +
@@ -27,24 +26,57 @@ namespace Eljur
                 "MinPoolSize=0;" +
                 "MaxPoolSize=50;" +
                 "Packet Size=8192;" +
-                "ServerType=0;";
+                "ServerType=0;";//указываем тип сервера (0 - "полноценный Firebird" (classic или super server), 1 - встроенный (embedded))
             FbConnection fbcon = new FbConnection(connectionString);
-
-            //FbConnectionStringBuilder fb_con = new FbConnectionStringBuilder();
-            //fb_con.Charset = "UTF-8";
-            //fb_con.UserID = "sysdba";
-            //fb_con.Password = "masterkey";
-            ////fb_con.Database = "D:/School/Backup_PERCo_04.10.18/Backup_PERCo_04.10.18/4.10.18_9.23/NEWBASE.FDB";
-            //fb_con.Database = @"D:\School\Backup_PERCo_04.10.18\Backup_PERCo_04.10.18\4.10.18_9.23\NEWBASE.FDB";
-            //fb_con.ServerType = 0;
-
-            //FbConnection fb = new FbConnection(fb_con.ToString());
 
             fbcon.Open();
 
             FbDatabaseInfo fb_inf = new FbDatabaseInfo(fbcon);
 
             System.Console.WriteLine("Info: " + fb_inf.ServerClass + "; " + fb_inf.ServerVersion);
+
+            //String sSQL = "select * from STAFF";
+
+
+            //FbCommand fbcmd = new FirebirdSql.Data.FirebirdClient.FbCommand(sSQL, fbcon);
+
+            FbCommand command = fbcon.CreateCommand();
+
+            command.CommandText = "select * from STAFF";
+
+            FbDataReader reader = command.ExecuteReader();
+
+            int count = 0;
+            int intValue = 0;
+
+            while (reader.Read())
+            {
+                if (count == 0) 
+                {
+                    intValue = reader.GetInt32(0);
+                    String param0 = reader[0].ToString();
+                    String param1 = reader[1].ToString();
+                    String param2 = reader[2].ToString();
+                    String param3 = reader[3].ToString();
+                    String param4 = reader[4].ToString();
+                    String param5 = reader[5].ToString();
+                    System.Console.WriteLine("intValue: " + intValue);
+                    System.Console.WriteLine("param0: " + param0);
+                    System.Console.WriteLine("param1: " + param1);
+                    System.Console.WriteLine("param2: " + param2);
+                    System.Console.WriteLine("param3: " + param3);
+                    System.Console.WriteLine("param4: " + param4);
+                    System.Console.WriteLine("param5: " + param5);
+                }
+                count++;
+            }
+
+            System.Console.WriteLine("count: " + count);
+
+
+            reader.Close();
+
+            command.Dispose();
 
 
 

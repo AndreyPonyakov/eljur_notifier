@@ -11,7 +11,7 @@ namespace Eljur
     {
         static void Main(string[] args)
         {
-            Firebird.Do_something();
+            Firebird.DoSomething();
         }
     }
 }
