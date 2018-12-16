@@ -11,7 +11,11 @@ namespace Eljur
     {
         static void Main(string[] args)
         {
-            Firebird.DoSomething();
+            var Firebird = new Firebird();
+            var staffs = new List<object[]>();
+            //staffs = Firebird.getOneStaff(1040);
+            staffs = Firebird.getAllStaffs();
+            Console.ReadKey();
         }
     }
 }

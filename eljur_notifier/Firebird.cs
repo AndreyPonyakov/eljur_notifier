@@ -9,10 +9,10 @@ namespace Eljur
 {
     class Firebird
     {
-        public static void DoSomething()
-        {
-            System.Console.WriteLine("HELLO");
+        internal protected FbConnection FbCon { get; set; }
 
+        public static FbConnection getConnection()
+        {
             string connectionString =
                 "User=SYSDBA;" +
                 "Password=masterkey;" +
@@ -28,62 +28,45 @@ namespace Eljur
                 "Packet Size=8192;" +
                 "ServerType=0;";//указываем тип сервера (0 - "полноценный Firebird" (classic или super server), 1 - встроенный (embedded))
             FbConnection fbcon = new FbConnection(connectionString);
+            return fbcon;
+        }
 
-            fbcon.Open();
-
-            FbDatabaseInfo fb_inf = new FbDatabaseInfo(fbcon);
-
-            System.Console.WriteLine("Info: " + fb_inf.ServerClass + "; " + fb_inf.ServerVersion);
-
-            //String sSQL = "select * from STAFF";
-
-
-            //FbCommand fbcmd = new FirebirdSql.Data.FirebirdClient.FbCommand(sSQL, fbcon);
-
-            FbCommand command = fbcon.CreateCommand();
-
+        public List<object[]> getOneStaff(int staffNumber)
+        {
+            this.FbCon = Firebird.getConnection();
+            this.FbCon.Open();
+            //FbDatabaseInfo fb_inf = new FbDatabaseInfo(this.FbCon);
+            //Console.WriteLine("Info: " + fb_inf.ServerClass + "; " + fb_inf.ServerVersion);
+            FbCommand command = this.FbCon.CreateCommand();
             command.CommandText = "select * from STAFF";
-
             FbDataReader reader = command.ExecuteReader();
-
             int count = 0;
-            int intValue = 0;
+            var staffs = new List<object[]>();
 
             while (reader.Read())
             {
-                if (count == 0) 
+                if (count == staffNumber || staffNumber == -1)
                 {
-                    intValue = reader.GetInt32(0);
-                    String param0 = reader[0].ToString();
-                    String param1 = reader[1].ToString();
-                    String param2 = reader[2].ToString();
-                    String param3 = reader[3].ToString();
-                    String param4 = reader[4].ToString();
-                    String param5 = reader[5].ToString();
-                    System.Console.WriteLine("intValue: " + intValue);
-                    System.Console.WriteLine("param0: " + param0);
-                    System.Console.WriteLine("param1: " + param1);
-                    System.Console.WriteLine("param2: " + param2);
-                    System.Console.WriteLine("param3: " + param3);
-                    System.Console.WriteLine("param4: " + param4);
-                    System.Console.WriteLine("param5: " + param5);
+                    var columns = new object[reader.FieldCount];
+                    reader.GetValues(columns);
+                    staffs.Add(columns);
+                    //Console.WriteLine(staffs);
+                    Console.WriteLine("staffs[" + count + "][id]: " + staffs[count][0].ToString());
+                    Console.WriteLine("staffs["+count+"][LastName]: " + staffs[count][1].ToString());
+                    Console.WriteLine("staffs[" + count + "][FirstName]: " + staffs[count][2].ToString());
+                    Console.WriteLine("staffs[" + count + "][MiddleName]: " + staffs[count][3].ToString());
+
                 }
                 count++;
             }
-
-            System.Console.WriteLine("count: " + count);
-
-
+            Console.WriteLine("count: " + count);
             reader.Close();
-
             command.Dispose();
-
-
-
-
-
-
-            System.Console.ReadKey();
+            return staffs;
+        }
+        public List<object[]> getAllStaffs()
+        {
+            return this.getOneStaff(-1);
         }
     }
 }
