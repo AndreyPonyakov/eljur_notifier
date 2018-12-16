@@ -13,20 +13,40 @@ namespace Eljur
         {
             System.Console.WriteLine("HELLO");
 
-            //string connectionString = 
-            //    "User=SYSDBA;" +
-            //    "Password=masterkey;" +
-            //    "Database=D:/SMDK/DBase/SmarketFood.fdb;" +
-            //    "DataSource=roman-book;" +
-            //    "Port=3050;Dialect=3;" +
-            //    "Charset=WIN1251;" +
-            //    "Role=;Connection lifetime=30;" +
-            //    "Pooling=true;" +
-            //    "MinPoolSize=0;" +
-            //    "MaxPoolSize=50;" +
-            //    "Packet Size=8192;" +
-            //    "ServerType=0;";
-            //FbConnection con = new FbConnection(connectionString);
+            string connectionString =
+                "User=SYSDBA;" +
+                "Password=masterkey;" +
+                "Database=D:/School/Backup_PERCo_04.10.18/Backup_PERCo_04.10.18/4.10.18_9.23/NEWBASE.FDB;" +
+                //"DataSource=roman-book;" +
+                "Port=3050;" +
+                "Dialect=3;" +
+                "Charset=WIN1251;" +
+                "Role=;" +
+                "Connection lifetime=30;" +
+                "Pooling=true;" +
+                "MinPoolSize=0;" +
+                "MaxPoolSize=50;" +
+                "Packet Size=8192;" +
+                "ServerType=0;";
+            FbConnection fbcon = new FbConnection(connectionString);
+
+            //FbConnectionStringBuilder fb_con = new FbConnectionStringBuilder();
+            //fb_con.Charset = "UTF-8";
+            //fb_con.UserID = "sysdba";
+            //fb_con.Password = "masterkey";
+            ////fb_con.Database = "D:/School/Backup_PERCo_04.10.18/Backup_PERCo_04.10.18/4.10.18_9.23/NEWBASE.FDB";
+            //fb_con.Database = @"D:\School\Backup_PERCo_04.10.18\Backup_PERCo_04.10.18\4.10.18_9.23\NEWBASE.FDB";
+            //fb_con.ServerType = 0;
+
+            //FbConnection fb = new FbConnection(fb_con.ToString());
+
+            fbcon.Open();
+
+            FbDatabaseInfo fb_inf = new FbDatabaseInfo(fbcon);
+
+            System.Console.WriteLine("Info: " + fb_inf.ServerClass + "; " + fb_inf.ServerVersion);
+
+
 
 
 
