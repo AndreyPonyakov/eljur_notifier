@@ -5,35 +5,42 @@ using System.Text;
 using System.Threading.Tasks;
 using FirebirdSql.Data.FirebirdClient;
 
-namespace Eljur
+namespace eljur_notifier
 {
     class Firebird
     {
         internal protected FbConnection FbCon { get; set; }
-
-        public static FbConnection getConnection()
+        internal protected String ConnectStr { get; set; }
+        public Firebird(String ConnectStr)
         {
-            string connectionString =
-                "User=SYSDBA;" +
-                "Password=masterkey;" +
-                "Database=D:/School/Backup_PERCo_04.10.18/Backup_PERCo_04.10.18/4.10.18_9.23/NEWBASE.FDB;" +
-                "Port=3050;" +
-                "Dialect=3;" +
-                "Charset=WIN1251;" +
-                "Role=;" +
-                "Connection lifetime=30;" +
-                "Pooling=true;" +
-                "MinPoolSize=0;" +
-                "MaxPoolSize=50;" +
-                "Packet Size=8192;" +
-                "ServerType=0;";//указываем тип сервера (0 - "полноценный Firebird" (classic или super server), 1 - встроенный (embedded))
-            FbConnection fbcon = new FbConnection(connectionString);
+            this.ConnectStr = ConnectStr;
+        }
+
+        public static FbConnection getConnection(String ConnectStr)
+        {
+            //string ConnectStr =
+            //    "User=SYSDBA;" +
+            //    "Password=masterkey;" +
+            //    "Database=D:/School/Backup_PERCo_04.10.18/Backup_PERCo_04.10.18/4.10.18_9.23/NEWBASE.FDB;" +
+            //    "Port=3050;" +
+            //    "Dialect=3;" +
+            //    "Charset=WIN1251;" +
+            //    "Role=;" +
+            //    "Connection lifetime=30;" +
+            //    "Pooling=true;" +
+            //    "MinPoolSize=0;" +
+            //    "MaxPoolSize=50;" +
+            //    "Packet Size=8192;" +
+            //    "ServerType=0;";//указываем тип сервера (0 - "полноценный Firebird" (classic или super server), 1 - встроенный (embedded))
+            //Console.WriteLine(ConnectStr);
+            //Console.ReadKey();
+            FbConnection fbcon = new FbConnection(ConnectStr);
             return fbcon;
         }
 
         public List<object[]> getOneStaff(int staffNumber)
         {
-            this.FbCon = Firebird.getConnection();
+            this.FbCon = Firebird.getConnection(this.ConnectStr);
             this.FbCon.Open();
             //FbDatabaseInfo fb_inf = new FbDatabaseInfo(this.FbCon);
             //Console.WriteLine("Info: " + fb_inf.ServerClass + "; " + fb_inf.ServerVersion);
