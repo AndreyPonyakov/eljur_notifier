@@ -17,8 +17,9 @@ namespace eljur_notifier
             //staff = Firebird.getOneStaff(1040);
             //staff = Firebird.getAllStaff();
 
-            DateTime curTime = DateTime.Now;
-            //Console.WriteLine(curTime);
+            TimeSpan curTime = DateTime.Now.TimeOfDay;
+            Console.WriteLine(curTime.TotalMinutes);
+            Console.WriteLine(curTime);
 
             var curStaff = Firebird.getStaffByTimeStamp(curTime);
             Console.ReadKey();

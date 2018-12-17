@@ -76,13 +76,14 @@ namespace eljur_notifier
                 rows.Add(columns);
             }
             this.FbCon.Close();
-            return rows;
+            return rows; 
         }
 
-        public List<object[]> getStaffByTimeStamp(DateTime TimeStamp)
+        public List<object[]> getStaffByTimeStamp(TimeSpan TimeStamp)
         {
             var staff = new List<object[]>();
-            staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS ORDER BY time_ev");
+            Console.WriteLine(TimeStamp.TotalMinutes.ToString());
+            staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '14:23:00' AND  '14:24:00'  ORDER BY time_ev ");
             Console.WriteLine(staff);
             foreach (object[] row in staff)
             {
@@ -94,6 +95,7 @@ namespace eljur_notifier
                 foreach (object element in row)
                 {
                     Console.WriteLine(element.ToString());
+                    //Console.WriteLine(element.GetType());
                 }
                 break;
             }
