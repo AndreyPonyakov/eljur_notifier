@@ -196,9 +196,11 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="eljur_notifier\.gitignore" />
     <Content Include="eljur_notifier\bin\Debug\ConsoleApp1.exe" />
     <Content Include="eljur_notifier\bin\Debug\ConsoleApp1.pdb" />
     <Content Include="eljur_notifier\ConsoleApp1.csproj" />
+    <Content Include="eljur_notifier\eljur_notifier.csproj.user" />
     <Content Include="eljur_notifier\obj\Debug\ConsoleApp1.csproj.FileListAbsolute.txt" />
     <Content Include="eljur_notifier\obj\Debug\ConsoleApp1.exe" />
     <Content Include="eljur_notifier\obj\Debug\ConsoleApp1.pdb" />

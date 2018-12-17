@@ -71,7 +71,7 @@ namespace eljur_notifier
             command.Dispose();
             return staffs;
         }
-        public List<object[]> getAllStaffs()
+        public List<object[]> getAllStaff()
         {
             return this.getOneStaff(-1);
         }

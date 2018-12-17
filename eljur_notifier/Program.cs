@@ -13,9 +13,11 @@ namespace eljur_notifier
         {
             var Config = new Config();
             var Firebird = new Firebird(Config.ConnectStr);
-            var staffs = new List<object[]>();
-            //staffs = Firebird.getOneStaff(1040);
-            staffs = Firebird.getAllStaffs();
+            var staff = new List<object[]>();
+            //staff = Firebird.getOneStaff(1040);
+            //staff = Firebird.getAllStaff();
+            DateTime date1 = DateTime.Now;
+            Console.WriteLine(date1);
             Console.ReadKey();
         }
     }
