@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using eljur_notifier;
 
 namespace eljur_notifier
@@ -17,11 +18,24 @@ namespace eljur_notifier
             //staff = Firebird.getOneStaff(1040);
             //staff = Firebird.getAllStaff();
 
-            TimeSpan curTime = DateTime.Now.TimeOfDay;
-            Console.WriteLine(curTime.TotalMinutes);
-            Console.WriteLine(curTime);
+            //DateTime curTime = DateTime.Now;
+            DateTime curTime = Convert.ToDateTime("2010-12-25 16:58:00");      
+            DateTime curTimeSubstracted = curTime.Add(new TimeSpan(0, -1, 0));
+            DateTime curTimeFuture = curTime.AddMinutes(1);
 
-            var curStaff = Firebird.getStaffByTimeStamp(curTime);
+            Console.WriteLine(curTime.GetType());
+            Console.WriteLine(curTime.ToLongTimeString());
+            Console.WriteLine(curTime.AddMinutes(1).ToLongTimeString());  
+            Console.WriteLine(curTimeSubstracted.ToLongTimeString());
+
+
+            //Console.WriteLine(curTime.TotalMinutes);
+            //Console.WriteLine(curTime.ToShortTimeString());
+
+            //Console.WriteLine(curTime);
+            //Console.WriteLine(curTime.TotalMinutes.ToString());
+
+            //var curStaff = Firebird.getStaffByTimeStamp(curTime);
             Console.ReadKey();
         }
     }
