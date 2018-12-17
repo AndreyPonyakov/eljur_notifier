@@ -79,11 +79,11 @@ namespace eljur_notifier
             return rows; 
         }
 
-        public List<object[]> getStaffByTimeStamp(TimeSpan TimeStamp)
+        public List<object[]> getStaffByTimeStamp(DateTime TimeStamp)
         {
             var staff = new List<object[]>();
-            Console.WriteLine(TimeStamp.TotalMinutes.ToString());
-            staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '14:23:00' AND  '14:24:00'  ORDER BY time_ev ");
+            Console.WriteLine(TimeStamp.ToString());
+            staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN " + "'14:23:00'" + " AND " + "'14:24:00'" + " ORDER BY time_ev ");
             Console.WriteLine(staff);
             foreach (object[] row in staff)
             {
@@ -94,7 +94,7 @@ namespace eljur_notifier
                 //break;
                 foreach (object element in row)
                 {
-                    Console.WriteLine(element.ToString());
+                    //Console.WriteLine(element.ToString());
                     //Console.WriteLine(element.GetType());
                 }
                 break;
