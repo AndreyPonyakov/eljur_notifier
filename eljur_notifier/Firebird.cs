@@ -14,33 +14,17 @@ namespace eljur_notifier
         public Firebird(String ConnectStr)
         {
             this.ConnectStr = ConnectStr;
+            this.FbCon = Firebird.getConnection(this.ConnectStr);
         }
 
         public static FbConnection getConnection(String ConnectStr)
         {
-            //string ConnectStr =
-            //    "User=SYSDBA;" +
-            //    "Password=masterkey;" +
-            //    "Database=D:/School/Backup_PERCo_04.10.18/Backup_PERCo_04.10.18/4.10.18_9.23/NEWBASE.FDB;" +
-            //    "Port=3050;" +
-            //    "Dialect=3;" +
-            //    "Charset=WIN1251;" +
-            //    "Role=;" +
-            //    "Connection lifetime=30;" +
-            //    "Pooling=true;" +
-            //    "MinPoolSize=0;" +
-            //    "MaxPoolSize=50;" +
-            //    "Packet Size=8192;" +
-            //    "ServerType=0;";//указываем тип сервера (0 - "полноценный Firebird" (classic или super server), 1 - встроенный (embedded))
-            //Console.WriteLine(ConnectStr);
-            //Console.ReadKey();
             FbConnection fbcon = new FbConnection(ConnectStr);
             return fbcon;
         }
 
         public List<object[]> getOneStaff(int staffNumber)
         {
-            this.FbCon = Firebird.getConnection(this.ConnectStr);
             this.FbCon.Open();
             //FbDatabaseInfo fb_inf = new FbDatabaseInfo(this.FbCon);
             //Console.WriteLine("Info: " + fb_inf.ServerClass + "; " + fb_inf.ServerVersion);
@@ -48,7 +32,8 @@ namespace eljur_notifier
             command.CommandText = "select * from STAFF";
             FbDataReader reader = command.ExecuteReader();
             int count = 0;
-            var staffs = new List<object[]>();
+            int count_staff = 0;
+            var staff = new List<object[]>();
 
             while (reader.Read())
             {
@@ -56,24 +41,65 @@ namespace eljur_notifier
                 {
                     var columns = new object[reader.FieldCount];
                     reader.GetValues(columns);
-                    staffs.Add(columns);
-                    //Console.WriteLine(staffs);
-                    Console.WriteLine("staffs[" + count + "][id]: " + staffs[count][0].ToString());
-                    Console.WriteLine("staffs["+count+"][LastName]: " + staffs[count][1].ToString());
-                    Console.WriteLine("staffs[" + count + "][FirstName]: " + staffs[count][2].ToString());
-                    Console.WriteLine("staffs[" + count + "][MiddleName]: " + staffs[count][3].ToString());
-
+                    staff.Add(columns);
+                    //Console.WriteLine(staff);
+                    Console.WriteLine("staff[" + count + "][id]: " + staff[count_staff][0].ToString());
+                    Console.WriteLine("staff[" + count + "][LastName]: " + staff[count_staff][1].ToString());
+                    Console.WriteLine("staff[" + count + "][FirstName]: " + staff[count_staff][2].ToString());
+                    Console.WriteLine("staff[" + count + "][MiddleName]: " + staff[count_staff][3].ToString());
+                    count_staff++;
                 }
                 count++;
             }
             Console.WriteLine("count: " + count);
             reader.Close();
             command.Dispose();
-            return staffs;
+            this.FbCon.Close();
+            return staff;
         }
         public List<object[]> getAllStaff()
         {
             return this.getOneStaff(-1);
         }
+
+        public List<object[]> getAnySqlQuery(String SqlQuery)
+        {
+            this.FbCon.Open();
+            var rows = new List<object[]>();
+            FbCommand command = this.FbCon.CreateCommand();
+            command.CommandText = SqlQuery;
+            FbDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                var columns = new object[reader.FieldCount];
+                reader.GetValues(columns);
+                rows.Add(columns);
+            }
+            this.FbCon.Close();
+            return rows;
+        }
+
+        public List<object[]> getStaffByTimeStamp(DateTime TimeStamp)
+        {
+            var staff = new List<object[]>();
+            staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS ORDER BY time_ev");
+            Console.WriteLine(staff);
+            foreach (object[] row in staff)
+            {
+                //Console.WriteLine(row);
+                //Console.WriteLine(row.GetType());
+                //Console.WriteLine(row.GetType().GetProperties());
+                //Console.WriteLine(row[0].ToString());
+                //break;
+                foreach (object element in row)
+                {
+                    Console.WriteLine(element.ToString());
+                }
+                break;
+            }
+            return staff;
+
+        }
+
     }
 }

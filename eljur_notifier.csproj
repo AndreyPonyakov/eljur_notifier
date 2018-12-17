@@ -183,7 +183,6 @@
     <None Include=".vs\eljur_notifier\v15\Server\sqlite3\storage.ide-shm" />
     <None Include=".vs\eljur_notifier\v15\Server\sqlite3\storage.ide-wal" />
     <None Include="app.config" />
-    <None Include="eljur_notifier\App.config" />
     <None Include="eljur_notifier\bin\Debug\ConsoleApp1.exe.config" />
     <None Include="eljur_notifier\obj\Debug\ConsoleApp1.csproj.CoreCompileInputs.cache" />
     <None Include="eljur_notifier\obj\Debug\ConsoleApp1.csprojAssemblyReference.cache" />
@@ -196,10 +195,9 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="eljur_notifier\.gitignore" />
+    <Content Include=".gitignore" />
     <Content Include="eljur_notifier\bin\Debug\ConsoleApp1.exe" />
     <Content Include="eljur_notifier\bin\Debug\ConsoleApp1.pdb" />
-    <Content Include="eljur_notifier\ConsoleApp1.csproj" />
     <Content Include="eljur_notifier\eljur_notifier.csproj.user" />
     <Content Include="eljur_notifier\obj\Debug\ConsoleApp1.csproj.FileListAbsolute.txt" />
     <Content Include="eljur_notifier\obj\Debug\ConsoleApp1.exe" />
