@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="eljur_notifier.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="ConStrFirebird" Type="System.String" Scope="User">
+      <Value Profile="(Default)">          User=SYSDBA;
+          Password=masterkey;
+          Database=D:/School/Backup_PERCo_04.10.18/Backup_PERCo_04.10.18/4.10.18_9.23/NEWBASE.FDB;
+          Port=3050;
+          Dialect=3;
+          Charset=WIN1251;
+          Role=;
+          Connection lifetime=30;
+          Pooling=true;
+          MinPoolSize=0;
+          MaxPoolSize=50;
+          Packet Size=8192;
+ServerType=0;</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
