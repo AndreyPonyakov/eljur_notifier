@@ -20,5 +20,11 @@ ServerType=0;</Value>
     <Setting Name="IntervalRequest" Type="System.Double" Scope="User">
       <Value Profile="(Default)">5900</Value>
     </Setting>
+    <Setting Name="EljurApiTocken" Type="System.String" Scope="User">
+      <Value Profile="(Default)">dfdssdfsfDFsfdsdgsdffWe52345EDFsd</Value>
+    </Setting>
+    <Setting Name="FrenchLeaveInterval" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">900000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

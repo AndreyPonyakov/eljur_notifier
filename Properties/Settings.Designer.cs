@@ -58,5 +58,29 @@ ServerType=0;")]
                 this["IntervalRequest"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("dfdssdfsfDFsfdsdgsdffWe52345EDFsd")]
+        public string EljurApiTocken {
+            get {
+                return ((string)(this["EljurApiTocken"]));
+            }
+            set {
+                this["EljurApiTocken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("900000")]
+        public double FrenchLeaveInterval {
+            get {
+                return ((double)(this["FrenchLeaveInterval"]));
+            }
+            set {
+                this["FrenchLeaveInterval"] = value;
+            }
+        }
     }
 }

@@ -85,8 +85,6 @@ namespace eljur_notifier
         public List<object[]> getStaffByTimeStamp(DateTime TimeStamp, TimeSpan IntervalRequest)
         {
             var staff = new List<object[]>();
-            //Console.WriteLine("Time from old beforeDt: " + this.beforeDt.ToString());
-            //Console.WriteLine("Time from old afterDt: " + this.afterDt.ToString());
             if (this.beforeDt == Convert.ToDateTime("2000-12-31 23:59:59"))
             {
                 Console.WriteLine("TRUE");
@@ -96,13 +94,9 @@ namespace eljur_notifier
             else
             {
                 Console.WriteLine("False");
-                Console.WriteLine("IntervalRequest is: " + IntervalRequest);
-                //this.beforeDt = TimeStamp.Add(new TimeSpan(0, -1, 0));
-                //this.afterDt = TimeStamp;
+                Console.WriteLine("IntervalRequest is: " + IntervalRequest);            
                 //+1 sec because Firebird sql operation Between  is inclusive
                 this.beforeDt = this.afterDt.Add(new TimeSpan(0, 0, 1)); // +1 second to IntervalRequest only for beforeDt
-                //this.beforeDt = this.afterDt.Add(new TimeSpan(0, 0, 1));
-                //this.beforeDt = this.beforeDt.Add(IntervalRequest);
                 this.afterDt = this.afterDt.Add(IntervalRequest);
             }
             

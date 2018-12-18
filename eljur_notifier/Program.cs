@@ -15,7 +15,9 @@ namespace eljur_notifier
 
             var Config = new Config();
             Task taskGetDataFb = new Task(() => GetDataFb(Config.ConnectStr, Config.IntervalRequest));
+            Task taskSendNotifyParents = new Task(() => SendNotifyParents(Config.EljurApiTocken, Config.FrenchLeaveInterval));
             taskGetDataFb.Start();
+            taskSendNotifyParents.Start();
 
             Console.ReadKey();
         }
@@ -32,14 +34,7 @@ namespace eljur_notifier
           
         }
 
-        static double GetInterval()
-        {
-            //DateTime now = DateTime.Now;
-            //return ((60 - now.Second) * 1000 - now.Millisecond);
-            //return 61000; //61 sec because Firebird sql operation Between  is inclusive
-            return 5000;
-        }
-
+    
         static void t_Elapsed(Firebird Firebird, TimeSpan IntervalRequest)
         {
             //DateTime curTime = Convert.ToDateTime("2010-12-25 09:24:00");
@@ -49,6 +44,16 @@ namespace eljur_notifier
           
         }
 
+        static void SendNotifyParents(String EljurApiTocken, Double FrenchLeaveInterval)
+        {
+            while(true)
+            {
+                Console.WriteLine("I'm from second task!!!!");
+                //Task.Delay(1000);
+                Thread.Sleep(1000);
+            }
+            
+        }
 
 
 
