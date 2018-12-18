@@ -82,9 +82,13 @@ namespace eljur_notifier
         public List<object[]> getStaffByTimeStamp(DateTime TimeStamp)
         {
             var staff = new List<object[]>();
-            Console.WriteLine(TimeStamp.ToString());
-            staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN " + "'14:23:00'" + " AND " + "'14:24:00'" + " ORDER BY time_ev ");
-            Console.WriteLine(staff);
+            //Console.WriteLine(TimeStamp.ToString());
+            String before = TimeStamp.Add(new TimeSpan(0, -1, 0)).ToLongTimeString();
+            String after = TimeStamp.ToLongTimeString();
+            //Console.WriteLine(before);
+            //Console.WriteLine(after);
+            staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '" + before + "' AND '" + after + "' ORDER BY time_ev ");
+            //Console.WriteLine(staff);
             foreach (object[] row in staff)
             {
                 //Console.WriteLine(row);
@@ -94,10 +98,10 @@ namespace eljur_notifier
                 //break;
                 foreach (object element in row)
                 {
-                    //Console.WriteLine(element.ToString());
+                    Console.WriteLine(element.ToString());
                     //Console.WriteLine(element.GetType());
                 }
-                break;
+                //break;
             }
             return staff;
 
