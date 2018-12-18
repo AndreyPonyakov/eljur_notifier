@@ -11,7 +11,7 @@ namespace eljur_notifier
         internal protected String ConnectStr { get; set; }
         public Config()
         {
-            this.ConnectStr = Properties.Settings.Default.ConnectionString;
+            this.ConnectStr = Properties.Settings.Default.ConStrFirebird;
         }
         
     }

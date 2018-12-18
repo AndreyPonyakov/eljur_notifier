@@ -19,13 +19,13 @@ namespace eljur_notifier
             //staff = Firebird.getAllStaff();
 
             //DateTime curTime = DateTime.Now;
-            DateTime curTime = Convert.ToDateTime("2010-12-25 16:58:00");      
+            DateTime curTime = Convert.ToDateTime("2010-12-25 16:58:00");
             DateTime curTimeSubstracted = curTime.Add(new TimeSpan(0, -1, 0));
             DateTime curTimeFuture = curTime.AddMinutes(1);
 
             Console.WriteLine(curTime.GetType());
             Console.WriteLine(curTime.ToLongTimeString());
-            Console.WriteLine(curTime.AddMinutes(1).ToLongTimeString());  
+            Console.WriteLine(curTime.AddMinutes(1).ToLongTimeString());
             Console.WriteLine(curTimeSubstracted.ToLongTimeString());
 
 
@@ -40,3 +40,4 @@ namespace eljur_notifier
         }
     }
 }
+
