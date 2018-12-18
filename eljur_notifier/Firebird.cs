@@ -82,29 +82,32 @@ namespace eljur_notifier
             return rows; 
         }
 
-        public List<object[]> getStaffByTimeStamp(DateTime TimeStamp)
+        public List<object[]> getStaffByTimeStamp(DateTime TimeStamp, TimeSpan IntervalRequest)
         {
             var staff = new List<object[]>();
-            Console.WriteLine("Time from beforeDt: " + this.beforeDt.ToString());
-            Console.WriteLine("Time from afterDt: " + this.afterDt.ToString());
+            //Console.WriteLine("Time from old beforeDt: " + this.beforeDt.ToString());
+            //Console.WriteLine("Time from old afterDt: " + this.afterDt.ToString());
             if (this.beforeDt == Convert.ToDateTime("2000-12-31 23:59:59"))
             {
                 Console.WriteLine("TRUE");
                 this.afterDt = DateTime.Now;
-                this.beforeDt = this.afterDt.Add(new TimeSpan(0, -1, 0));
+                this.beforeDt = this.afterDt.Subtract(IntervalRequest); //Add(new TimeSpan(0, -1, 0));
             }
             else
             {
                 Console.WriteLine("False");
+                Console.WriteLine("IntervalRequest is: " + IntervalRequest);
                 //this.beforeDt = TimeStamp.Add(new TimeSpan(0, -1, 0));
                 //this.afterDt = TimeStamp;
-                //61 sec because Firebird sql operation Between  is inclusive
-                this.beforeDt = this.beforeDt.Add(new TimeSpan(0, 1, 1));
-                this.afterDt = this.afterDt.Add(new TimeSpan(0, 1, 1));
+                //+1 sec because Firebird sql operation Between  is inclusive
+                this.beforeDt = this.afterDt.Add(new TimeSpan(0, 0, 1)); // +1 second to IntervalRequest only for beforeDt
+                //this.beforeDt = this.afterDt.Add(new TimeSpan(0, 0, 1));
+                //this.beforeDt = this.beforeDt.Add(IntervalRequest);
+                this.afterDt = this.afterDt.Add(IntervalRequest);
             }
             
-            Console.WriteLine("Time from beforeDt: " + this.beforeDt.ToString());
-            Console.WriteLine("Time from afterDt: " + this.afterDt.ToString());
+            Console.WriteLine("Time from new beforeDt: " + this.beforeDt.ToString());
+            Console.WriteLine("Time from new afterDt: " + this.afterDt.ToString());
 
             String beforeStr = this.beforeDt.ToLongTimeString();
             String afterStr = this.beforeDt.ToLongTimeString();

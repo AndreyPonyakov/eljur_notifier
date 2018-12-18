@@ -72,6 +72,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="eljur_notifier\App.config" />
     <None Include="eljur_notifier\packages.config" />
     <None Include="Properties\Settings.settings">

@@ -17,5 +17,8 @@
           Packet Size=8192;
 ServerType=0;</Value>
     </Setting>
+    <Setting Name="IntervalRequest" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">5900</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

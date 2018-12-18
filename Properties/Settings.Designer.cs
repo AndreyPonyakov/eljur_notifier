@@ -46,5 +46,17 @@ ServerType=0;")]
                 this["ConStrFirebird"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5900")]
+        public double IntervalRequest {
+            get {
+                return ((double)(this["IntervalRequest"]));
+            }
+            set {
+                this["IntervalRequest"] = value;
+            }
+        }
     }
 }

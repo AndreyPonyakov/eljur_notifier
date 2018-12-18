@@ -14,19 +14,20 @@ namespace eljur_notifier
         {
 
             var Config = new Config();
-            Task taskGetDataFb = new Task(() => GetDataFb(Config.ConnectStr));
+            Task taskGetDataFb = new Task(() => GetDataFb(Config.ConnectStr, Config.IntervalRequest));
             taskGetDataFb.Start();
 
             Console.ReadKey();
         }
 
-        static void GetDataFb(String ConnectStr)
+        static void GetDataFb(String ConnectStr, Double IntervalRequest)
         {           
             var Firebird = new Firebird(ConnectStr);         
             var timerFb = new System.Timers.Timer();
+            TimeSpan IntervalRequestTS = TimeSpan.FromMilliseconds(IntervalRequest);
             timerFb.AutoReset = true;
-            timerFb.Elapsed += delegate { t_Elapsed(Firebird); };
-            timerFb.Interval = GetInterval();
+            timerFb.Elapsed += delegate { t_Elapsed(Firebird, IntervalRequestTS); };
+            timerFb.Interval = IntervalRequest;
             timerFb.Start();
           
         }
@@ -39,14 +40,17 @@ namespace eljur_notifier
             return 5000;
         }
 
-        static void t_Elapsed(Firebird Firebird)
+        static void t_Elapsed(Firebird Firebird, TimeSpan IntervalRequest)
         {
             //DateTime curTime = Convert.ToDateTime("2010-12-25 09:24:00");
             DateTime curTime = DateTime.Now;
-            curTime = curTime.Add(new TimeSpan(-8, 0, 0));
-            var curStaff = Firebird.getStaffByTimeStamp(curTime);
+            //curTime = curTime.Add(new TimeSpan(-8, 0, 0));
+            var curStaff = Firebird.getStaffByTimeStamp(curTime, IntervalRequest);
           
         }
+
+
+
 
     }
 }
