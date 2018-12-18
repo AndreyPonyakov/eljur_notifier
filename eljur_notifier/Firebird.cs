@@ -11,10 +11,15 @@ namespace eljur_notifier
     {
         internal protected FbConnection FbCon { get; set; }
         internal protected String ConnectStr { get; set; }
+        internal protected DateTime beforeDt { get; set; }
+        internal protected DateTime afterDt { get; set; }
+
         public Firebird(String ConnectStr)
         {
             this.ConnectStr = ConnectStr;
             this.FbCon = Firebird.getConnection(this.ConnectStr);
+            this.beforeDt = Convert.ToDateTime("2000-12-31 23:59:59");
+            this.afterDt = Convert.ToDateTime("2000-12-31 23:59:59");
         }
 
         public static FbConnection getConnection(String ConnectStr)
@@ -26,8 +31,6 @@ namespace eljur_notifier
         public List<object[]> getOneStaff(int staffNumber)
         {
             this.FbCon.Open();
-            //FbDatabaseInfo fb_inf = new FbDatabaseInfo(this.FbCon);
-            //Console.WriteLine("Info: " + fb_inf.ServerClass + "; " + fb_inf.ServerVersion);
             FbCommand command = this.FbCon.CreateCommand();
             command.CommandText = "select * from STAFF";
             FbDataReader reader = command.ExecuteReader();
@@ -82,26 +85,39 @@ namespace eljur_notifier
         public List<object[]> getStaffByTimeStamp(DateTime TimeStamp)
         {
             var staff = new List<object[]>();
-            //Console.WriteLine(TimeStamp.ToString());
-            String before = TimeStamp.Add(new TimeSpan(0, -1, 0)).ToLongTimeString();
-            String after = TimeStamp.ToLongTimeString();
-            //Console.WriteLine(before);
-            //Console.WriteLine(after);
-            staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '" + before + "' AND '" + after + "' ORDER BY time_ev ");
-            //Console.WriteLine(staff);
+            Console.WriteLine("Time from beforeDt: " + this.beforeDt.ToString());
+            Console.WriteLine("Time from afterDt: " + this.afterDt.ToString());
+            if (this.beforeDt == Convert.ToDateTime("2000-12-31 23:59:59"))
+            {
+                Console.WriteLine("TRUE");
+                this.afterDt = DateTime.Now;
+                this.beforeDt = this.afterDt.Add(new TimeSpan(0, -1, 0));
+            }
+            else
+            {
+                Console.WriteLine("False");
+                //this.beforeDt = TimeStamp.Add(new TimeSpan(0, -1, 0));
+                //this.afterDt = TimeStamp;
+                //61 sec because Firebird sql operation Between  is inclusive
+                this.beforeDt = this.beforeDt.Add(new TimeSpan(0, 1, 1));
+                this.afterDt = this.afterDt.Add(new TimeSpan(0, 1, 1));
+            }
+            
+            Console.WriteLine("Time from beforeDt: " + this.beforeDt.ToString());
+            Console.WriteLine("Time from afterDt: " + this.afterDt.ToString());
+
+            String beforeStr = this.beforeDt.ToLongTimeString();
+            String afterStr = this.beforeDt.ToLongTimeString();
+           
+            staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "' ORDER BY time_ev ");
             foreach (object[] row in staff)
             {
-                //Console.WriteLine(row);
-                //Console.WriteLine(row.GetType());
-                //Console.WriteLine(row.GetType().GetProperties());
-                //Console.WriteLine(row[0].ToString());
-                //break;
                 foreach (object element in row)
                 {
-                    Console.WriteLine(element.ToString());
+                    //Console.WriteLine(element.ToString());
                     //Console.WriteLine(element.GetType());
                 }
-                //break;
+                break;
             }
             return staff;
 
