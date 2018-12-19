@@ -111,6 +111,7 @@ namespace eljur_notifier
             {
                 foreach (object element in row)
                 {
+
                     //Console.WriteLine(element.ToString());
                     //Console.WriteLine(element.GetType());
                 }

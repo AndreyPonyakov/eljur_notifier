@@ -82,5 +82,17 @@ ServerType=0;")]
                 this["FrenchLeaveInterval"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ghf")]
+        public string ghf {
+            get {
+                return ((string)(this["ghf"]));
+            }
+            set {
+                this["ghf"] = value;
+            }
+        }
     }
 }
