@@ -83,15 +83,21 @@ ServerType=0;")]
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ghf")]
-        public string ghf {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool fdgd {
             get {
-                return ((string)(this["ghf"]));
+                return ((bool)(this["fdgd"]));
             }
-            set {
-                this["ghf"] = value;
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool Параметр {
+            get {
+                return ((bool)(this["Параметр"]));
             }
         }
     }
