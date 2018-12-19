@@ -15,6 +15,7 @@ namespace eljur_notifier
         internal protected IDbConnection dbcon { get; set; }
         internal protected String ConnectStr { get; set; }
         internal protected Boolean IsDbExistVar { get; set; }
+        internal protected StaffContext StaffCtx { get; set; }
 
         public MsDb()
         {
@@ -43,9 +44,10 @@ namespace eljur_notifier
             return dbcon;
         }
 
-        public static void createDb(String conStr)
+        public void createDb(String conStr)
         {
-            using (StaffContext context = new StaffContext())
+            //using (StaffContext context = new StaffContext())
+            using ( this.StaffCtx = new StaffContext())
             {
                 Console.WriteLine("Inside using");
 
@@ -64,16 +66,17 @@ namespace eljur_notifier
                 firstStudent.NotifyWasSendDirector = false;
 
 
-                context.Pupils.Add(firstStudent);
-                context.SaveChanges();
+                StaffCtx.Pupils.Add(firstStudent);
+                StaffCtx.SaveChanges();
                 Console.WriteLine("firstStudent success saved");
 
-                var students = context.Pupils;
+                var students = StaffCtx.Pupils;
                 Console.WriteLine("List of objects:");
                 foreach (Pupil p in students)
                 {
                     Console.WriteLine("{0}.{1} - {2}", p.PupilId, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Class);
                 }
+                this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Pupils]");
 
             }
          
@@ -97,8 +100,15 @@ namespace eljur_notifier
                 SqlCommand sqlCommandDeleteDB = new SqlCommand(sqlCommandTextDeleteDB, con);
                 sqlCommandDeleteDB.ExecuteNonQuery();
             }
-
         }
+
+        public void clearTableDb(String TableName)
+        {
+            //this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [" + TableName + "]");
+        }
+
+
+        
 
 
 

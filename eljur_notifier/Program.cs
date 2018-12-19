@@ -39,11 +39,15 @@ namespace eljur_notifier
             {
                 Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
                 Db.deleteDb(Config.ConStrMsDB);
-                Console.WriteLine("DATABASE was delete");
+                Console.WriteLine("DATABASE was deleted");
+                //Db.clearTableDb("Pupils");
+                //Console.WriteLine("TABLE Pupils was cleared");
             }
             else
             {
-                MsDb.createDb(Config.ConStrMsDB);
+                Db.createDb(Config.ConStrMsDB);
+                //Db.clearTableDb("Pupils");
+                Console.WriteLine("TABLE Pupils was cleared");
                 Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
             }
 
