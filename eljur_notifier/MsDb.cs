@@ -48,35 +48,44 @@ namespace eljur_notifier
         {
             //using (StaffContext context = new StaffContext())
             using ( this.StaffCtx = new StaffContext())
-            {
-                Console.WriteLine("Inside using");
-
+            {             
                 Pupil firstStudent = new Pupil();
                 firstStudent.PupilId = 1;
                 firstStudent.FirstName = "Иван";
                 firstStudent.LastName = "Иванов";
                 firstStudent.MiddleName = "Иванович";
                 firstStudent.FullFIO = "Иван Иванов Иванович";
-                firstStudent.Class = "1Б";
-                firstStudent.Event = "Прогул";
+                firstStudent.Class = "1Б";               
                 firstStudent.EljurAccount = "some_string";
-                firstStudent.NotifyEnable = true;
-                firstStudent.NotifyEnableDirector = true;
-                firstStudent.NotifyWasSend = false;
-                firstStudent.NotifyWasSendDirector = false;
+                
+                Event firstEvent = new Event();
+                firstEvent.EventId = 1;
+                firstEvent.PupilId = firstStudent;
+                firstEvent.EventName = "Прогул";
+                firstEvent.NotifyEnable = true;
+                firstEvent.NotifyEnableDirector = true;
+                firstEvent.NotifyWasSend = false;
+                firstEvent.NotifyWasSendDirector = false;
 
 
                 StaffCtx.Pupils.Add(firstStudent);
+                StaffCtx.Events.Add(firstEvent);
                 StaffCtx.SaveChanges();
                 Console.WriteLine("firstStudent success saved");
 
                 var students = StaffCtx.Pupils;
+                var evets = StaffCtx.Events;
                 Console.WriteLine("List of objects:");
                 foreach (Pupil p in students)
                 {
-                    Console.WriteLine("{0}.{1} - {2}", p.PupilId, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Class);
+                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5}", p.PupilId, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Class);
+                }
+                foreach (Event e in evets)
+                {
+                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5} - {6}", e.EventId, e.PupilId, e.EventName, e.NotifyEnable, e.NotifyEnableDirector, e.NotifyWasSend, e.NotifyWasSendDirector);
                 }
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Pupils]");
+                this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Events]");
 
             }
          

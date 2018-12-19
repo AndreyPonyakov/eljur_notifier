@@ -9,7 +9,7 @@ namespace eljur_notifier.StaffModel
 {
     public class Pupil
     {
-        //[Key]     
+        [Key]     
         public int PupilId { get; set; }
         [MaxLength(500)]
         public string FirstName { get; set; }
@@ -22,12 +22,7 @@ namespace eljur_notifier.StaffModel
         [MaxLength(10)]
         public string Class { get; set; }
         [MaxLength(500)]
-        public string Event { get; set; }
-        [MaxLength(500)]
         public string EljurAccount { get; set; }   
-        public Boolean NotifyEnable { get; set; }
-        public Boolean NotifyEnableDirector { get; set; }
-        public Boolean NotifyWasSend { get; set; }
-        public Boolean NotifyWasSendDirector { get; set; }
+
     }
 }

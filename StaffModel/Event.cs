@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace eljur_notifier.StaffModel
+{
+    public class Event
+    {
+        [Key]     
+        public int EventId { get; set; }
+        [ForeignKey("PupilId")]//error
+        public Pupil PupilId { get; set; }
+        //public int PupilId { get; set; }            
+        [MaxLength(500)]
+        public string EventName { get; set; }       
+        public Boolean NotifyEnable { get; set; }
+        public Boolean NotifyEnableDirector { get; set; }
+        public Boolean NotifyWasSend { get; set; }
+        public Boolean NotifyWasSendDirector { get; set; }
+    }
+}

@@ -16,7 +16,8 @@
 
 
         }  
-        public  DbSet<Pupil> Pupils { get; set; }
+        public DbSet<Pupil> Pupils { get; set; }
+        public DbSet<Event> Events { get; set; }
     }
 
 
