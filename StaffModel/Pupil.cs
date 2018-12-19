@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace eljur_notifier.StaffModel
 {
-    class Pupil
+    public class Pupil
     {
         //[Key]
         //[ForeignKey("PupilId")]

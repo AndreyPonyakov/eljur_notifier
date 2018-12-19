@@ -15,7 +15,7 @@ namespace eljur_notifier
         {
 
             var Config = new Config();
-            var StaffDb = new StaffDb();
+            //var StaffDb = new StaffDb();
             //Task taskGetDataFb = new Task(() => GetDataFb(Config.ConnectStr, Config.IntervalRequest));
             //Task taskSendNotifyParents = new Task(() => SendNotifyParents(Config.EljurApiTocken, Config.FrenchLeaveInterval));
             //taskGetDataFb.Start();
@@ -75,28 +75,28 @@ namespace eljur_notifier
 
             //var curStaff = Firebird.getAllStaff();
 
-            using (StaffDb db = new StaffDb())
-            {
-                Console.WriteLine("Inside using");
-                //foreach (object[] row in curStaff)
-                //{
-                    Staff firstStudent = new Staff { Staff_Id = 1, FirstName = "Tom", LastName = "Nicht" };
-                    db.Staffs.Add(firstStudent);
-                    db.SaveChanges();
-                    Console.WriteLine("firstStudent success saved");
+            //using (StaffDb db = new StaffDb())
+            //{
+            //    Console.WriteLine("Inside using");
+            //    //foreach (object[] row in curStaff)
+            //    //{
+            //        Staff firstStudent = new Staff { Staff_Id = 1, FirstName = "Tom", LastName = "Nicht" };
+            //        db.Staffs.Add(firstStudent);
+            //        db.SaveChanges();
+            //        Console.WriteLine("firstStudent success saved");
 
-                    var students = db.Staffs;
-                    Console.WriteLine("List of objects:");
-                    foreach (Staff u in students)
-                    {
-                        Console.WriteLine("{0}.{1} - {2}", u.FirstName, u.LastName, u.Staff_Id);
-                    }
+            //        var students = db.Staffs;
+            //        Console.WriteLine("List of objects:");
+            //        foreach (Staff u in students)
+            //        {
+            //            Console.WriteLine("{0}.{1} - {2}", u.FirstName, u.LastName, u.Staff_Id);
+            //        }
 
 
-                    //break;
-                //}
+            //        //break;
+            //    //}
 
-            }
+            //}
           
         }
 
