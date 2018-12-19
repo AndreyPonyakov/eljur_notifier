@@ -26,44 +26,28 @@ namespace eljur_notifier
 
 
 
-            //using (StaffContext context = new StaffContext())
-            //{
-            //    Console.WriteLine("Inside using");
-
-            //    Pupil firstStudent = new Pupil();
-            //    firstStudent.PupilId = 1;
-            //    firstStudent.FirstName = "Иван";
-            //    firstStudent.LastName = "Иванов";
-            //    firstStudent.MiddleName = "Иванович";
-            //    firstStudent.FullFIO = "Иван Иванов Иванович";
-            //    firstStudent.Class = "1Б";
-            //    firstStudent.Event = "Прогул";
-            //    firstStudent.EljurAccount = "some_string";
-            //    firstStudent.NotifyEnable = true;
-            //    firstStudent.NotifyEnableDirector = true;
-            //    firstStudent.NotifyWasSend = false;
-            //    firstStudent.NotifyWasSendDirector = false;
-
-
-            //    context.Pupils.Add(firstStudent);
-            //    context.SaveChanges();
-            //    Console.WriteLine("firstStudent success saved");
-
-            //    var students = context.Pupils;
-            //    Console.WriteLine("List of objects:");
-            //    foreach (Pupil p in students)
-            //    {
-            //        Console.WriteLine("{0}.{1} - {2}", p.PupilId, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Class);
-            //    }             
-
-            //}
-
+           
+             
 
             MsDb Db = new MsDb();
             Db.IsDbExistVar = MsDb.IsDbExist(Config.ConStrMsDB);
 
             //Db.IsDbExistVar = "data source=DESKTOP-I53QIPT/SQLEXPRESS";
-            Console.WriteLine("MsSQLDB is exist " + Db.IsDbExistVar.ToString());
+            Console.WriteLine("MsSQLDB is exist: " + Db.IsDbExistVar.ToString());
+
+            if (Db.IsDbExistVar)
+            {
+                Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
+                Db.deleteDb(Config.ConStrMsDB);
+                Console.WriteLine("DATABASE was delete");
+            }
+            else
+            {
+                MsDb.createDb(Config.ConStrMsDB);
+                Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
+            }
+
+
 
             Console.ReadKey();
         }
