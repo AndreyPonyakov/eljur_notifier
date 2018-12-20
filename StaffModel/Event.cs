@@ -16,7 +16,8 @@ namespace eljur_notifier.StaffModel
         [Key]     
         public int EventId { get; set; }
         //[ForeignKey("PupilId")]//error
-        public int PupilId { get; set; }            
+        public int PupilId { get; set; }
+        public TimeSpan EventTime { get; set; }
         [MaxLength(500)]
         public string EventName { get; set; }       
         public Boolean NotifyEnable { get; set; }

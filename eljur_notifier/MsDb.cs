@@ -51,6 +51,7 @@ namespace eljur_notifier
             {             
                 Pupil firstStudent = new Pupil();
                 firstStudent.PupilId = 1;
+                firstStudent.PupilIdOld = 5001;
                 firstStudent.FirstName = "Иван";
                 firstStudent.LastName = "Иванов";
                 firstStudent.MiddleName = "Иванович";
@@ -61,6 +62,7 @@ namespace eljur_notifier
                 Event firstEvent = new Event();
                 firstEvent.EventId = 1;
                 firstEvent.PupilId = 1;
+                firstEvent.EventTime = DateTime.Now.TimeOfDay;
                 firstEvent.EventName = "Прогул";
                 firstEvent.NotifyEnable = true;
                 firstEvent.NotifyEnableDirector = true;
@@ -78,11 +80,11 @@ namespace eljur_notifier
                 Console.WriteLine("List of objects:");
                 foreach (Pupil p in students)
                 {
-                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5}", p.PupilId, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Class);
+                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5}", p.PupilIdOld, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Class);
                 }
                 foreach (Event e in evets)
                 {
-                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5} - {6}", e.EventId, e.PupilId, e.EventName, e.NotifyEnable, e.NotifyEnableDirector, e.NotifyWasSend, e.NotifyWasSendDirector);
+                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5} - {6}- {7}", e.EventId, e.PupilId, e.EventTime, e.EventName, e.NotifyEnable, e.NotifyEnableDirector, e.NotifyWasSend, e.NotifyWasSendDirector);
                 }
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Pupils]");
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Events]");
@@ -101,7 +103,7 @@ namespace eljur_notifier
                     //Console.WriteLine("PupilId: " + row[0].ToString());
 
                     Pupil Student = new Pupil();
-                    Student.PupilId = Convert.ToInt32(row[0]);
+                    Student.PupilIdOld = Convert.ToInt32(row[0]);
                     Student.FirstName = row[2].ToString();
                     Student.LastName = row[1].ToString();
                     Student.MiddleName = row[3].ToString();
@@ -121,6 +123,79 @@ namespace eljur_notifier
                 }
 
             }
+        }
+
+
+        public void CheckEventsDb(List<object[]> curEvents)
+        {
+            using (this.StaffCtx = new StaffContext())
+            {
+                foreach (object[] row in curEvents)
+                {
+                    var PupilId = Convert.ToInt32(row[1]);//PipilIdOld
+
+
+
+                    var result = StaffCtx.Events.SingleOrDefault(e => e.PupilId == PupilId);
+                    if (result != null)
+                    {
+                        if (result.EventName == "Первый проход" || result.EventName == "Вернулся")
+                        {
+                            result.EventName = "Вышел";
+                            result.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
+                            StaffCtx.SaveChanges();
+                            Console.WriteLine("Школьник с id " + PupilId + " вышел из школы в " + row[0].ToString());
+                        }
+                        else if (result.EventName == "Вышел" || result.EventName == "Прогул")
+                        {
+                            result.EventName = "Вернулся";
+                            result.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
+                            StaffCtx.SaveChanges();
+                            Console.WriteLine("Школьник с id " + PupilId + "  вернулся в школу в " + row[0].ToString());
+
+                        }
+                    }
+                    else
+                    {
+                        result.EventName = "Первый проход";
+                        result.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
+                        StaffCtx.SaveChanges();
+                        Console.WriteLine("Школьник с id " + PupilId + "  пришёл в школу в " + row[0].ToString());
+                    }
+
+
+
+                    //var students = StaffCtx.Pupils;
+                    //foreach (Pupil p in students)
+                    //{
+                    //    Console.WriteLine("TEST{0}.{1} - {2} - {3} - {4} - {5}", p.PupilIdOld, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Class);
+                    //}
+
+
+
+
+                    //var evets = StaffCtx.Events;
+                    //foreach (Event e in evets)
+                    //{
+                    //    if (e.PupilId == PupilId)
+                    //    {
+                    //        if (e.EventName == "Первый проход")
+                    //        {
+                    //            e.EventName = 
+                    //            StaffCtx.SaveChanges();
+                    //        }                                         
+                    //    }                    
+                    //    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5} - {6}", e.EventId, e.PupilId, e.EventName, e.NotifyEnable, e.NotifyEnableDirector, e.NotifyWasSend, e.NotifyWasSendDirector);
+                    //}
+
+
+
+
+                }
+
+
+            }
+
         }
 
 

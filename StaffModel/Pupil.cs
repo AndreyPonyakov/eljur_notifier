@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace eljur_notifier.StaffModel
 {
@@ -12,6 +13,7 @@ namespace eljur_notifier.StaffModel
 
         [Key]     
         public int PupilId { get; set; }
+        public int PupilIdOld { get; set; }
         [MaxLength(500)]
         public string FirstName { get; set; }
         [MaxLength(500)]

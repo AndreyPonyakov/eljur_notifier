@@ -18,23 +18,11 @@ namespace eljur_notifier
         {
 
             var Config = new Config();
-            //var StaffDb = new StaffDb();
-            //Task taskGetDataFb = new Task(() => GetDataFb(Config.ConnectStr, Config.IntervalRequest));
-            //Task taskSendNotifyParents = new Task(() => SendNotifyParents(Config.EljurApiTocken, Config.FrenchLeaveInterval));
-            //taskGetDataFb.Start();
-            //taskSendNotifyParents.Start();
-
-
-
-           
-             
-
             MsDb Db = new MsDb();
             Db.IsDbExistVar = MsDb.IsDbExist(Config.ConStrMsDB);
 
-            //Db.IsDbExistVar = "data source=DESKTOP-I53QIPT/SQLEXPRESS";
+         
             Console.WriteLine("MsSQLDB is exist: " + Db.IsDbExistVar.ToString());
-
             if (Db.IsDbExistVar)
             {
                 Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
@@ -48,20 +36,25 @@ namespace eljur_notifier
                 Console.WriteLine("TABLE Events was cleared");
                 Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
 
-
-                
-
                 var Firebird = new Firebird(Config.ConnectStr);
                 var AllStaff = Firebird.getAllStaff();
                 Db.FillStaffDb(AllStaff);
-
-
-                
-
-
-
-
             }
+
+
+         
+            //Task taskGetDataFb = new Task(() => GetDataFb(Config.ConnectStr, Config.IntervalRequest));
+            Task taskGetDataFb = new Task(() => GetDataFb(Config));
+            //Task taskSendNotifyParents = new Task(() => SendNotifyParents(Config.EljurApiTocken, Config.FrenchLeaveInterval));
+            taskGetDataFb.Start();
+            //taskSendNotifyParents.Start();
+
+
+
+
+
+
+
 
 
 
@@ -73,29 +66,31 @@ namespace eljur_notifier
 
  
 
-        static void GetDataFb(String ConnectStr, Double IntervalRequest)
+        //static void GetDataFb(String ConnectStr, Double IntervalRequest)
+        static void GetDataFb(Config Config)
         {
-            var Firebird = new Firebird(ConnectStr);
-            var timerFb = new System.Timers.Timer();
-            TimeSpan IntervalRequestTS = TimeSpan.FromMilliseconds(IntervalRequest);
+            var Firebird = new Firebird(Config.ConnectStr);
+            var timerFb = new System.Timers.Timer();           
             timerFb.AutoReset = true;
-            timerFb.Elapsed += delegate { t_Elapsed(Firebird, IntervalRequestTS); };
-            timerFb.Interval = IntervalRequest;
+            timerFb.Elapsed += delegate { t_Elapsed(Firebird, Config); };
+            timerFb.Interval = Config.IntervalRequest;
             timerFb.Start();
 
         }
 
 
-        static void t_Elapsed(Firebird Firebird, TimeSpan IntervalRequest)
+        //static void t_Elapsed(Firebird Firebird, TimeSpan IntervalRequest)
+        static void t_Elapsed(Firebird Firebird, Config Config)
         {
+            TimeSpan IntervalRequestTS = TimeSpan.FromMilliseconds(Config.IntervalRequest);
             //DateTime curTime = Convert.ToDateTime("2010-12-25 09:24:00");
             DateTime curTime = DateTime.Now;
             //curTime = curTime.Add(new TimeSpan(-8, 0, 0));
 
-
-            //var curStaff = Firebird.getStaffByTimeStamp(curTime, IntervalRequest);
-
-
+            var curEvents = Firebird.getStaffByTimeStamp(curTime, IntervalRequestTS);
+            MsDb Db = new MsDb();
+            Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
+            Db.CheckEventsDb(curEvents);
 
         }
 
