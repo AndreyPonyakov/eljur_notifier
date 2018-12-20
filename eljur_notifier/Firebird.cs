@@ -89,6 +89,7 @@ namespace eljur_notifier
             {
                 Console.WriteLine("TRUE");
                 this.afterDt = DateTime.Now;
+                this.afterDt = this.afterDt.Add(new TimeSpan(-10, -55, 0));// NEED COMMENT!!!!!!!!!!!!!!
                 this.beforeDt = this.afterDt.Subtract(IntervalRequest); //Add(new TimeSpan(0, -1, 0));
             }
             else

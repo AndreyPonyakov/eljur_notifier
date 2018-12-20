@@ -85,7 +85,9 @@ namespace eljur_notifier
             TimeSpan IntervalRequestTS = TimeSpan.FromMilliseconds(Config.IntervalRequest);
             //DateTime curTime = Convert.ToDateTime("2010-12-25 09:24:00");
             DateTime curTime = DateTime.Now;
-            //curTime = curTime.Add(new TimeSpan(-8, 0, 0));
+            //curTime = curTime.Add(new TimeSpan(-9, 0, 0));
+
+            Console.WriteLine("CurTime is " + curTime);
 
             var curEvents = Firebird.getStaffByTimeStamp(curTime, IntervalRequestTS);
             MsDb Db = new MsDb();

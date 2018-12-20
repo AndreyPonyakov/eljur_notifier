@@ -10,9 +10,7 @@ using System.Data.Entity;
 namespace eljur_notifier.StaffModel
 {
     public class Event
-    {
-       
-
+    {     
         [Key]     
         public int EventId { get; set; }
         //[ForeignKey("PupilId")]//error

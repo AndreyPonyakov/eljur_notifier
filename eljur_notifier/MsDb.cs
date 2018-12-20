@@ -132,8 +132,13 @@ namespace eljur_notifier
             {
                 foreach (object[] row in curEvents)
                 {
+                    //if (row[1] == DBNull)
+                    if (row[1] == System.DBNull.Value)
+                    {
+                        continue;
+                    }
                     var PupilId = Convert.ToInt32(row[1]);//PipilIdOld
-
+                    Console.WriteLine("Событие проход школьника с id " + PupilId.ToString() + " в " + row[0].ToString());
 
 
                     var result = StaffCtx.Events.SingleOrDefault(e => e.PupilId == PupilId);
@@ -142,51 +147,31 @@ namespace eljur_notifier
                         if (result.EventName == "Первый проход" || result.EventName == "Вернулся")
                         {
                             result.EventName = "Вышел";
-                            result.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
+                            //result.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
+                            result.EventTime = TimeSpan.Parse(row[0].ToString());
                             StaffCtx.SaveChanges();
                             Console.WriteLine("Школьник с id " + PupilId + " вышел из школы в " + row[0].ToString());
                         }
                         else if (result.EventName == "Вышел" || result.EventName == "Прогул")
                         {
                             result.EventName = "Вернулся";
-                            result.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
+                            //result.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
+                            result.EventTime = TimeSpan.Parse(row[0].ToString());
                             StaffCtx.SaveChanges();
                             Console.WriteLine("Школьник с id " + PupilId + "  вернулся в школу в " + row[0].ToString());
-
                         }
                     }
                     else
                     {
-                        result.EventName = "Первый проход";
-                        result.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
+                        Event Event = new Event();
+                        Event.PupilId = PupilId;
+                        //Event.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
+                        Event.EventTime = TimeSpan.Parse(row[0].ToString());
+                        Event.EventName = "Первый проход";
+                        StaffCtx.Events.Add(Event);
                         StaffCtx.SaveChanges();
                         Console.WriteLine("Школьник с id " + PupilId + "  пришёл в школу в " + row[0].ToString());
                     }
-
-
-
-                    //var students = StaffCtx.Pupils;
-                    //foreach (Pupil p in students)
-                    //{
-                    //    Console.WriteLine("TEST{0}.{1} - {2} - {3} - {4} - {5}", p.PupilIdOld, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Class);
-                    //}
-
-
-
-
-                    //var evets = StaffCtx.Events;
-                    //foreach (Event e in evets)
-                    //{
-                    //    if (e.PupilId == PupilId)
-                    //    {
-                    //        if (e.EventName == "Первый проход")
-                    //        {
-                    //            e.EventName = 
-                    //            StaffCtx.SaveChanges();
-                    //        }                                         
-                    //    }                    
-                    //    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5} - {6}", e.EventId, e.PupilId, e.EventName, e.NotifyEnable, e.NotifyEnableDirector, e.NotifyWasSend, e.NotifyWasSendDirector);
-                    //}
 
 
 
