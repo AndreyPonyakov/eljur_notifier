@@ -89,7 +89,7 @@ namespace eljur_notifier
             {
                 Console.WriteLine("TRUE");
                 this.afterDt = DateTime.Now;
-                this.afterDt = this.afterDt.Add(new TimeSpan(-10, -55, 0));// NEED COMMENT!!!!!!!!!!!!!!
+                this.afterDt = this.afterDt.Add(new TimeSpan(-13, -55, 0));// NEED COMMENT!!!!!!!!!!!!!!
                 this.beforeDt = this.afterDt.Subtract(IntervalRequest); //Add(new TimeSpan(0, -1, 0));
             }
             else
@@ -107,9 +107,13 @@ namespace eljur_notifier
             String beforeStr = this.beforeDt.ToLongTimeString();
             String afterStr = this.afterDt.ToLongTimeString();
 
-            Console.WriteLine("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "' ORDER BY time_ev ");
-           
-            staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "' ORDER BY time_ev ");
+            //Console.WriteLine("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "' ORDER BY time_ev ");
+            Console.WriteLine("select time_ev, staff_id, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498 or configs_tree_id_controller = 7806)  ORDER BY time_ev");
+
+
+
+            //staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "' ORDER BY time_ev ");
+            staff = getAnySqlQuery("select time_ev, staff_id, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498 or configs_tree_id_controller = 7806)  ORDER BY time_ev");
             foreach (object[] row in staff)
             {
                 foreach (object element in row)
