@@ -47,7 +47,24 @@ namespace eljur_notifier
                 Console.WriteLine("TABLE Pupils was cleared");
                 Console.WriteLine("TABLE Events was cleared");
                 Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
+
+
+                
+
+                var Firebird = new Firebird(Config.ConnectStr);
+                var AllStaff = Firebird.getAllStaff();
+                Db.FillStaffDb(AllStaff);
+
+
+                
+
+
+
+
             }
+
+
+
 
 
 

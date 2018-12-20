@@ -46,10 +46,10 @@ namespace eljur_notifier
                     reader.GetValues(columns);
                     staff.Add(columns);
                     //Console.WriteLine(staff);
-                    Console.WriteLine("staff[" + count + "][id]: " + staff[count_staff][0].ToString());
-                    Console.WriteLine("staff[" + count + "][LastName]: " + staff[count_staff][1].ToString());
-                    Console.WriteLine("staff[" + count + "][FirstName]: " + staff[count_staff][2].ToString());
-                    Console.WriteLine("staff[" + count + "][MiddleName]: " + staff[count_staff][3].ToString());
+                    //Console.WriteLine("staff[" + count + "][id]: " + staff[count_staff][0].ToString());
+                    //Console.WriteLine("staff[" + count + "][LastName]: " + staff[count_staff][1].ToString());
+                    //Console.WriteLine("staff[" + count + "][FirstName]: " + staff[count_staff][2].ToString());
+                    //Console.WriteLine("staff[" + count + "][MiddleName]: " + staff[count_staff][3].ToString());
                     count_staff++;
                 }
                 count++;

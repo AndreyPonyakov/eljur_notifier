@@ -9,6 +9,7 @@ namespace eljur_notifier.StaffModel
 {
     public class Pupil
     {
+
         [Key]     
         public int PupilId { get; set; }
         [MaxLength(500)]

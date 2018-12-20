@@ -60,7 +60,7 @@ namespace eljur_notifier
                 
                 Event firstEvent = new Event();
                 firstEvent.EventId = 1;
-                firstEvent.PupilId = firstStudent;
+                firstEvent.PupilId = 1;
                 firstEvent.EventName = "Прогул";
                 firstEvent.NotifyEnable = true;
                 firstEvent.NotifyEnableDirector = true;
@@ -87,10 +87,45 @@ namespace eljur_notifier
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Pupils]");
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Events]");
 
-            }
-         
-
+            }     
         }
+
+        public void FillStaffDb(List<object[]> AllStaff)
+        {
+            using (this.StaffCtx = new StaffContext())
+            {
+                foreach (object[] row in AllStaff)
+                {
+                    //var columns = row.Count();
+                    //Console.WriteLine(columns);
+                    //Console.WriteLine("PupilId: " + row[0].ToString());
+
+                    Pupil Student = new Pupil();
+                    Student.PupilId = Convert.ToInt32(row[0]);
+                    Student.FirstName = row[2].ToString();
+                    Student.LastName = row[1].ToString();
+                    Student.MiddleName = row[3].ToString();
+                    Student.FullFIO = row[22].ToString();
+                    //Student.Class = row[21].ToString();
+                    //Student.EljurAccount = row[21].ToString();
+                    StaffCtx.Pupils.Add(Student);
+                    StaffCtx.SaveChanges();
+                    Console.WriteLine("Student success saved");
+                    //break;
+                }
+                var students = StaffCtx.Pupils;
+                Console.WriteLine("List of objects:");
+                foreach (Pupil p in students)
+                {
+                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5}", p.PupilId, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Class);
+                }
+
+            }
+        }
+
+
+
+
 
         public void deleteDb(String conStr)
         {

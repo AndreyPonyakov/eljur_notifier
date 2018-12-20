@@ -5,16 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 
 namespace eljur_notifier.StaffModel
 {
     public class Event
     {
+       
+
         [Key]     
         public int EventId { get; set; }
-        [ForeignKey("PupilId")]//error
-        public Pupil PupilId { get; set; }
-        //public int PupilId { get; set; }            
+        //[ForeignKey("PupilId")]//error
+        public int PupilId { get; set; }            
         [MaxLength(500)]
         public string EventName { get; set; }       
         public Boolean NotifyEnable { get; set; }
