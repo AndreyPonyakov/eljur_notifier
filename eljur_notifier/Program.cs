@@ -89,7 +89,25 @@ namespace eljur_notifier
 
             Console.WriteLine("CurTime is " + curTime);
 
+
+
             var curEvents = Firebird.getStaffByTimeStamp(curTime, IntervalRequestTS);
+
+
+
+            //foreach (object[] row in curEvents)
+            //{
+            //    foreach (object element in row)
+            //    {
+
+            //        Console.WriteLine(element.ToString());
+            //        Console.WriteLine(element.GetType());
+            //    }
+            //    //break;
+            //}
+
+
+
             MsDb Db = new MsDb();
             Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
             Db.CheckEventsDb(curEvents);

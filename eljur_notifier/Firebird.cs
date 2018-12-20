@@ -105,7 +105,9 @@ namespace eljur_notifier
             Console.WriteLine("Time from new afterDt: " + this.afterDt.ToString());
 
             String beforeStr = this.beforeDt.ToLongTimeString();
-            String afterStr = this.beforeDt.ToLongTimeString();
+            String afterStr = this.afterDt.ToLongTimeString();
+
+            Console.WriteLine("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "' ORDER BY time_ev ");
            
             staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "' ORDER BY time_ev ");
             foreach (object[] row in staff)
