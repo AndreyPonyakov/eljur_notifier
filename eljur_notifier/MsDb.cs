@@ -23,30 +23,9 @@ namespace eljur_notifier
         {
             this.ConnectStr = ConnectStr;
             IDbConnection db = new SqlConnection(ConnectStr);
+            this.IsDbExistVar = this.IsDbExist(db);
+        }
 
-        }
-        public override Boolean IsDbExist(IDbConnection db)
-        {           
-            try
-            {
-                db.Open();
-                db.Close();
-                return true;
-            }
-            catch (SqlException e)
-            {
-                // Cannot connect to database
-                Console.WriteLine("Cannot connect to database");
-                return false;
-            }
-        }
-        
-
-        public static IDbConnection getConnection(String conStr)
-        {
-            IDbConnection dbcon = new SqlConnection(conStr);
-            return dbcon;
-        }
 
         public void createDb(String conStr)
         {

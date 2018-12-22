@@ -38,7 +38,7 @@ namespace eljur_notifier
 
 
             MsDb Db = new MsDb(Config.ConStrMsDB);
-            Db.IsDbExistVar = MsDb.IsDbExist(Config.ConStrMsDB);
+ 
 
          
             Console.WriteLine("MsSQLDB is exist: " + Db.IsDbExistVar.ToString());
@@ -142,8 +142,8 @@ namespace eljur_notifier
 
 
 
-            MsDb Db = new MsDb();
-            Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
+            MsDb Db = new MsDb(Config.ConStrMsDB);
+           
             Db.CheckEventsDb(curEvents);
 
         }
