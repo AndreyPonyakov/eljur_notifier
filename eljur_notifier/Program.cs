@@ -8,6 +8,8 @@ using System.Data;
 using System.Data.SqlClient;
 using eljur_notifier;
 using eljur_notifier.StaffModel;
+using eljur_notifier.AppCommon;
+using NLog;
 
 
 namespace eljur_notifier
@@ -16,47 +18,52 @@ namespace eljur_notifier
     {
         static void Main(string[] args)
         {
-
-            var Config = new Config();
+            //Logger logger = LogManager.GetCurrentClassLogger(); 
+            Message message = new Message();
+            Config Config = new Config();
             TimeSpan IntervalRequestTS = TimeSpan.FromMilliseconds(Config.IntervalRequest);
-            var Firebird = new Firebird(Config.ConStrFbDB);
+            Firebird Firebird = new Firebird(Config.ConStrFbDB);
+            MsDb MsDb = new MsDb(Config.ConStrMsDB);
 
-            Firebird.IsDbExistVar = Firebird.IsDbExist(Config.ConStrFbDB);
+            //message.Display("trace message", "Trace");
+            //message.Display("debug message", "Debug");
+            //message.Display("info message", "Info");
+            //message.Display("warn message", "Warn");
+            //message.Display("error message", "Error");
+            //message.Display("fatal message", "Fatal");
+            //Thread.Sleep(10000);
 
-            if (!Firebird.IsDbExistVar)
+
+
+            //if (!Firebird.IsDbExistVar)
+            //{
+            //    CloseProgram(new Action(delegate
+            //    {
+            //        Console.WriteLine("Firebird database doesn't exist. Program will be closed!");
+            //        Thread.Sleep(2000);
+
+            //    }));
+
+            //}
+
+
+
+            Console.WriteLine("MsSQLDB is exist: " + MsDb.IsDbExistVar.ToString());
+            if (MsDb.IsDbExistVar)
             {
-                CloseProgram(new Action(delegate
-                {
-                    Console.WriteLine("Firebird database doesn't exist. Program will be closed!");
-                    Thread.Sleep(2000);
 
-                }));
-
-            }
-           
-
-
-
-            MsDb Db = new MsDb(Config.ConStrMsDB);
- 
-
-         
-            Console.WriteLine("MsSQLDB is exist: " + Db.IsDbExistVar.ToString());
-            if (Db.IsDbExistVar)
-            {
-                Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
-                Db.deleteDb(Config.ConStrMsDB);
+                MsDb.deleteDb(Config.ConStrMsDB);
                 Console.WriteLine("DATABASE was deleted");
             }
             else
             {
-                Db.createDb(Config.ConStrMsDB);
+                MsDb.createDb(Config.ConStrMsDB);
                 Console.WriteLine("TABLE Pupils was cleared");
                 Console.WriteLine("TABLE Events was cleared");
-                Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
+
 
                 var AllStaff = Firebird.getAllStaff();
-                Db.FillStaffDb(AllStaff);
+                MsDb.FillStaffDb(AllStaff);
             }
 
 
@@ -83,17 +90,7 @@ namespace eljur_notifier
         }
 
 
-        public static void CloseProgram()
-        {
-            //Process.GetCurrentProcess().Kill();
-            Environment.Exit(1);
-        }
-
-        public static void CloseProgram(Action actionBeforeClosing)
-        {
-            actionBeforeClosing();
-            CloseProgram();
-        }
+       
 
 
 
@@ -142,9 +139,9 @@ namespace eljur_notifier
 
 
 
-            MsDb Db = new MsDb(Config.ConStrMsDB);
-           
-            Db.CheckEventsDb(curEvents);
+            MsDb MsDb = new MsDb(Config.ConStrMsDB);
+
+            MsDb.CheckEventsDb(curEvents);
 
         }
 

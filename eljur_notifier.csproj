@@ -57,6 +57,9 @@
     <Reference Include="FirebirdSql.Data.FirebirdClient, Version=6.4.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
       <HintPath>packages\FirebirdSql.Data.FirebirdClient.6.4.0\lib\net452\FirebirdSql.Data.FirebirdClient.dll</HintPath>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -64,8 +67,11 @@
     <Reference Include="System.Data.SqlClient, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Data.SqlClient.4.6.0\lib\net461\System.Data.SqlClient.dll</HintPath>
     </Reference>
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -74,11 +80,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="eljur_notifier\Config.cs" />
+    <Compile Include="eljur_notifier\AppCommon\Config.cs" />
+    <Compile Include="eljur_notifier\AppCommon\Message.cs" />
     <Compile Include="eljur_notifier\DbCommon\DbCommon.cs" />
     <Compile Include="eljur_notifier\DbCommon\DbCommonCommunicationInf.cs" />
-    <Compile Include="eljur_notifier\Firebird.cs" />
-    <Compile Include="eljur_notifier\MsDb.cs" />
+    <Compile Include="eljur_notifier\FireBird\Firebird.cs" />
+    <Compile Include="eljur_notifier\MsDb\MsDb.cs" />
     <Compile Include="eljur_notifier\Program.cs" />
     <Compile Include="Migrations\201812191123066_InitialCreate.cs" />
     <Compile Include="Migrations\201812191123066_InitialCreate.Designer.cs">
@@ -115,8 +122,12 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="eljur_notifier\App.config" />
-    <None Include="eljur_notifier\packages.config" />
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -155,9 +166,6 @@
       <DependentUpon>201812201358278_EventTime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="eljur_notifier\FireBird\" />
-    <Folder Include="eljur_notifier\MsDb\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FirebirdSql.Data.FirebirdClient;
+using eljur_notifier.DbCommon;
 
 namespace eljur_notifier
 {
-    class Firebird
+    class Firebird : DbCommonClass
     {
-        internal protected FbConnection FbCon { get; set; }
+        internal protected FbConnection dbcon { get; set; }
         internal protected String ConnectStr { get; set; }
         internal protected Boolean IsDbExistVar { get; set; }
         internal protected DateTime beforeDt { get; set; }
@@ -18,44 +19,19 @@ namespace eljur_notifier
         public Firebird(String ConnectStr)
         {
             this.ConnectStr = ConnectStr;
-            this.FbCon = Firebird.getConnection(this.ConnectStr);
+            this.dbcon = new FbConnection(ConnectStr);
+            this.IsDbExistVar = this.IsDbExist(dbcon);
+
             this.beforeDt = Convert.ToDateTime("2000-12-31 23:59:59");
             this.afterDt = Convert.ToDateTime("2000-12-31 23:59:59");
         }
 
-
-        public static Boolean IsDbExist(String conStr)
-        {
-            FbConnection db = new FbConnection(conStr);
-            try
-            {
-                db.Open();
-                db.Close();
-                return true;
-            }
-            catch (FbException e)
-            {
-                // Cannot connect to database
-                Console.WriteLine("Cannot connect to Firebird database");
-                return false;
-            }
-        }
-
-
-
-
-
-
-        public static FbConnection getConnection(String ConnectStr)
-        {
-            FbConnection fbcon = new FbConnection(ConnectStr);
-            return fbcon;
-        }
+    
 
         public List<object[]> getOneStaff(int staffNumber)
         {
-            this.FbCon.Open();
-            FbCommand command = this.FbCon.CreateCommand();
+            this.dbcon.Open();
+            FbCommand command = this.dbcon.CreateCommand();
             command.CommandText = "select * from STAFF";
             FbDataReader reader = command.ExecuteReader();
             int count = 0;
@@ -81,7 +57,7 @@ namespace eljur_notifier
             Console.WriteLine("count: " + count);
             reader.Close();
             command.Dispose();
-            this.FbCon.Close();
+            this.dbcon.Close();
             return staff;
         }
         public List<object[]> getAllStaff()
@@ -91,9 +67,9 @@ namespace eljur_notifier
 
         public List<object[]> getAnySqlQuery(String SqlQuery)
         {
-            this.FbCon.Open();
+            this.dbcon.Open();
             var rows = new List<object[]>();
-            FbCommand command = this.FbCon.CreateCommand();
+            FbCommand command = this.dbcon.CreateCommand();
             command.CommandText = SqlQuery;
             FbDataReader reader = command.ExecuteReader();
             while (reader.Read())
@@ -102,7 +78,7 @@ namespace eljur_notifier
                 reader.GetValues(columns);
                 rows.Add(columns);
             }
-            this.FbCon.Close();
+            this.dbcon.Close();
             return rows; 
         }
 

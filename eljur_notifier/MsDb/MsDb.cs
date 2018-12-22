@@ -13,17 +13,18 @@ namespace eljur_notifier
 {
     class MsDb: DbCommonClass
     {
-        internal protected IDbConnection dbcon { get; set; }
+
         internal protected String ConnectStr { get; set; }
+        internal protected IDbConnection dbcon { get; set; }
         internal protected Boolean IsDbExistVar { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
-        internal protected IDbConnection db { get; set; }
+        
 
         public MsDb(String ConnectStr)
         {
             this.ConnectStr = ConnectStr;
-            IDbConnection db = new SqlConnection(ConnectStr);
-            this.IsDbExistVar = this.IsDbExist(db);
+            IDbConnection dbcon = new SqlConnection(ConnectStr);
+            this.IsDbExistVar = this.IsDbExist(dbcon);
         }
 
 
