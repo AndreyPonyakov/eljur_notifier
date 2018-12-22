@@ -18,7 +18,26 @@ namespace eljur_notifier
         {
 
             var Config = new Config();
-            MsDb Db = new MsDb();
+            TimeSpan IntervalRequestTS = TimeSpan.FromMilliseconds(Config.IntervalRequest);
+            var Firebird = new Firebird(Config.ConStrFbDB);
+
+            Firebird.IsDbExistVar = Firebird.IsDbExist(Config.ConStrFbDB);
+
+            if (!Firebird.IsDbExistVar)
+            {
+                CloseProgram(new Action(delegate
+                {
+                    Console.WriteLine("Firebird database doesn't exist. Program will be closed!");
+                    Thread.Sleep(2000);
+
+                }));
+
+            }
+           
+
+
+
+            MsDb Db = new MsDb(Config.ConStrMsDB);
             Db.IsDbExistVar = MsDb.IsDbExist(Config.ConStrMsDB);
 
          
@@ -36,7 +55,6 @@ namespace eljur_notifier
                 Console.WriteLine("TABLE Events was cleared");
                 Db.dbcon = MsDb.getConnection(Config.ConStrMsDB);
 
-                var Firebird = new Firebird(Config.ConnectStr);
                 var AllStaff = Firebird.getAllStaff();
                 Db.FillStaffDb(AllStaff);
             }
@@ -64,17 +82,44 @@ namespace eljur_notifier
             Console.ReadKey();
         }
 
- 
+
+        public static void CloseProgram()
+        {
+            //Process.GetCurrentProcess().Kill();
+            Environment.Exit(1);
+        }
+
+        public static void CloseProgram(Action actionBeforeClosing)
+        {
+            actionBeforeClosing();
+            CloseProgram();
+        }
+
+
+
+
+
+
 
         //static void GetDataFb(String ConnectStr, Double IntervalRequest)
         static void GetDataFb(Config Config)
         {
-            var Firebird = new Firebird(Config.ConnectStr);
-            var timerFb = new System.Timers.Timer();           
-            timerFb.AutoReset = true;
-            timerFb.Elapsed += delegate { t_Elapsed(Firebird, Config); };
-            timerFb.Interval = Config.IntervalRequest;
-            timerFb.Start();
+            //TimeSpan IntervalRequestTS = TimeSpan.FromMilliseconds(Config.IntervalRequest);
+            //var Firebird = new Firebird(Config.ConnectStr);
+
+
+
+
+
+
+
+
+
+            //var timerFb = new System.Timers.Timer();           
+            //timerFb.AutoReset = true;
+            //timerFb.Elapsed += delegate { t_Elapsed(Firebird, Config); };
+            //timerFb.Interval = Config.IntervalRequest;
+            //timerFb.Start();
 
         }
 
@@ -94,17 +139,6 @@ namespace eljur_notifier
             var curEvents = Firebird.getStaffByTimeStamp(curTime, IntervalRequestTS);
 
 
-
-            //foreach (object[] row in curEvents)
-            //{
-            //    foreach (object element in row)
-            //    {
-
-            //        Console.WriteLine(element.ToString());
-            //        Console.WriteLine(element.GetType());
-            //    }
-            //    //break;
-            //}
 
 
 

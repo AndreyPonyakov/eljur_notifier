@@ -7,23 +7,26 @@ using System.Data.SqlClient;
 using System.Data;
 using eljur_notifier;
 using eljur_notifier.StaffModel;
+using eljur_notifier.DbCommon;
 
 namespace eljur_notifier
 {
-    class MsDb
+    class MsDb: DbCommonClass
     {
         internal protected IDbConnection dbcon { get; set; }
         internal protected String ConnectStr { get; set; }
         internal protected Boolean IsDbExistVar { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
+        internal protected IDbConnection db { get; set; }
 
-        public MsDb()
+        public MsDb(String ConnectStr)
         {
+            this.ConnectStr = ConnectStr;
+            IDbConnection db = new SqlConnection(ConnectStr);
 
         }
-        public static Boolean IsDbExist(String conStr)
-        {
-            IDbConnection db = new SqlConnection(conStr);
+        public override Boolean IsDbExist(IDbConnection db)
+        {           
             try
             {
                 db.Open();
@@ -37,6 +40,7 @@ namespace eljur_notifier
                 return false;
             }
         }
+        
 
         public static IDbConnection getConnection(String conStr)
         {
@@ -131,9 +135,8 @@ namespace eljur_notifier
             using (this.StaffCtx = new StaffContext())
             {
                 foreach (object[] row in curEvents)
-                {
-                    //if (row[1] == DBNull)
-                    if (row[1] == System.DBNull.Value)
+                {                  
+                    if (row[1] == DBNull.Value)
                     {
                         continue;
                     }

@@ -75,6 +75,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="eljur_notifier\Config.cs" />
+    <Compile Include="eljur_notifier\DbCommon\DbCommon.cs" />
+    <Compile Include="eljur_notifier\DbCommon\DbCommonCommunicationInf.cs" />
     <Compile Include="eljur_notifier\Firebird.cs" />
     <Compile Include="eljur_notifier\MsDb.cs" />
     <Compile Include="eljur_notifier\Program.cs" />
@@ -152,6 +154,10 @@
     <EmbeddedResource Include="Migrations\201812201358278_EventTime.resx">
       <DependentUpon>201812201358278_EventTime.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="eljur_notifier\FireBird\" />
+    <Folder Include="eljur_notifier\MsDb\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

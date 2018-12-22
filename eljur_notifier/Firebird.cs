@@ -11,6 +11,7 @@ namespace eljur_notifier
     {
         internal protected FbConnection FbCon { get; set; }
         internal protected String ConnectStr { get; set; }
+        internal protected Boolean IsDbExistVar { get; set; }
         internal protected DateTime beforeDt { get; set; }
         internal protected DateTime afterDt { get; set; }
 
@@ -21,6 +22,29 @@ namespace eljur_notifier
             this.beforeDt = Convert.ToDateTime("2000-12-31 23:59:59");
             this.afterDt = Convert.ToDateTime("2000-12-31 23:59:59");
         }
+
+
+        public static Boolean IsDbExist(String conStr)
+        {
+            FbConnection db = new FbConnection(conStr);
+            try
+            {
+                db.Open();
+                db.Close();
+                return true;
+            }
+            catch (FbException e)
+            {
+                // Cannot connect to database
+                Console.WriteLine("Cannot connect to Firebird database");
+                return false;
+            }
+        }
+
+
+
+
+
 
         public static FbConnection getConnection(String ConnectStr)
         {
