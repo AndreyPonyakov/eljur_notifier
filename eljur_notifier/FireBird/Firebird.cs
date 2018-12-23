@@ -27,7 +27,7 @@ namespace eljur_notifier
 
             if (!this.IsDbExistVar)
             {
-                message.Display("Firebird database doesn't exist. Program will be closed!", "Fatal");               
+                message.Display("Firebird database doesn't exist. Program will be closed!", "Fatal",  new Exception());               
             }
             this.beforeDt = Convert.ToDateTime("2000-12-31 23:59:59");
             this.afterDt = Convert.ToDateTime("2000-12-31 23:59:59");

@@ -19,26 +19,24 @@ namespace eljur_notifier
         static void Main(string[] args)
         { 
             Message message = new Message();
+
+            //try
+            //{
+            //    throw new Exception();
+            //}
+            //catch (Exception ex)
+            //{
+            //    message.Display("fatal message", "Fatal", ex);
+            //}
+
+
             Config Config = new Config();
             TimeSpan IntervalRequestTS = TimeSpan.FromMilliseconds(Config.IntervalRequest);
             Firebird Firebird = new Firebird(Config.ConStrFbDB);
             MsDb MsDb = new MsDb(Config.ConStrMsDB);
 
-            //message.Display("trace message", "Trace");
-            //throw new Exception("Test Exception");
-            //message.Display("debug message", "Debug");
-            //message.Display("info message", "Info");
-            //message.Display("warn message", "Warn");
-            //message.Display("error message", "Error");
-            //message.Display("fatal message", "Fatal");
-            //Thread.Sleep(10000);
 
-
-
-            
-
-
-
+      
             Console.WriteLine("MsSQLDB is exist: " + MsDb.IsDbExistVar.ToString());
             if (MsDb.IsDbExistVar)
             {
