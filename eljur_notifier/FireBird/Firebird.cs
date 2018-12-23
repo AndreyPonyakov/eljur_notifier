@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using FirebirdSql.Data.FirebirdClient;
 using eljur_notifier.DbCommon;
+using eljur_notifier.AppCommon;
 
 namespace eljur_notifier
 {
@@ -21,7 +23,12 @@ namespace eljur_notifier
             this.ConnectStr = ConnectStr;
             this.dbcon = new FbConnection(ConnectStr);
             this.IsDbExistVar = this.IsDbExist(dbcon);
+            Message message = new Message();
 
+            if (!this.IsDbExistVar)
+            {
+                message.Display("Firebird database doesn't exist. Program will be closed!", "Fatal");               
+            }
             this.beforeDt = Convert.ToDateTime("2000-12-31 23:59:59");
             this.afterDt = Convert.ToDateTime("2000-12-31 23:59:59");
         }

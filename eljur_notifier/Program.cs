@@ -17,33 +17,8 @@ namespace eljur_notifier
     class Program
     {
         static void Main(string[] args)
-        {
-            //Logger logger = LogManager.GetCurrentClassLogger();
-
-    
-
-
+        { 
             Message message = new Message();
-            //message.Display("error message", "Error");
-
-            try
-            {
-                throw new Exception("Test Exception");
-            }
-            catch (Exception ex)
-            {
-                message.Display("trace messag", "Trace");
-                message.Display("warn message", "Warn");
-                message.Display("error message without exeption", "Error");
-                message.Display("error message", "Error", ex);
-
-                //logger.Error(ex, "ow noos!"); // render the exception with ${exception}
-                //logger.ErrorException("ex", ex);
-                //throw;
-            }
-
-
-
             Config Config = new Config();
             TimeSpan IntervalRequestTS = TimeSpan.FromMilliseconds(Config.IntervalRequest);
             Firebird Firebird = new Firebird(Config.ConStrFbDB);
@@ -56,20 +31,11 @@ namespace eljur_notifier
             //message.Display("warn message", "Warn");
             //message.Display("error message", "Error");
             //message.Display("fatal message", "Fatal");
-            Thread.Sleep(10000);
+            //Thread.Sleep(10000);
 
 
 
-            //if (!Firebird.IsDbExistVar)
-            //{
-            //    CloseProgram(new Action(delegate
-            //    {
-            //        Console.WriteLine("Firebird database doesn't exist. Program will be closed!");
-            //        Thread.Sleep(2000);
-
-            //    }));
-
-            //}
+            
 
 
 

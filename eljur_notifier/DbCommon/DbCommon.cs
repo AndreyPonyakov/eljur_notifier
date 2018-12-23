@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eljur_notifier.AppCommon;
 
 namespace eljur_notifier.DbCommon
 {
@@ -18,10 +19,11 @@ namespace eljur_notifier.DbCommon
                 db.Close();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 // Cannot connect to database
-                Console.WriteLine("Cannot connect to database");
+                Message message = new Message();
+                message.Display("Cannot connect to database", "Error", ex);
                 return false;
             }
         }

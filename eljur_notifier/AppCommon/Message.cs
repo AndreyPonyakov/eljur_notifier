@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using NLog;
 
 namespace eljur_notifier.AppCommon
@@ -48,6 +49,13 @@ namespace eljur_notifier.AppCommon
             {
                 logger.Fatal(MesStr);
                 Console.ForegroundColor = ConsoleColor.DarkRed;
+                CloseProgram(new Action(delegate
+                {
+                    Console.WriteLine(MesStr);
+                    Thread.Sleep(2000);
+
+                }));
+
             }
             else if (level == "Debug")
             {
@@ -59,12 +67,7 @@ namespace eljur_notifier.AppCommon
             Console.ResetColor();
 
         }
-        //    CloseProgram(new Action(delegate
-        //    {
-        //        Console.WriteLine("Firebird database doesn't exist. Program will be closed!");
-        //        Thread.Sleep(2000);
-
-        //    }));
+       
 
 
         public static void CloseProgram()
@@ -85,6 +88,9 @@ namespace eljur_notifier.AppCommon
         //message.Display("warn message", "Warn");
         //message.Display("error message", "Error");
         //message.Display("fatal message", "Fatal");
+
+        //message.Display("error message without exeption", "Error");
+        //message.Display("error message", "Error", ex);
         //Thread.Sleep(10000);
 
 
