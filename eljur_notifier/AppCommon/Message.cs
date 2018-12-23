@@ -7,7 +7,7 @@ using NLog;
 
 namespace eljur_notifier.AppCommon
 {
-    delegate void MessageShowAction(String message, String level);
+    delegate void MessageShowAction(String message, String level, Exception exeption);
     class Message
     {
         internal protected Logger logger { get; set; }
@@ -22,11 +22,11 @@ namespace eljur_notifier.AppCommon
         {
             _mes = mes;
         }
-        public void Display(String MesStr, String level)
+        public void Display(String MesStr, String level, Exception ex = null)
         {
             
             if (level == "Trace")
-            {
+            {                              
                 logger.Trace(MesStr);
             }
             else if (level == "Info")
@@ -41,7 +41,7 @@ namespace eljur_notifier.AppCommon
             }
             else if (level == "Error")
             {
-                logger.Error(MesStr);
+                logger.Error(ex, MesStr);
                 Console.ForegroundColor = ConsoleColor.Red;
             }
             else if (level == "Fatal")

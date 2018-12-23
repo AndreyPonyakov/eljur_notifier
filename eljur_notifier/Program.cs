@@ -18,20 +18,45 @@ namespace eljur_notifier
     {
         static void Main(string[] args)
         {
-            //Logger logger = LogManager.GetCurrentClassLogger(); 
+            //Logger logger = LogManager.GetCurrentClassLogger();
+
+    
+
+
             Message message = new Message();
+            //message.Display("error message", "Error");
+
+            try
+            {
+                throw new Exception("Test Exception");
+            }
+            catch (Exception ex)
+            {
+                message.Display("trace messag", "Trace");
+                message.Display("warn message", "Warn");
+                message.Display("error message without exeption", "Error");
+                message.Display("error message", "Error", ex);
+
+                //logger.Error(ex, "ow noos!"); // render the exception with ${exception}
+                //logger.ErrorException("ex", ex);
+                //throw;
+            }
+
+
+
             Config Config = new Config();
             TimeSpan IntervalRequestTS = TimeSpan.FromMilliseconds(Config.IntervalRequest);
             Firebird Firebird = new Firebird(Config.ConStrFbDB);
             MsDb MsDb = new MsDb(Config.ConStrMsDB);
 
             //message.Display("trace message", "Trace");
+            //throw new Exception("Test Exception");
             //message.Display("debug message", "Debug");
             //message.Display("info message", "Info");
             //message.Display("warn message", "Warn");
             //message.Display("error message", "Error");
             //message.Display("fatal message", "Fatal");
-            //Thread.Sleep(10000);
+            Thread.Sleep(10000);
 
 
 
