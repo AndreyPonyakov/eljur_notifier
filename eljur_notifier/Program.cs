@@ -19,21 +19,34 @@ namespace eljur_notifier
 {
     class Program
     {
+        public static List<string> MainMethodArgs = new List<string>();
         static void Main(string[] args)
-        { 
+        {
+            MainMethodArgs = args.ToList();
+            Run(MainMethodArgs.ToArray());
+        }
+
+        public static void Run(string[] args)
+        {
             Message message = new Message();
             Config Config = new Config();         
             Firebird Firebird = new Firebird(Config.ConStrFbDB);
             MsDb MsDb = new MsDb(Config.ConStrMsDB);
             MsDbChecker MsDbChecker = new MsDbChecker(MsDb, Config, Firebird);
             EventHandlerEljur EventHandler = new EventHandlerEljur(Config, Firebird, MsDb, MsDbChecker);
-         
-            Task taskGetDataFb = new Task(() => EventHandler.GetDataFb());
-            //Task taskSendNotifyParents = new Task(() => EventHandler.SendNotifyParents(Config.EljurApiTocken, Config.FrenchLeaveInterval));
-            taskGetDataFb.Start();
-            //taskSendNotifyParents.Start();
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            Console.ReadKey();
+            var GetDataFb = EventHandler.GetDataFb(cancellationTokenSource.Token);
+
+            var SendNotifyParents = EventHandler.SendNotifyParents(cancellationTokenSource.Token);
+
+
+
+            while (Console.ReadKey().Key != ConsoleKey.Enter) { }
+            cancellationTokenSource.Cancel();
+            Task.WaitAll(GetDataFb, SendNotifyParents);
+            //restart
+            Run(MainMethodArgs.ToArray());
         }
    
     }

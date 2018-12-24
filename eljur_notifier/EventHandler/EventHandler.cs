@@ -28,9 +28,11 @@ namespace eljur_notifier.EventHandlerNS
             this.msDbChecker = MsDbChecker;
 
         }
-        public void GetDataFb()
+
+
+        public async Task GetDataFb(CancellationToken cancellationToken) 
         {
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 DateTime startTime = DateTime.Now;
 
@@ -42,18 +44,20 @@ namespace eljur_notifier.EventHandlerNS
                 TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(config.IntervalRequest);
                 TimeSpan sleepTime = IntervalRequest - deltaTime;
                 message.Display("sleepTime is: " + sleepTime.ToString(), "Trace");
-                Thread.Sleep(sleepTime);
+                await Task.Delay(sleepTime);
             }
         }
-       
 
-        public void SendNotifyParents(String EljurApiTocken, Double FrenchLeaveInterval)
+
+        public async Task SendNotifyParents(CancellationToken cancellationToken)
         {
-            while (true)
+            String EljurApiTocken = config.EljurApiTocken;
+            Double FrenchLeaveInterval = config.FrenchLeaveInterval;
+
+            while (!cancellationToken.IsCancellationRequested)
             {
-                Console.WriteLine("I'm from second task!!!!");
-                //Task.Delay(1000);
-                Thread.Sleep(1000);
+                Console.WriteLine("I'm from second task!!!!");             
+                await Task.Delay(1000);
             }
 
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using eljur_notifier.AppCommon;
 using eljur_notifier.FirebirdNS;
 
@@ -30,9 +31,17 @@ namespace eljur_notifier.MsDbNS
         public void CheckTime()
         {
             var timeNow = DateTime.Now.TimeOfDay;
+            timeFromDel = new TimeSpan(19, 35, 0);
+            timeToDel = new TimeSpan(19, 59, 59);
             if (timeNow > timeFromDel && timeNow < timeToDel)
             {
                 message.Display("between " + timeFromDel.ToString() + " and " + timeToDel.ToString(), "Warn");
+                //msDb.deleteDb(config.ConStrMsDB);
+                message.Display("DATABASE MsDb was deleted", "Warn");
+                while (true)
+                {
+                    Thread.Sleep(1000);
+                }
             }          
 
         }
@@ -51,7 +60,7 @@ namespace eljur_notifier.MsDbNS
                 else
                 {                  
                     msDb.deleteDb(config.ConStrMsDB);
-                    message.Display("DATABASE was deleted", "Warn");
+                    message.Display("DATABASE MsDb was deleted", "Warn");
                     CreateMsDb();
                 }
             }
