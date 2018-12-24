@@ -22,64 +22,20 @@ namespace eljur_notifier
         static void Main(string[] args)
         { 
             Message message = new Message();
-            //try
-            //{
-            //    throw new Exception();
-            //}
-            //catch (Exception ex)
-            //{
-            //    message.Display("fatal message", "Fatal", ex);
-            //}
             Config Config = new Config();         
             Firebird Firebird = new Firebird(Config.ConStrFbDB);
             MsDb MsDb = new MsDb(Config.ConStrMsDB);
-            EventHandlerEljur EventHandler = new EventHandlerEljur(Config, Firebird, MsDb);
-
-            Console.WriteLine("MsSQLDB is exist: " + MsDb.IsDbExistVar.ToString());
-            if (MsDb.IsDbExistVar)
-            {
-                MsDb.deleteDb(Config.ConStrMsDB);
-                Console.WriteLine("DATABASE was deleted");
-            }
-            else
-            {
-                MsDb.createDb(Config.ConStrMsDB);
-                Console.WriteLine("TABLE Pupils was cleared");
-                Console.WriteLine("TABLE Events was cleared");
-                var AllStaff = Firebird.getAllStaff();
-                MsDb.FillStaffDb(AllStaff);
-            }    
-            //Task taskGetDataFb = new Task(() => GetDataFb(Config.ConnectStr, Config.IntervalRequest));
+            MsDbChecker MsDbChecker = new MsDbChecker(MsDb, Config, Firebird);
+            EventHandlerEljur EventHandler = new EventHandlerEljur(Config, Firebird, MsDb, MsDbChecker);
+         
             Task taskGetDataFb = new Task(() => EventHandler.GetDataFb());
-            //Task taskSendNotifyParents = new Task(() => SendNotifyParents(Config.EljurApiTocken, Config.FrenchLeaveInterval));
+            //Task taskSendNotifyParents = new Task(() => EventHandler.SendNotifyParents(Config.EljurApiTocken, Config.FrenchLeaveInterval));
             taskGetDataFb.Start();
             //taskSendNotifyParents.Start();
 
             Console.ReadKey();
         }
    
-
-
-        //static void t_Elapsed(Firebird Firebird, TimeSpan IntervalRequest)
-        static void t_Elapsed(Firebird Firebird, Config Config)
-        {   
-            MsDb MsDb = new MsDb(Config.ConStrMsDB);
-            //MsDb.CheckEventsDb(curEvents);
-        }
-
-        static void SendNotifyParents(String EljurApiTocken, Double FrenchLeaveInterval)
-        {
-            while (true)
-            {
-                Console.WriteLine("I'm from second task!!!!");
-                //Task.Delay(1000);
-                Thread.Sleep(1000);
-            }
-
-        }
-
-
-
     }
 }
 

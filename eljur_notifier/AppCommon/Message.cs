@@ -84,7 +84,20 @@ namespace eljur_notifier.AppCommon
             Console.ResetColor();
 
         }
-       
+
+        public void CheckEmailSending()
+        {
+            try
+            {
+                throw new Exception();
+            }
+            catch (Exception ex)
+            {
+                Display("fatal message", "Fatal", ex);
+            }
+        }
+
+
 
 
         public static void CloseProgram()

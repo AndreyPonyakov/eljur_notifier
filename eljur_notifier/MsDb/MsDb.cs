@@ -15,7 +15,8 @@ namespace eljur_notifier.MsDbNS
     {
 
         internal protected String ConnectStr { get; set; }
-        internal protected IDbConnection dbcon { get; set; }
+        //internal protected IDbConnection dbcon { get; set; }
+        internal protected SqlConnection dbcon { get; set; }
         internal protected Boolean IsDbExistVar { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
         
@@ -23,7 +24,7 @@ namespace eljur_notifier.MsDbNS
         public MsDb(String ConnectStr)
         {
             this.ConnectStr = ConnectStr;
-            IDbConnection dbcon = new SqlConnection(ConnectStr);
+            this.dbcon = new SqlConnection(ConnectStr);
             this.IsDbExistVar = this.IsDbExist(dbcon);
         }
 
@@ -156,19 +157,11 @@ namespace eljur_notifier.MsDbNS
                         Console.WriteLine("Школьник с id " + PupilId + "  пришёл в школу в " + row[0].ToString());
                     }
 
-
-
-
                 }
-
 
             }
 
         }
-
-
-
-
 
         public void deleteDb(String conStr)
         {
@@ -194,8 +187,26 @@ namespace eljur_notifier.MsDbNS
             //this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [" + TableName + "]");
         }
 
+        public DateTime getCreationDate()
+        {
+            DateTime CreationDate = new DateTime();
+            dbcon.Open();
+            SqlCommand command = new SqlCommand("SELECT create_date FROM sys.tables order by create_date", dbcon);
+            SqlDataReader reader = command.ExecuteReader();
+            Console.WriteLine("SELECT create_date FROM sys.tables order by create_date");
+            while (reader.Read())
+            {
+                Console.WriteLine(String.Format("{0}", reader[0]));
+                CreationDate = Convert.ToDateTime(reader[0].ToString());
+                break;
+            }
+            dbcon.Close();
+            return CreationDate;
+        }
 
-        
+
+
+
 
 
 
