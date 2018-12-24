@@ -133,6 +133,7 @@
     <Compile Include="eljur_notifier\AppCommon\SMTP.cs" />
     <Compile Include="eljur_notifier\DbCommon\DbCommon.cs" />
     <Compile Include="eljur_notifier\DbCommon\DbCommonCommunicationInf.cs" />
+    <Compile Include="eljur_notifier\EventHandler\EventHandler.cs" />
     <Compile Include="eljur_notifier\FireBird\Firebird.cs" />
     <Compile Include="eljur_notifier\MsDb\MsDb.cs" />
     <Compile Include="eljur_notifier\Program.cs" />

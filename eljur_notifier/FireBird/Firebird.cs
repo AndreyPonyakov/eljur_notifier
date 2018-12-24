@@ -8,7 +8,7 @@ using FirebirdSql.Data.FirebirdClient;
 using eljur_notifier.DbCommon;
 using eljur_notifier.AppCommon;
 
-namespace eljur_notifier
+namespace eljur_notifier.FirebirdNS
 {
     class Firebird : DbCommonClass
     {
@@ -17,13 +17,14 @@ namespace eljur_notifier
         internal protected Boolean IsDbExistVar { get; set; }
         internal protected DateTime beforeDt { get; set; }
         internal protected DateTime afterDt { get; set; }
+        internal protected Message message { get; set; }
 
         public Firebird(String ConnectStr)
         {
             this.ConnectStr = ConnectStr;
             this.dbcon = new FbConnection(ConnectStr);
             this.IsDbExistVar = this.IsDbExist(dbcon);
-            Message message = new Message();
+            this.message = new Message();
 
             if (!this.IsDbExistVar)
             {
@@ -89,50 +90,36 @@ namespace eljur_notifier
             return rows; 
         }
 
-        public List<object[]> getStaffByTimeStamp(DateTime TimeStamp, TimeSpan IntervalRequest)
+        public void SetBeforeDtAndAfterDt(TimeSpan IntervalRequest)
         {
-            var staff = new List<object[]>();
             if (this.beforeDt == Convert.ToDateTime("2000-12-31 23:59:59"))
             {
-                Console.WriteLine("TRUE");
                 this.afterDt = DateTime.Now;
-                this.afterDt = this.afterDt.Add(new TimeSpan(-13, -55, 0));// NEED COMMENT!!!!!!!!!!!!!!
+                //this.afterDt = this.afterDt.Add(new TimeSpan(-13, -55, 0));// NEED COMMENT!!!!!!!!!!!!!!
                 this.beforeDt = this.afterDt.Subtract(IntervalRequest); //Add(new TimeSpan(0, -1, 0));
             }
             else
             {
-                Console.WriteLine("False");
-                Console.WriteLine("IntervalRequest is: " + IntervalRequest);            
                 //+1 sec because Firebird sql operation Between  is inclusive
                 this.beforeDt = this.afterDt.Add(new TimeSpan(0, 0, 1)); // +1 second to IntervalRequest only for beforeDt
                 this.afterDt = this.afterDt.Add(IntervalRequest);
             }
-            
-            Console.WriteLine("Time from new beforeDt: " + this.beforeDt.ToString());
-            Console.WriteLine("Time from new afterDt: " + this.afterDt.ToString());
+            message.Display("Time from new beforeDt: " + this.beforeDt.ToString(), "Trace");
+            message.Display("Time from new afterDt: " + this.afterDt.ToString(), "Trace");
+        }
 
+
+        public List<object[]> getStaffByTimeStamp(Config Config)
+        {
+            TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(Config.IntervalRequest);
+            var staff = new List<object[]>();
+            SetBeforeDtAndAfterDt(IntervalRequest);
             String beforeStr = this.beforeDt.ToLongTimeString();
             String afterStr = this.afterDt.ToLongTimeString();
-
-            //Console.WriteLine("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "' ORDER BY time_ev ");
-            Console.WriteLine("select time_ev, staff_id, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498 or configs_tree_id_controller = 7806)  ORDER BY time_ev");
-
-
-
-            //staff = getAnySqlQuery("select time_ev, staff_id  from REG_EVENTS WHERE  time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "' ORDER BY time_ev ");
+            message.Display("select time_ev, staff_id, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498 or configs_tree_id_controller = 7806)  ORDER BY time_ev", "Trace");
             staff = getAnySqlQuery("select time_ev, staff_id, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498 or configs_tree_id_controller = 7806)  ORDER BY time_ev");
-            foreach (object[] row in staff)
-            {
-                foreach (object element in row)
-                {
 
-                    //Console.WriteLine(element.ToString());
-                    //Console.WriteLine(element.GetType());
-                }
-                break;
-            }
             return staff;
-
         }
 
 

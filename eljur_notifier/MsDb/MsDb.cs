@@ -9,7 +9,7 @@ using eljur_notifier;
 using eljur_notifier.StaffModel;
 using eljur_notifier.DbCommon;
 
-namespace eljur_notifier
+namespace eljur_notifier.MsDbNS
 {
     class MsDb: DbCommonClass
     {
