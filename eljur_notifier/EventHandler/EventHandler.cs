@@ -16,12 +16,15 @@ namespace eljur_notifier.EventHandlerNS
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
+        internal protected MsDb msDb { get; set; }
         internal protected Firebird firebird { get; set; }
+
         internal protected MsDbChecker msDbChecker { get; set; }
-        public EventHandlerEljur(Config Config, Firebird Firebird, MsDbChecker MsDbChecker)
+        public EventHandlerEljur(Config Config, MsDb MsDb, Firebird Firebird, MsDbChecker MsDbChecker)
         {
             this.message = new Message();
             this.config = Config;
+            this.msDb = MsDb;
             this.firebird = Firebird;
             this.msDbChecker = MsDbChecker;
 
@@ -77,18 +80,7 @@ namespace eljur_notifier.EventHandlerNS
 
         }
 
-        public void CreateMsDb()
-        {
-            SqlConnection.ClearAllPools();
-            msDb = new MsDb(config.ConStrMsDB);
-            msDb.dbcon = new SqlConnection(config.ConStrMsDB);
 
-            msDb.createDb(config.ConStrMsDB);
-            message.Display("TABLE Pupils was cleared", "Warn");
-            message.Display("TABLE Events was cleared", "Warn");
-            var AllStaff = firebird.getAllStaff();
-            msDb.FillStaffDb(AllStaff);
-        }
 
 
     }

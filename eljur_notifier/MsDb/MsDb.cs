@@ -14,58 +14,20 @@ namespace eljur_notifier.MsDbNS
 {
     class MsDb: DbCommonClass
     {
-        private static MsDb instance = null;
-        static readonly object padlock = new object();
         internal protected Message message { get; set; }
         internal protected String ConnectStr { get; set; }
         internal protected SqlConnection dbcon { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
 
 
-        private MsDb(String ConnectStr)
+        public MsDb(String ConnectStr)
         {
+            this.message = new Message();
+            this.ConnectStr = ConnectStr;
             SqlConnection.ClearAllPools();
-            instance.ConnectStr = ConnectStr;
-            instance.message = new Message();        
-        }
-        public static MsDb Instance
-        {
-            get
-            {
-                lock (padlock)
-                {
-                    if (instance == null)
-                    {                     
-                        try
-                        {
-                            throw new Exception("MsDb instance not created!!!");
-                        }
-                        catch (Exception ex)
-                        {
-                            Message message = new Message();
-                            message.Display("MsDb instance not created!!!", "Fatal", ex);
-                        }                      
-                    }
-                    return instance;
-                }
-            }
-        }
-
-        public static void Create(String ConnectStr)
-        {
-            if (instance != null)
-            {             
-                try
-                {
-                    throw new Exception("MsDb  already created!!!");
-                }
-                catch (Exception ex)
-                {
-                    Message message = new Message();
-                    message.Display("MsDb  already created!!!", "Fatal", ex);
-                }
-            }
-            instance = new MsDb(ConnectStr);
+            this.dbcon = new SqlConnection(ConnectStr);
+            this.createDb(ConnectStr);
+            while (this.IsDbExist(dbcon) == false) { }
         }
 
 
@@ -111,7 +73,9 @@ namespace eljur_notifier.MsDbNS
                     Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5} - {6}- {7}", e.EventId, e.PupilId, e.EventTime, e.EventName, e.NotifyEnable, e.NotifyEnableDirector, e.NotifyWasSend, e.NotifyWasSendDirector);
                 }
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Pupils]");
-                this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Events]");
+                message.Display("TABLE Pupils was cleared", "Warn");
+                this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Events]");         
+                message.Display("TABLE Events was cleared", "Warn");
 
             }     
         }
@@ -218,27 +182,28 @@ namespace eljur_notifier.MsDbNS
 
         public void clearTableDb(String TableName)
         {
-            //this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [" + TableName + "]");
+            using (this.StaffCtx = new StaffContext())
+            {
+                this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [" + TableName + "]");
+            }
+            
         }
 
-        public DateTime getCreationDate()
+        public DateTime getModifyDate()
         {
-            message.Display("dbcon.Open(); ", "Warn");
-            DateTime CreationDate = new DateTime();
-            message.Display("dbcon.Open(); ", "Warn");
+            DateTime ModifyDate = new DateTime();
             dbcon.Open();
-            message.Display("AFTER dbcon.Open(); ", "Warn");
-            SqlCommand command = new SqlCommand("SELECT create_date FROM sys.tables order by create_date", dbcon);
+            SqlCommand command = new SqlCommand("SELECT modify_date FROM sys.tables order by modify_date", dbcon);
             SqlDataReader reader = command.ExecuteReader();
-            Console.WriteLine("SELECT create_date FROM sys.tables order by create_date");
+            message.Display("SELECT modify_date FROM sys.tables order by modify_date", "Warn");
             while (reader.Read())
             {
                 Console.WriteLine(String.Format("{0}", reader[0]));
-                CreationDate = Convert.ToDateTime(reader[0].ToString());
+                ModifyDate = Convert.ToDateTime(reader[0].ToString());
                 break;
             }
             dbcon.Close();
-            return CreationDate;
+            return ModifyDate;
         }
 
     }    

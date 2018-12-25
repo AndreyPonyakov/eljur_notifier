@@ -14,11 +14,12 @@ namespace eljur_notifier.MsDbNS
     {
         internal protected Message message { get; set; }
         internal protected Firebird firebird { get; set; }
+        internal protected MsDb msDb { get; set; }
         internal protected Config config { get; set; }
         internal protected TimeSpan timeFromDel { get; set; }
         internal protected TimeSpan timeToDel { get; set; }
 
-        public MsDbChecker(Config Config, Firebird Firebird)
+        public MsDbChecker(Config Config, MsDb MsDb, Firebird Firebird)
         {
             this.message = new Message();
             this.msDb = MsDb;
@@ -31,25 +32,27 @@ namespace eljur_notifier.MsDbNS
         public void CheckTime(Action actionAtMidnight)
         {
             var timeNow = DateTime.Now.TimeOfDay;
-            timeFromDel = new TimeSpan(15, 38, 0);
-            timeToDel = new TimeSpan(15, 39, 0);
+            //timeFromDel = new TimeSpan(20, 24, 0);
+            //timeToDel = new TimeSpan(20, 25, 0);
             if (timeNow > timeFromDel && timeNow < timeToDel)
             {
                 message.Display("between " + timeFromDel.ToString() + " and " + timeToDel.ToString(), "Warn");
                 if (msDb.IsDbExist(msDb.dbcon))
                 {
-                    DateTime CreationDate = msDb.getCreationDate();
+                    DateTime CreationDate = msDb.getModifyDate();
                     message.Display("DATABASE was created: " + CreationDate.ToString(), "Warn");
                     TimeSpan diff = DateTime.Now.Subtract(CreationDate);
-                    if (diff.TotalMilliseconds < 60000)
+                    if (diff.TotalMilliseconds < 10000)
                     {
                         message.Display("diff is " + diff.TotalMilliseconds.ToString(), "Warn");
-                        message.Display("DATABASE MsDb was created recently!!! No needed to delete!!!", "Warn");
+                        message.Display("DATABASE MsDb was modify recently!!! No needed to clear tables again!!!", "Warn");
                     }
                     else
                     {
-                        msDb.deleteDb(config.ConStrMsDB);
-                        message.Display("DATABASE MsDb was deleted", "Warn");
+                        //msDb.deleteDb(config.ConStrMsDB);
+                        msDb.clearTableDb("Pupils");
+                        msDb.clearTableDb("Events");
+                        message.Display("TABLES Pupils and Events MsDb DATABASE was cleared", "Warn");
                         actionAtMidnight();
                     }
                 }
@@ -71,39 +74,47 @@ namespace eljur_notifier.MsDbNS
             message.Display("MsSQLDB is exist: " + msDb.IsDbExist(msDb.dbcon).ToString(), "Warn");        
             if (msDb.IsDbExist(msDb.dbcon))
             {      
-                DateTime CreationDate = msDb.getCreationDate();
-                message.Display("DATABASE was created: " + CreationDate.ToString(), "Warn");
-                DateTime dateOnly = CreationDate.Date;
+                DateTime ModifyDate = msDb.getModifyDate();
+                message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
+                DateTime dateOnly = ModifyDate.Date;
                 if (dateOnly == DateTime.Today)
                 {
-                    message.Display("DATABASE MsDb was created Today!!!", "Warn");
+                    message.Display("DATABASE MsDb was modified Today!!!", "Warn");
                 }
                 else
-                {                  
-                    msDb.deleteDb(config.ConStrMsDB);
-                    message.Display("DATABASE MsDb was deleted because it was created not Today!!!", "Warn");
-                    CreateMsDb();
+                {   
+                    // DO NOTHING HERE!!!
+                    //msDb.deleteDb(config.ConStrMsDB);
+                    //message.Display("DATABASE MsDb was deleted because it was created not Today!!!", "Warn");
+                    //CreateMsDb();
                 }
             }
             else
             {
-                message.Display("Cannot connect to database MsDb from CheckMsDb()", "Warn");
-                SqlConnection.ClearAllPools();
-                msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-                CreateMsDb();                                
+                try
+                {
+                    throw new Exception();
+                }
+                catch (Exception ex)
+                {
+                    message.Display("Cannot connect to MsDb", "Fatal", ex);
+                }
+                //message.Display("Cannot connect to database MsDb from CheckMsDb()", "Warn");
+                //SqlConnection.ClearAllPools();
+                //msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+                //CreateMsDb();                                
             }
         }
-        //public void CreateMsDb()
-        //{
-        //    SqlConnection.ClearAllPools();
-        //    msDb = new MsDb(config.ConStrMsDB);
-        //    msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+        public void CreateMsDb()
+        {
+            SqlConnection.ClearAllPools();
+            //msDb = new MsDb(config.ConStrMsDB); //DON'T DO THIS TERRABLE THING HERE!!!
+            msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+
+            msDb.createDb(config.ConStrMsDB);
             
-        //    msDb.createDb(config.ConStrMsDB);
-        //    message.Display("TABLE Pupils was cleared", "Warn");
-        //    message.Display("TABLE Events was cleared", "Warn");
-        //    var AllStaff = firebird.getAllStaff();
-        //    msDb.FillStaffDb(AllStaff);
-        //}
+            var AllStaff = firebird.getAllStaff();
+            msDb.FillStaffDb(AllStaff);
+        }
     }
 }
