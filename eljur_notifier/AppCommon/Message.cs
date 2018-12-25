@@ -15,23 +15,14 @@ using System.Net.Mail;
 
 namespace eljur_notifier.AppCommon
 {
-    //delegate void MessageShowAction(String message, String level, Exception exception);
     class Message
     {
         internal protected Logger logger { get; set; }
         internal protected Exception exception { get; set; }
-        //MessageShowAction _mes;
         public Message()
         {
-            this.logger = LogManager.GetCurrentClassLogger();
-            //this.Rigister_mes(new MessageShowAction(this.Display));
-            
-
+            this.logger = LogManager.GetCurrentClassLogger();      
         }
-        //public void Rigister_mes(MessageShowAction mes)
-        //{
-        //    _mes = mes;
-        //}
         public void Display(String MesStr, String level, Exception ex = null)
         {
           
@@ -67,7 +58,6 @@ namespace eljur_notifier.AppCommon
                 {
                     SMTP smtp = new SMTP();
                     smtp.SendEmail(MesStr + exception.Message);
-                    //smtp.SendEmail(this.exeption.ToString());
                     Console.WriteLine(MesStr);
                     Thread.Sleep(10000);
 
@@ -97,12 +87,8 @@ namespace eljur_notifier.AppCommon
             }
         }
 
-
-
-
         public static void CloseProgram()
         {
-            //Process.GetCurrentProcess().Kill();
             Environment.Exit(1);
         }
 

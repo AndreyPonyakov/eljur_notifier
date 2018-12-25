@@ -122,11 +122,5 @@ namespace eljur_notifier.FirebirdNS
             return staff;
         }
 
-
-
-
-
-
-
     }
 }

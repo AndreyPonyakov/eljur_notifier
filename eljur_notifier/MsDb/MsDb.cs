@@ -16,9 +16,7 @@ namespace eljur_notifier.MsDbNS
     {
         internal protected Message message { get; set; }
         internal protected String ConnectStr { get; set; }
-        //internal protected IDbConnection dbcon { get; set; }
         internal protected SqlConnection dbcon { get; set; }
-        internal protected Boolean IsDbExistVar { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
         
 
@@ -27,8 +25,7 @@ namespace eljur_notifier.MsDbNS
             this.message = new Message();
             this.ConnectStr = ConnectStr;
             SqlConnection.ClearAllPools();
-            this.dbcon = new SqlConnection(ConnectStr);
-            this.IsDbExistVar = this.IsDbExist(dbcon);
+            this.dbcon = new SqlConnection(ConnectStr);       
             while (this.IsDbExist(dbcon) == false)
             {
                 this.createDb(ConnectStr);
@@ -38,7 +35,6 @@ namespace eljur_notifier.MsDbNS
 
         public void createDb(String conStr)
         {
-            //using (StaffContext context = new StaffContext())
             using ( this.StaffCtx = new StaffContext())
             {             
                 Pupil firstStudent = new Pupil();
@@ -90,9 +86,6 @@ namespace eljur_notifier.MsDbNS
             {
                 foreach (object[] row in AllStaff)
                 {
-                    //var columns = row.Count();
-                    //Console.WriteLine(columns);
-                    //Console.WriteLine("PupilId: " + row[0].ToString());
 
                     Pupil Student = new Pupil();
                     Student.PupilIdOld = Convert.ToInt32(row[0]);
@@ -105,7 +98,6 @@ namespace eljur_notifier.MsDbNS
                     StaffCtx.Pupils.Add(Student);
                     StaffCtx.SaveChanges();
                     Console.WriteLine("Student success saved");
-                    //break;
                 }
                 var students = StaffCtx.Pupils;
                 Console.WriteLine("List of objects:");
@@ -156,7 +148,6 @@ namespace eljur_notifier.MsDbNS
                     {
                         Event Event = new Event();
                         Event.PupilId = PupilId;
-                        //Event.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
                         Event.EventTime = TimeSpan.Parse(row[0].ToString());
                         Event.EventName = "Первый проход";
                         StaffCtx.Events.Add(Event);
@@ -213,16 +204,6 @@ namespace eljur_notifier.MsDbNS
             dbcon.Close();
             return CreationDate;
         }
-
-
-
-
-
-
-
-
-
-
 
     }    
 }
