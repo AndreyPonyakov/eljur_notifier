@@ -8,12 +8,13 @@ using System.Data;
 using eljur_notifier;
 using eljur_notifier.StaffModel;
 using eljur_notifier.DbCommon;
+using eljur_notifier.AppCommon;
 
 namespace eljur_notifier.MsDbNS
 {
     class MsDb: DbCommonClass
     {
-
+        internal protected Message message { get; set; }
         internal protected String ConnectStr { get; set; }
         //internal protected IDbConnection dbcon { get; set; }
         internal protected SqlConnection dbcon { get; set; }
@@ -23,9 +24,15 @@ namespace eljur_notifier.MsDbNS
 
         public MsDb(String ConnectStr)
         {
+            this.message = new Message();
             this.ConnectStr = ConnectStr;
+            SqlConnection.ClearAllPools();
             this.dbcon = new SqlConnection(ConnectStr);
             this.IsDbExistVar = this.IsDbExist(dbcon);
+            while (this.IsDbExist(dbcon) == false)
+            {
+                this.createDb(ConnectStr);
+            }
         }
 
 
@@ -189,8 +196,11 @@ namespace eljur_notifier.MsDbNS
 
         public DateTime getCreationDate()
         {
+            message.Display("dbcon.Open(); ", "Warn");
             DateTime CreationDate = new DateTime();
+            message.Display("dbcon.Open(); ", "Warn");
             dbcon.Open();
+            message.Display("AFTER dbcon.Open(); ", "Warn");
             SqlCommand command = new SqlCommand("SELECT create_date FROM sys.tables order by create_date", dbcon);
             SqlDataReader reader = command.ExecuteReader();
             Console.WriteLine("SELECT create_date FROM sys.tables order by create_date");

@@ -35,17 +35,32 @@ namespace eljur_notifier.EventHandlerNS
             while (!cancellationToken.IsCancellationRequested)
             {
                 DateTime startTime = DateTime.Now;
-
                 List<object[]> curEvents = firebird.getStaffByTimeStamp(config);
-                msDb.CheckEventsDb(curEvents);
-                msDbChecker.CheckTime();
-
+                if (msDb.IsDbExist(msDb.dbcon))
+                {
+                    msDb.CheckEventsDb(curEvents);
+                }
+                else
+                {
+                    SqlConnection.ClearAllPools();
+                    msDbChecker.CreateMsDb();
+                }
+                                      
                 TimeSpan deltaTime = DateTime.Now - startTime;
                 TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(config.IntervalRequest);
                 TimeSpan sleepTime = IntervalRequest - deltaTime;
                 message.Display("sleepTime is: " + sleepTime.ToString(), "Trace");
                 await Task.Delay(sleepTime);
             }
+        }
+
+        public async Task CheckMsDb(CancellationToken cancellationToken, Action actionAtMidnight)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                msDbChecker.CheckTime(actionAtMidnight);
+                await Task.Delay(1000);
+            }        
         }
 
 
