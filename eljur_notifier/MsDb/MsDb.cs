@@ -12,7 +12,7 @@ using eljur_notifier.AppCommon;
 
 namespace eljur_notifier.MsDbNS
 {
-    class MsDb: DbCommonClass
+    class MsDb : DbCommonClass
     {
         internal protected Message message { get; set; }
         internal protected String ConnectStr { get; set; }
@@ -33,8 +33,8 @@ namespace eljur_notifier.MsDbNS
 
         public void createDb(String conStr)
         {
-            using ( this.StaffCtx = new StaffContext())
-            {             
+            using (this.StaffCtx = new StaffContext())
+            {
                 Pupil firstStudent = new Pupil();
                 firstStudent.PupilId = 1;
                 firstStudent.PupilIdOld = 5001;
@@ -42,9 +42,9 @@ namespace eljur_notifier.MsDbNS
                 firstStudent.LastName = "Иванов";
                 firstStudent.MiddleName = "Иванович";
                 firstStudent.FullFIO = "Иван Иванов Иванович";
-                firstStudent.Class = "1Б";               
+                firstStudent.Class = "1Б";
                 firstStudent.EljurAccount = "some_string";
-                
+
                 Event firstEvent = new Event();
                 firstEvent.EventId = 1;
                 firstEvent.PupilId = 1;
@@ -74,10 +74,10 @@ namespace eljur_notifier.MsDbNS
                 }
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Pupils]");
                 message.Display("TABLE Pupils was cleared", "Warn");
-                this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Events]");         
+                this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Events]");
                 message.Display("TABLE Events was cleared", "Warn");
 
-            }     
+            }
         }
 
         public void FillStaffDb(List<object[]> AllStaff)
@@ -115,13 +115,13 @@ namespace eljur_notifier.MsDbNS
             using (this.StaffCtx = new StaffContext())
             {
                 foreach (object[] row in curEvents)
-                {                  
+                {
                     if (row[1] == DBNull.Value)
                     {
                         continue;
                     }
                     var PupilId = Convert.ToInt32(row[1]);//PipilIdOld
-                    Console.WriteLine("Событие проход школьника с id " + PupilId.ToString() + " в " + row[0].ToString());
+                    message.Display("Событие проход школьника с id " + PupilId.ToString() + " в " + row[0].ToString(), "Trace");
 
 
                     var result = StaffCtx.Events.SingleOrDefault(e => e.PupilId == PupilId);
@@ -129,30 +129,41 @@ namespace eljur_notifier.MsDbNS
                     {
                         if (result.EventName == "Первый проход" || result.EventName == "Вернулся")
                         {
-                            result.EventName = "Вышел";
-                            //result.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
-                            result.EventTime = TimeSpan.Parse(row[0].ToString());
-                            StaffCtx.SaveChanges();
-                            Console.WriteLine("Школьник с id " + PupilId + " вышел из школы в " + row[0].ToString());
+                            //register only output configs_tree_id_resource
+                            if (row[3].ToString() == "8564" || row[3].ToString() == "9369")
+                            {
+                                result.EventName = "Вышел";
+                                result.EventTime = TimeSpan.Parse(row[0].ToString());
+                                StaffCtx.SaveChanges();
+                                Console.WriteLine("Школьник с id " + PupilId + " вышел из школы в " + row[0].ToString());
+                            }
+
                         }
                         else if (result.EventName == "Вышел" || result.EventName == "Прогул")
                         {
-                            result.EventName = "Вернулся";
-                            //result.EventTime = Convert.ToDateTime(row[0]).TimeOfDay;
-                            result.EventTime = TimeSpan.Parse(row[0].ToString());
-                            StaffCtx.SaveChanges();
-                            Console.WriteLine("Школьник с id " + PupilId + "  вернулся в школу в " + row[0].ToString());
+                            if (row[3].ToString() == "8677" || row[3].ToString() == "9256")
+                            {
+                                //register only input configs_tree_id_resource
+                                result.EventName = "Вернулся";
+                                result.EventTime = TimeSpan.Parse(row[0].ToString());
+                                StaffCtx.SaveChanges();
+                                Console.WriteLine("Школьник с id " + PupilId + "  вернулся в школу в " + row[0].ToString());
+                            }
                         }
                     }
                     else
                     {
-                        Event Event = new Event();
-                        Event.PupilId = PupilId;
-                        Event.EventTime = TimeSpan.Parse(row[0].ToString());
-                        Event.EventName = "Первый проход";
-                        StaffCtx.Events.Add(Event);
-                        StaffCtx.SaveChanges();
-                        Console.WriteLine("Школьник с id " + PupilId + "  пришёл в школу в " + row[0].ToString());
+                        //register only input configs_tree_id_resource
+                        if (row[3].ToString() == "8677" || row[3].ToString() == "9256")
+                        {
+                            Event Event = new Event();
+                            Event.PupilId = PupilId;
+                            Event.EventTime = TimeSpan.Parse(row[0].ToString());
+                            Event.EventName = "Первый проход";
+                            StaffCtx.Events.Add(Event);
+                            StaffCtx.SaveChanges();
+                            message.Display("Школьник с id " + PupilId + "  пришёл в школу в " + row[0].ToString(), "Trace");
+                        }
                     }
 
                 }
@@ -186,7 +197,7 @@ namespace eljur_notifier.MsDbNS
             {
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [" + TableName + "]");
             }
-            
+
         }
 
         public DateTime getModifyDate()
@@ -206,5 +217,5 @@ namespace eljur_notifier.MsDbNS
             return ModifyDate;
         }
 
-    }    
+    }
 }
