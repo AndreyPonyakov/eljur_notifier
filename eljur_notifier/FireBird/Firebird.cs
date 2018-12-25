@@ -95,7 +95,7 @@ namespace eljur_notifier.FirebirdNS
             if (this.beforeDt == Convert.ToDateTime("2000-12-31 23:59:59"))
             {
                 this.afterDt = DateTime.Now;
-                //this.afterDt = this.afterDt.Add(new TimeSpan(-13, -55, 0));// NEED COMMENT!!!!!!!!!!!!!!
+                this.afterDt = this.afterDt.Add(new TimeSpan(-13, -25, 0));// NEED COMMENT OUT THIS!!!!!!!!!!!!!!!
                 this.beforeDt = this.afterDt.Subtract(IntervalRequest); //Add(new TimeSpan(0, -1, 0));
             }
             else
@@ -114,11 +114,15 @@ namespace eljur_notifier.FirebirdNS
             TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(Config.IntervalRequest);
             var staff = new List<object[]>();
             SetBeforeDtAndAfterDt(IntervalRequest);
+            String dateOnlyStr = DateTime.Now.ToShortDateString();
+            dateOnlyStr = "01.10.2018"; //NEED COMMENT OUT THIS!!!!!!!!!!!!!!!
             String beforeStr = this.beforeDt.ToLongTimeString();
             String afterStr = this.afterDt.ToLongTimeString();
-            message.Display("select time_ev, staff_id, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498 or configs_tree_id_controller = 7806)  ORDER BY time_ev", "Trace");
-            staff = getAnySqlQuery("select time_ev, staff_id, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498 or configs_tree_id_controller = 7806)  ORDER BY time_ev");
-
+            //message.Display("select time_ev, staff_id, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498 or configs_tree_id_controller = 7806)  ORDER BY time_ev", "Trace");
+            //staff = getAnySqlQuery("select time_ev, staff_id, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498 or configs_tree_id_controller = 7806)  ORDER BY time_ev");
+            //staff = getAnySqlQuery("select time_ev, staff_id, date_ev, configs_tree_id_resource, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '07:40:00' AND '07:41:00') AND (date_ev = '01.10.2018') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498)  AND (type_pass = 1) ORDER BY time_ev");
+            message.Display("select time_ev, staff_id, date_ev, configs_tree_id_resource, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "') AND (date_ev = '" + dateOnlyStr + "') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498)  AND (type_pass = 1) ORDER BY time_ev", "Trace");
+            staff = getAnySqlQuery("select time_ev, staff_id, date_ev, configs_tree_id_resource, configs_tree_id_controller  from REG_EVENTS WHERE  (time_ev BETWEEN '" + beforeStr + "' AND '" + afterStr + "') AND (date_ev = '" + dateOnlyStr + "') AND (configs_tree_id_controller = 9190 or configs_tree_id_controller = 8498)  AND (type_pass = 1) ORDER BY time_ev");
             return staff;
         }
 
