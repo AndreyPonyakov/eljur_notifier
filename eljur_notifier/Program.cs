@@ -31,9 +31,10 @@ namespace eljur_notifier
             Message message = new Message();
             Config Config = new Config();         
             Firebird Firebird = new Firebird(Config.ConStrFbDB);
-            MsDb MsDb = new MsDb(Config.ConStrMsDB);
-            MsDbChecker MsDbChecker = new MsDbChecker(MsDb, Config, Firebird);
-            EventHandlerEljur EventHandler = new EventHandlerEljur(Config, Firebird, MsDb, MsDbChecker);
+            MsDb.Create(Config.ConStrMsDB);
+            MsDb msDb = MsDb.Instance;
+            MsDbChecker MsDbChecker = new MsDbChecker(Config, Firebird);
+            EventHandlerEljur EventHandler = new EventHandlerEljur(Config, Firebird, MsDbChecker);
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
             var GetDataFb = EventHandler.GetDataFb(cancellationTokenSource.Token);
@@ -47,6 +48,8 @@ namespace eljur_notifier
                 Task.Delay(60000);
                 //restart
                 SqlConnection.ClearAllPools();
+                //MsDb = new MsDb(Config.ConStrMsDB);
+               // MsDb.dbcon = new SqlConnection(Config.ConStrMsDB);
                 Run(MainMethodArgs.ToArray());
 
             }));

@@ -14,22 +14,58 @@ namespace eljur_notifier.MsDbNS
 {
     class MsDb: DbCommonClass
     {
+        private static MsDb instance = null;
+        static readonly object padlock = new object();
         internal protected Message message { get; set; }
         internal protected String ConnectStr { get; set; }
         internal protected SqlConnection dbcon { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
-        
 
-        public MsDb(String ConnectStr)
+
+        private MsDb(String ConnectStr)
         {
-            this.message = new Message();
-            this.ConnectStr = ConnectStr;
             SqlConnection.ClearAllPools();
-            this.dbcon = new SqlConnection(ConnectStr);       
-            while (this.IsDbExist(dbcon) == false)
+            instance.ConnectStr = ConnectStr;
+            instance.message = new Message();        
+        }
+        public static MsDb Instance
+        {
+            get
             {
-                this.createDb(ConnectStr);
+                lock (padlock)
+                {
+                    if (instance == null)
+                    {                     
+                        try
+                        {
+                            throw new Exception("MsDb instance not created!!!");
+                        }
+                        catch (Exception ex)
+                        {
+                            Message message = new Message();
+                            message.Display("MsDb instance not created!!!", "Fatal", ex);
+                        }                      
+                    }
+                    return instance;
+                }
             }
+        }
+
+        public static void Create(String ConnectStr)
+        {
+            if (instance != null)
+            {             
+                try
+                {
+                    throw new Exception("MsDb  already created!!!");
+                }
+                catch (Exception ex)
+                {
+                    Message message = new Message();
+                    message.Display("MsDb  already created!!!", "Fatal", ex);
+                }
+            }
+            instance = new MsDb(ConnectStr);
         }
 
 

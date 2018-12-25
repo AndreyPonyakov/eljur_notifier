@@ -13,13 +13,12 @@ namespace eljur_notifier.MsDbNS
     class MsDbChecker
     {
         internal protected Message message { get; set; }
-        internal protected MsDb msDb { get; set; }
         internal protected Firebird firebird { get; set; }
         internal protected Config config { get; set; }
         internal protected TimeSpan timeFromDel { get; set; }
         internal protected TimeSpan timeToDel { get; set; }
 
-        public MsDbChecker(MsDb MsDb, Config Config, Firebird Firebird)
+        public MsDbChecker(Config Config, Firebird Firebird)
         {
             this.message = new Message();
             this.msDb = MsDb;
@@ -32,8 +31,8 @@ namespace eljur_notifier.MsDbNS
         public void CheckTime(Action actionAtMidnight)
         {
             var timeNow = DateTime.Now.TimeOfDay;
-            timeFromDel = new TimeSpan(15, 15, 0);
-            timeToDel = new TimeSpan(15, 16, 0);
+            timeFromDel = new TimeSpan(15, 38, 0);
+            timeToDel = new TimeSpan(15, 39, 0);
             if (timeNow > timeFromDel && timeNow < timeToDel)
             {
                 message.Display("between " + timeFromDel.ToString() + " and " + timeToDel.ToString(), "Warn");
@@ -56,7 +55,9 @@ namespace eljur_notifier.MsDbNS
                 }
                 else
                 {
+                    message.Display("Cannot connect to database MsDb from CheckTime(Action actionAtMidnight)", "Warn");
                     SqlConnection.ClearAllPools();
+                    msDb.dbcon = new SqlConnection(config.ConStrMsDB);
                     CreateMsDb();
                 }
                 
@@ -65,7 +66,9 @@ namespace eljur_notifier.MsDbNS
         public void CheckMsDb()
         {
             SqlConnection.ClearAllPools();
-            message.Display("MsSQLDB is exist: " + msDb.IsDbExist(msDb.dbcon).ToString(), "Warn");
+            msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+
+            message.Display("MsSQLDB is exist: " + msDb.IsDbExist(msDb.dbcon).ToString(), "Warn");        
             if (msDb.IsDbExist(msDb.dbcon))
             {      
                 DateTime CreationDate = msDb.getCreationDate();
@@ -84,19 +87,23 @@ namespace eljur_notifier.MsDbNS
             }
             else
             {
+                message.Display("Cannot connect to database MsDb from CheckMsDb()", "Warn");
                 SqlConnection.ClearAllPools();
+                msDb.dbcon = new SqlConnection(config.ConStrMsDB);
                 CreateMsDb();                                
             }
         }
-        public void CreateMsDb()
-        {
-            SqlConnection.ClearAllPools();
-            MsDb msDb = new MsDb(config.ConStrMsDB);
-            msDb.createDb(config.ConStrMsDB);
-            message.Display("TABLE Pupils was cleared", "Warn");
-            message.Display("TABLE Events was cleared", "Warn");
-            var AllStaff = firebird.getAllStaff();
-            msDb.FillStaffDb(AllStaff);
-        }
+        //public void CreateMsDb()
+        //{
+        //    SqlConnection.ClearAllPools();
+        //    msDb = new MsDb(config.ConStrMsDB);
+        //    msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+            
+        //    msDb.createDb(config.ConStrMsDB);
+        //    message.Display("TABLE Pupils was cleared", "Warn");
+        //    message.Display("TABLE Events was cleared", "Warn");
+        //    var AllStaff = firebird.getAllStaff();
+        //    msDb.FillStaffDb(AllStaff);
+        //}
     }
 }
