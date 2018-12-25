@@ -44,6 +44,7 @@ namespace eljur_notifier
             {
                 cancellationTokenSource.Cancel();
                 Task.WaitAll(GetDataFb, SendNotifyParents);
+                Task.Delay(60000);
                 //restart
                 SqlConnection.ClearAllPools();
                 Run(MainMethodArgs.ToArray());

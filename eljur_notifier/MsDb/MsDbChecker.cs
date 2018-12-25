@@ -32,8 +32,8 @@ namespace eljur_notifier.MsDbNS
         public void CheckTime(Action actionAtMidnight)
         {
             var timeNow = DateTime.Now.TimeOfDay;
-            timeFromDel = new TimeSpan(15, 7, 0);
-            timeToDel = new TimeSpan(15, 8, 0);
+            timeFromDel = new TimeSpan(15, 15, 0);
+            timeToDel = new TimeSpan(15, 16, 0);
             if (timeNow > timeFromDel && timeNow < timeToDel)
             {
                 message.Display("between " + timeFromDel.ToString() + " and " + timeToDel.ToString(), "Warn");
@@ -84,11 +84,13 @@ namespace eljur_notifier.MsDbNS
             }
             else
             {
+                SqlConnection.ClearAllPools();
                 CreateMsDb();                                
             }
         }
         public void CreateMsDb()
         {
+            SqlConnection.ClearAllPools();
             MsDb msDb = new MsDb(config.ConStrMsDB);
             msDb.createDb(config.ConStrMsDB);
             message.Display("TABLE Pupils was cleared", "Warn");
