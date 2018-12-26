@@ -49,8 +49,10 @@ namespace eljur_notifier.MsDbNS
 
                 Event firstEvent = new Event();
                 firstEvent.EventId = 1;
-                firstEvent.PupilId = 1;
+                firstEvent.PupilIdOld = 5001;
                 firstEvent.EventTime = DateTime.Now.TimeOfDay;
+                firstEvent.StartTimeLessons = DateTime.Now.TimeOfDay;
+                firstEvent.EndTimeLessons = DateTime.Now.TimeOfDay;
                 firstEvent.EventName = "Прогул";
                 firstEvent.NotifyEnable = true;
                 firstEvent.NotifyEnableDirector = true;
@@ -72,7 +74,7 @@ namespace eljur_notifier.MsDbNS
                 }
                 foreach (Event e in evets)
                 {
-                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5} - {6}- {7}", e.EventId, e.PupilId, e.EventTime, e.EventName, e.NotifyEnable, e.NotifyEnableDirector, e.NotifyWasSend, e.NotifyWasSendDirector);
+                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5} - {6}- {7}", e.EventId, e.PupilIdOld, e.EventTime, e.EventName, e.NotifyEnable, e.NotifyEnableDirector, e.NotifyWasSend, e.NotifyWasSendDirector);
                 }
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Pupils]");
                 message.Display("TABLE Pupils was cleared", "Warn");
@@ -122,28 +124,35 @@ namespace eljur_notifier.MsDbNS
         {
             using (this.StaffCtx = new StaffContext())
             {
+                EljurApiRequester elRequester = new EljurApiRequester();
                 foreach (object[] row in curEvents)
                 {
                     if (row[1] == DBNull.Value)
                     {
                         continue;
                     }
-                    var PupilId = Convert.ToInt32(row[1]);//PipilIdOld
-                    message.Display("Событие проход школьника с id " + PupilId.ToString() + " в " + row[0].ToString(), "Trace");
+                    var PupilIdOld = Convert.ToInt32(row[1]);
+                    message.Display("Событие проход школьника с id " + PupilIdOld.ToString() + " в " + row[0].ToString(), "Trace");
 
 
-                    var result = StaffCtx.Events.SingleOrDefault(e => e.PupilId == PupilId);
+                    var result = StaffCtx.Events.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
                     if (result != null)
                     {
-                        if (result.EventName == "Первый проход" || result.EventName == "Вернулся")
+                        if (result.EventName == "Первый проход" || result.EventName == "Вернулся" || result.EventName == "Опоздал")
                         {
                             //register only output configs_tree_id_resource
                             if (row[3].ToString() == "8564" || row[3].ToString() == "9369")
                             {
                                 result.EventName = "Вышел";
                                 result.EventTime = TimeSpan.Parse(row[0].ToString());
+
+                                String FullFIO = getFullFIOByPupilIdOld(PupilIdOld);
+                                result.StartTimeLessons = elRequester.getStartTimeLessonsByFullFIO(FullFIO);
+                                result.EndTimeLessons = elRequester.getEndTimeLessonsByFullFIO(FullFIO);
+                                
+                                   
                                 StaffCtx.SaveChanges();
-                                Console.WriteLine("Школьник с id " + PupilId + " вышел из школы в " + row[0].ToString());
+                                Console.WriteLine("Школьник с id " + PupilIdOld + " вышел из школы в " + row[0].ToString());
                             }
 
                         }
@@ -155,7 +164,7 @@ namespace eljur_notifier.MsDbNS
                                 result.EventName = "Вернулся";
                                 result.EventTime = TimeSpan.Parse(row[0].ToString());
                                 StaffCtx.SaveChanges();
-                                Console.WriteLine("Школьник с id " + PupilId + "  вернулся в школу в " + row[0].ToString());
+                                Console.WriteLine("Школьник с id " + PupilIdOld + "  вернулся в школу в " + row[0].ToString());
                             }
                         }
                     }
@@ -165,12 +174,12 @@ namespace eljur_notifier.MsDbNS
                         if (row[3].ToString() == "8677" || row[3].ToString() == "9256")
                         {
                             Event Event = new Event();
-                            Event.PupilId = PupilId;
+                            Event.PupilIdOld = PupilIdOld;
                             Event.EventTime = TimeSpan.Parse(row[0].ToString());
                             Event.EventName = "Первый проход";
                             StaffCtx.Events.Add(Event);
                             StaffCtx.SaveChanges();
-                            message.Display("Школьник с id " + PupilId + "  пришёл в школу в " + row[0].ToString(), "Trace");
+                            message.Display("Школьник с id " + PupilIdOld + "  пришёл в школу в " + row[0].ToString(), "Trace");
                         }
                     }
 
@@ -217,13 +226,32 @@ namespace eljur_notifier.MsDbNS
             message.Display("SELECT modify_date FROM sys.tables order by modify_date", "Warn");
             while (reader.Read())
             {
-                Console.WriteLine(String.Format("{0}", reader[0]));
+                message.Display(String.Format("{0}", reader[0]), "Trace");
                 ModifyDate = Convert.ToDateTime(reader[0].ToString());
                 break;
             }
             dbcon.Close();
             return ModifyDate;
         }
+
+
+        public String getFullFIOByPupilIdOld(int PipilIdOld)
+        {
+            String FullFIO = "Default FullFIO";
+            dbcon.Open();
+            SqlCommand command = new SqlCommand("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PipilIdOld + "'", dbcon);
+            SqlDataReader reader = command.ExecuteReader();
+            message.Display("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PipilIdOld + "'", "Warn");
+            while (reader.Read())
+            {
+                message.Display(String.Format("{0}", reader[0]), "Trace");
+                FullFIO = reader[0].ToString();
+                break;
+            }
+            dbcon.Close();
+            return FullFIO;
+        }
+
 
     }
 }

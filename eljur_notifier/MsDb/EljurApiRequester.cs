@@ -15,10 +15,35 @@ namespace eljur_notifier.MsDbNS
         internal protected JObject rules { get; set; }
         internal protected String clas { get; set; }
         internal protected int eljurAccountId { get; set; }
+        internal protected TimeSpan startTimeLessons { get; set; }
+        internal protected TimeSpan endTimeLessons { get; set; }
 
         public EljurApiRequester()
         {
             this.message = new Message();
+        }
+
+
+        public TimeSpan getStartTimeLessonsByFullFIO(String FullFIO)
+        {
+            Random random = new Random();
+            TimeSpan start = TimeSpan.FromHours(7);
+            TimeSpan end = TimeSpan.FromHours(11);
+            int maxMinutes = (int)((end - start).TotalMinutes);
+            int minutes = random.Next(maxMinutes);
+            TimeSpan t = start.Add(TimeSpan.FromMinutes(minutes));
+            return t;
+        }
+
+        public TimeSpan getEndTimeLessonsByFullFIO(String FullFIO)
+        {
+            Random random = new Random();
+            TimeSpan start = TimeSpan.FromHours(12);
+            TimeSpan end = TimeSpan.FromHours(18);
+            int maxMinutes = (int)((end - start).TotalMinutes);
+            int minutes = random.Next(maxMinutes);
+            TimeSpan t = start.Add(TimeSpan.FromMinutes(minutes));
+            return t;
         }
 
         public int getEljurAccountIdByFullFIO(String FullFIO)
