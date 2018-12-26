@@ -163,6 +163,10 @@
     <Compile Include="Migrations\201812261558108_EljurAccount_to_EljurAccountId.Designer.cs">
       <DependentUpon>201812261558108_EljurAccount_to_EljurAccountId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201812262325177_Schedule_was_added.cs" />
+    <Compile Include="Migrations\201812262325177_Schedule_was_added.Designer.cs">
+      <DependentUpon>201812262325177_Schedule_was_added.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -172,6 +176,7 @@
     </Compile>
     <Compile Include="StaffModel\Event.cs" />
     <Compile Include="StaffModel\Pupil.cs" />
+    <Compile Include="StaffModel\Schedule.cs" />
     <Compile Include="StaffModel\StaffContext.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +228,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812261558108_EljurAccount_to_EljurAccountId.resx">
       <DependentUpon>201812261558108_EljurAccount_to_EljurAccountId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812262325177_Schedule_was_added.resx">
+      <DependentUpon>201812262325177_Schedule_was_added.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />

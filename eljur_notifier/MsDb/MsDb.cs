@@ -44,15 +44,13 @@ namespace eljur_notifier.MsDbNS
                 firstStudent.LastName = "Иванов";
                 firstStudent.MiddleName = "Иванович";
                 firstStudent.FullFIO = "Иван Иванов Иванович";
-                firstStudent.Class = "1Б";
+                firstStudent.Clas = "1Б";
                 firstStudent.EljurAccountId = 666;
 
                 Event firstEvent = new Event();
                 firstEvent.EventId = 1;
                 firstEvent.PupilIdOld = 5001;
                 firstEvent.EventTime = DateTime.Now.TimeOfDay;
-                firstEvent.StartTimeLessons = DateTime.Now.TimeOfDay;
-                firstEvent.EndTimeLessons = DateTime.Now.TimeOfDay;
                 firstEvent.EventName = "Прогул";
                 firstEvent.NotifyEnable = true;
                 firstEvent.NotifyEnableDirector = true;
@@ -60,26 +58,41 @@ namespace eljur_notifier.MsDbNS
                 firstEvent.NotifyWasSendDirector = false;
 
 
+                Schedule firstScheduleToDayItem = new Schedule();
+                firstScheduleToDayItem.ScheduleId = 1;
+                firstScheduleToDayItem.Clas = "1A";
+                firstScheduleToDayItem.StartTimeLessons = DateTime.Now.TimeOfDay;
+                firstScheduleToDayItem.EndTimeLessons = DateTime.Now.TimeOfDay;
+
+
                 StaffCtx.Pupils.Add(firstStudent);
                 StaffCtx.Events.Add(firstEvent);
+                StaffCtx.Schedules.Add(firstScheduleToDayItem);
                 StaffCtx.SaveChanges();
-                Console.WriteLine("firstStudent success saved");
+                message.Display("firstStudent success saved", "Warn");
 
                 var students = StaffCtx.Pupils;
                 var evets = StaffCtx.Events;
+                var schedules = StaffCtx.Schedules;
                 Console.WriteLine("List of objects:");
                 foreach (Pupil p in students)
                 {
-                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5}", p.PupilIdOld, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Class);
+                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5}", p.PupilIdOld, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Clas);
                 }
                 foreach (Event e in evets)
                 {
                     Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5} - {6}- {7}", e.EventId, e.PupilIdOld, e.EventTime, e.EventName, e.NotifyEnable, e.NotifyEnableDirector, e.NotifyWasSend, e.NotifyWasSendDirector);
                 }
+                foreach (Schedule s in schedules)
+                {
+                    Console.WriteLine("{0}.{1} - {2} - {3}", s.ScheduleId, s.Clas, s.StartTimeLessons, s.EndTimeLessons);
+                }
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Pupils]");
                 message.Display("TABLE Pupils was cleared", "Warn");
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Events]");
                 message.Display("TABLE Events was cleared", "Warn");
+                this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [Schedules]");
+                message.Display("TABLE Schedules was cleared", "Warn");
 
             }
         }
@@ -100,20 +113,21 @@ namespace eljur_notifier.MsDbNS
                     Student.FullFIO = row[22].ToString();
 
                     elRequester.clas = elRequester.getClasByFullFIO(Student.FullFIO);
-                    Student.Class = elRequester.clas;
+                    Student.Clas = elRequester.clas;
 
                     elRequester.eljurAccountId = elRequester.getEljurAccountIdByFullFIO(Student.FullFIO);
                     Student.EljurAccountId = elRequester.eljurAccountId;
 
                     StaffCtx.Pupils.Add(Student);
                     StaffCtx.SaveChanges();
-                    Console.WriteLine("Student success saved");
+                    message.Display("Student success saved", "Warn");
+
                 }
                 var students = StaffCtx.Pupils;
                 Console.WriteLine("List of objects:");
                 foreach (Pupil p in students)
                 {
-                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5}", p.PupilId, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Class);
+                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5}", p.PupilId, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Clas);
                 }
 
             }
@@ -146,13 +160,16 @@ namespace eljur_notifier.MsDbNS
                                 result.EventName = "Вышел";
                                 result.EventTime = TimeSpan.Parse(row[0].ToString());
 
-                                String FullFIO = getFullFIOByPupilIdOld(PupilIdOld);
-                                result.StartTimeLessons = elRequester.getStartTimeLessonsByFullFIO(FullFIO);
-                                result.EndTimeLessons = elRequester.getEndTimeLessonsByFullFIO(FullFIO);
-                                
-                                   
+
+                                String Clas = getClasByPupilIdOld(PupilIdOld);
+                                //String FullFIO = getFullFIOByPupilIdOld(PupilIdOld);
+
+                                TimeSpan StartTimeLessons = elRequester.getStartTimeLessonsByClas(Clas);
+                                TimeSpan EndTimeLessons = elRequester.getEndTimeLessonsByClas(Clas);
+
+
                                 StaffCtx.SaveChanges();
-                                Console.WriteLine("Школьник с id " + PupilIdOld + " вышел из школы в " + row[0].ToString());
+                                message.Display("Школьник с id " + PupilIdOld + " вышел из школы в " + row[0].ToString(), "Trace");
                             }
 
                         }
@@ -164,7 +181,7 @@ namespace eljur_notifier.MsDbNS
                                 result.EventName = "Вернулся";
                                 result.EventTime = TimeSpan.Parse(row[0].ToString());
                                 StaffCtx.SaveChanges();
-                                Console.WriteLine("Школьник с id " + PupilIdOld + "  вернулся в школу в " + row[0].ToString());
+                                message.Display("Школьник с id " + PupilIdOld + "  вернулся в школу в " + row[0].ToString(), "Trace");
                             }
                         }
                     }
@@ -185,6 +202,26 @@ namespace eljur_notifier.MsDbNS
 
                 }
 
+            }
+
+        }
+
+        public void FillSchedulesDb(List<object[]> curEvents)
+        {
+            using (this.StaffCtx = new StaffContext())
+            {
+                EljurApiRequester elRequester = new EljurApiRequester();
+                String[] ClasesArr = elRequester.getClases();
+                foreach (String clas in ClasesArr)
+                {
+                    Schedule ScheduleItem = new Schedule();
+                    ScheduleItem.Clas = clas;
+                    ScheduleItem.StartTimeLessons = elRequester.getStartTimeLessonsByClas(clas);
+                    ScheduleItem.EndTimeLessons = elRequester.getEndTimeLessonsByClas(clas);
+                    StaffCtx.Schedules.Add(ScheduleItem);
+                    StaffCtx.SaveChanges();
+                    message.Display("ScheduleItem success saved", "Warn");
+                }
             }
 
         }
@@ -235,13 +272,13 @@ namespace eljur_notifier.MsDbNS
         }
 
 
-        public String getFullFIOByPupilIdOld(int PipilIdOld)
+        public String getFullFIOByPupilIdOld(int PupilIdOld)
         {
             String FullFIO = "Default FullFIO";
             dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PipilIdOld + "'", dbcon);
+            SqlCommand command = new SqlCommand("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon);
             SqlDataReader reader = command.ExecuteReader();
-            message.Display("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PipilIdOld + "'", "Warn");
+            message.Display("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
             while (reader.Read())
             {
                 message.Display(String.Format("{0}", reader[0]), "Trace");
@@ -251,6 +288,25 @@ namespace eljur_notifier.MsDbNS
             dbcon.Close();
             return FullFIO;
         }
+
+        public String getClasByPupilIdOld(int PupilIdOld)
+        {
+            String Clas = "Default Clas";
+            dbcon.Open();
+            SqlCommand command = new SqlCommand("SELECT Clas FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon);
+            SqlDataReader reader = command.ExecuteReader();
+            message.Display("SELECT Clas FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
+            while (reader.Read())
+            {
+                message.Display(String.Format("{0}", reader[0]), "Trace");
+                Clas = reader[0].ToString();
+                break;
+            }
+            dbcon.Close();
+            return Clas;
+        }
+
+
 
 
     }

@@ -15,8 +15,6 @@ namespace eljur_notifier.StaffModel
         public int EventId { get; set; }
         public int PupilIdOld { get; set; }
         public TimeSpan EventTime { get; set; }
-        public TimeSpan StartTimeLessons { get; set; }
-        public TimeSpan EndTimeLessons { get; set; }
         [MaxLength(500)]
         public string EventName { get; set; }       
         public Boolean NotifyEnable { get; set; }
