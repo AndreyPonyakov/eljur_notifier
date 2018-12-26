@@ -40,7 +40,7 @@ namespace eljur_notifier
 
             var SendNotifyParents = EventHandler.SendNotifyParents(cancellationTokenSource.Token);
 
-            var CheckMsDb = EventHandler.CheckMsDb(cancellationTokenSource.Token, new Action(delegate
+            var CheckMsDb = EventHandler.ChecTimekMsDb(cancellationTokenSource.Token, new Action(delegate
             {
                 cancellationTokenSource.Cancel();
                 Task.WaitAll(GetDataFb, SendNotifyParents);

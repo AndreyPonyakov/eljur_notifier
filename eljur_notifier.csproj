@@ -57,8 +57,8 @@
     <Reference Include="FirebirdSql.Data.FirebirdClient, Version=6.4.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
       <HintPath>packages\FirebirdSql.Data.FirebirdClient.6.4.0\lib\net452\FirebirdSql.Data.FirebirdClient.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
@@ -135,6 +135,7 @@
     <Compile Include="eljur_notifier\DbCommon\DbCommonCommunicationInf.cs" />
     <Compile Include="eljur_notifier\EventHandler\EventHandler.cs" />
     <Compile Include="eljur_notifier\FireBird\Firebird.cs" />
+    <Compile Include="eljur_notifier\MsDb\EljurApiRequester.cs" />
     <Compile Include="eljur_notifier\MsDb\MsDb.cs" />
     <Compile Include="eljur_notifier\MsDb\MsDbChecker.cs" />
     <Compile Include="eljur_notifier\Program.cs" />

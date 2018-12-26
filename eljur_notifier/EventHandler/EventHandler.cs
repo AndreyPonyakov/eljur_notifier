@@ -43,10 +43,14 @@ namespace eljur_notifier.EventHandlerNS
                 }
                 else
                 {
-                    message.Display("Cannot connect to database MsDb from Task GetDataFb", "Warn");
-                    SqlConnection.ClearAllPools();
-                    msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-                    msDbChecker.CreateMsDb();
+                    try
+                    {
+                        throw new Exception();
+                    }
+                    catch (Exception ex)
+                    {
+                        message.Display("Cannot connect to MsDb from Task GetDataFb", "Fatal", ex);
+                    }                  
                 }
                                       
                 TimeSpan deltaTime = DateTime.Now - startTime;
@@ -57,7 +61,7 @@ namespace eljur_notifier.EventHandlerNS
             }
         }
 
-        public async Task CheckMsDb(CancellationToken cancellationToken, Action actionAtMidnight)
+        public async Task ChecTimekMsDb(CancellationToken cancellationToken, Action actionAtMidnight)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
