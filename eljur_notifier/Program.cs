@@ -13,6 +13,8 @@ using eljur_notifier.FirebirdNS;
 using eljur_notifier.MsDbNS;
 using eljur_notifier.EventHandlerNS;
 using NLog;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 
 namespace eljur_notifier
@@ -28,6 +30,13 @@ namespace eljur_notifier
 
         public static void Run(string[] args)
         {
+
+            EljurApiRequester elRequester = new EljurApiRequester();
+            elRequester.data = elRequester.getData();
+
+            Console.ReadKey();
+
+
             Message message = new Message();
             Config Config = new Config();         
             Firebird Firebird = new Firebird(Config.ConStrFbDB);        
