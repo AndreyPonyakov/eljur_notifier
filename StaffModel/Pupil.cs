@@ -24,8 +24,7 @@ namespace eljur_notifier.StaffModel
         public string FullFIO { get; set; }
         [MaxLength(10)]
         public string Class { get; set; }
-        [MaxLength(500)]
-        public string EljurAccount { get; set; }   
+        public int EljurAccountId { get; set; }   
 
     }
 }

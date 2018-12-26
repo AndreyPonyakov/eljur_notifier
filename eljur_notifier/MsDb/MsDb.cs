@@ -45,7 +45,7 @@ namespace eljur_notifier.MsDbNS
                 firstStudent.MiddleName = "Иванович";
                 firstStudent.FullFIO = "Иван Иванов Иванович";
                 firstStudent.Class = "1Б";
-                firstStudent.EljurAccount = "some_string";
+                firstStudent.EljurAccountId = 666;
 
                 Event firstEvent = new Event();
                 firstEvent.EventId = 1;
@@ -86,6 +86,7 @@ namespace eljur_notifier.MsDbNS
         {
             using (this.StaffCtx = new StaffContext())
             {
+                EljurApiRequester elRequester = new EljurApiRequester();
                 foreach (object[] row in AllStaff)
                 {
 
@@ -95,8 +96,13 @@ namespace eljur_notifier.MsDbNS
                     Student.LastName = row[1].ToString();
                     Student.MiddleName = row[3].ToString();
                     Student.FullFIO = row[22].ToString();
-                    //Student.Class = row[21].ToString();
-                    //Student.EljurAccount = row[21].ToString();
+
+                    elRequester.clas = elRequester.getClasByFullFIO(Student.FullFIO);
+                    Student.Class = elRequester.clas;
+
+                    elRequester.eljurAccountId = elRequester.getEljurAccountIdByFullFIO(Student.FullFIO);
+                    Student.EljurAccountId = elRequester.eljurAccountId;
+
                     StaffCtx.Pupils.Add(Student);
                     StaffCtx.SaveChanges();
                     Console.WriteLine("Student success saved");

@@ -28,11 +28,12 @@ namespace eljur_notifier.MsDbNS
             this.timeFromDel = new TimeSpan(23, 58, 59);
             this.timeToDel = new TimeSpan(23, 59, 59);
             this.CheckMsDb();
+            this.CreateMsDb();
         }
         public void CheckTime(Action actionAtMidnight)
         {
             var timeNow = DateTime.Now.TimeOfDay;
-            //timeFromDel = new TimeSpan(20, 24, 0);
+            //timeFromDel = new TimeSpan(18, 55, 0);
             //timeToDel = new TimeSpan(20, 25, 0);
             if (timeNow > timeFromDel && timeNow < timeToDel)
             {
