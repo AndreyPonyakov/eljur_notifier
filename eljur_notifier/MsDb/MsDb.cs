@@ -196,15 +196,7 @@ namespace eljur_notifier.MsDbNS
                             {
                                 result.EventName = "Вышел";
                                 result.EventTime = TimeSpan.Parse(row[0].ToString());
-
-
-                                //String Clas = getClasByPupilIdOld(PupilIdOld);
-                                //String FullFIO = getFullFIOByPupilIdOld(PupilIdOld);
-
-                                //TimeSpan StartTimeLessons = elRequester.getStartTimeLessonsByClas(Clas);
-                                //TimeSpan EndTimeLessons = elRequester.getEndTimeLessonsByClas(Clas);
-
-
+                                result.NotifyWasSend = false;
                                 StaffCtx.SaveChanges();
                                 message.Display("Школьник с id " + PupilIdOld + " вышел из школы в " + row[0].ToString(), "Trace");
                             }
@@ -217,6 +209,7 @@ namespace eljur_notifier.MsDbNS
                                 //register only input configs_tree_id_resource
                                 result.EventName = "Вернулся";
                                 result.EventTime = TimeSpan.Parse(row[0].ToString());
+                                result.NotifyWasSend = false;
                                 StaffCtx.SaveChanges();
                                 message.Display("Школьник с id " + PupilIdOld + "  вернулся в школу в " + row[0].ToString(), "Trace");
                             }
@@ -446,6 +439,21 @@ namespace eljur_notifier.MsDbNS
                 }
             }
         }
+
+        public void SetStatusWentHomeTooEarly(int PupilIdOld)
+        {
+            using (this.StaffCtx = new StaffContext())
+            {
+                var result = StaffCtx.Events.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
+                if (result != null)
+                {
+                    result.EventName = "Прогул";
+                    StaffCtx.SaveChanges();
+                    message.Display("WentHomeTooEarly to " + PupilIdOld + " PupilIdOld was set", "Trace");
+                }
+            }
+        }
+        
 
 
         public Boolean IsTableExist(String TableName)

@@ -96,6 +96,31 @@ namespace eljur_notifier.EventHandlerNS
             }
         }
 
+        public async Task CatchEventLastPass(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (msDb.IsDbExist(msDb.dbcon, "Task CatchEventLastPass"))
+                {
+                    MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass(config, msDb);
+                    msDbCatcherLastPass.catchLastPass();
+                }
+                else
+                {
+                    try
+                    {
+                        msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+                        //throw new Exception();
+                    }
+                    catch (Exception ex)
+                    {
+                        message.Display("Cannot connect to MsDb from Task CatchEventLastPass", "Fatal", ex);
+                    }
+                }
+                await Task.Delay(10000);
+            }
+        }
+
         public async Task SendNotifyParents(CancellationToken cancellationToken)
         {
             String EljurApiTocken = config.EljurApiTocken;

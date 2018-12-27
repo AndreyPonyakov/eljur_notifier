@@ -44,13 +44,14 @@ namespace eljur_notifier
 
             var CatchEventFirstPass = EventHandler.CatchEventFirstPass(cancellationTokenSource.Token);
 
+            var CatchEventLastPass = EventHandler.CatchEventLastPass(cancellationTokenSource.Token);
+
             var CheckMsDb = EventHandler.ChecTimekMsDb(cancellationTokenSource.Token, new Action(delegate
             {
                 cancellationTokenSource.Cancel();
-                Task.WaitAll(GetDataFb, SendNotifyParents, CatchEventFirstPass);
+                Task.WaitAll(GetDataFb, SendNotifyParents, CatchEventFirstPass, CatchEventLastPass);
                 Task.Delay(60000);
-                //restart
-                //SqlConnection.ClearAllPools();                              
+                //restart                              
                 Run(MainMethodArgs.ToArray());
 
             }));

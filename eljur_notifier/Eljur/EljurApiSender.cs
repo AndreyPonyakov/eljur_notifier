@@ -31,8 +31,8 @@ namespace eljur_notifier.EljurNS
             //TimeSpan EndTimeLessons = msDb.getEndTimeLessonsByClas(Clas);
  
             //var timeNow = DateTime.Now.TimeOfDay;
-            var timeNow = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
-            if (timeNow > StartTimeLessons)
+            var EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
+            if (EventTime > StartTimeLessons)
             {
                 msDb.SetStatusCameTooLate(Convert.ToInt32(PupilIdOldAndTime[0]));
                 message.Display("Notify about student " + FullFIO + " who came too late was sent to " + EljurAccountId + " EljurAccountId", "Warn");
@@ -40,10 +40,40 @@ namespace eljur_notifier.EljurNS
             else
             {
                 message.Display("Notify about FirstPass by student " + FullFIO + " was sent to " + EljurAccountId + " EljurAccountId", "Warn");
-            }            
+            }             
             return true;
-        } 
+        }
 
+        public Boolean SendNotifyLastPass(object[] PupilIdOldAndTime)
+        {
+            int EljurAccountId = msDb.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            String FullFIO = msDb.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            String Clas = msDb.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            TimeSpan EndTimeLessons = msDb.getEndTimeLessonsByClas(Clas);
 
+            var EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
+            var EventTimePlus15Min = EventTime.Add(new TimeSpan(0, 15, 0));
+            var timeNow = DateTime.Now.TimeOfDay;
+
+            if (timeNow > EventTimePlus15Min)
+            {
+                if (EventTime > EndTimeLessons)
+                {
+                    message.Display("Notify about student " + FullFIO + " who went home was sent to " + EljurAccountId + " EljurAccountId", "Warn");
+                    return true;
+                }
+                else
+                {
+                    message.Display("Notify about student " + FullFIO + " who went home too early was sent to " + EljurAccountId + " EljurAccountId", "Warn");
+                    msDb.SetStatusWentHomeTooEarly(Convert.ToInt32(PupilIdOldAndTime[0]));
+                    return true;
+                }          
+            }
+            else
+            {
+                message.Display("Too early to make a decision. 15 minutes have not passed yet.", "Warn");
+                return false;
+            }
+        }      
     }
 }
