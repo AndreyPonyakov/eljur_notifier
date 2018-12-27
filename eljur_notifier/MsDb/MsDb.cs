@@ -27,7 +27,7 @@ namespace eljur_notifier.MsDbNS
         {
             this.message = new Message();
             this.ConnectStr = ConnectStr;
-            SqlConnection.ClearAllPools();
+            //SqlConnection.ClearAllPools();
             this.dbcon = new SqlConnection(ConnectStr);
             this.createDb(ConnectStr);
             while (this.IsDbExist(dbcon) == false) { }

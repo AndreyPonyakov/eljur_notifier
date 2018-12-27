@@ -50,7 +50,7 @@ namespace eljur_notifier
                 Task.WaitAll(GetDataFb, SendNotifyParents, CatchEventFirstPass);
                 Task.Delay(60000);
                 //restart
-                SqlConnection.ClearAllPools();                              
+                //SqlConnection.ClearAllPools();                              
                 Run(MainMethodArgs.ToArray());
 
             }));

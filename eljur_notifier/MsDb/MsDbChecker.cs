@@ -50,10 +50,10 @@ namespace eljur_notifier.MsDbNS
                     }
                     else
                     {
-                        //msDb.deleteDb(config.ConStrMsDB);
-                        msDb.clearTableDb("Pupils");
+                        //msDb.deleteDb(config.ConStrMsDB); // NEVER DELETE THIS DATABASE WHOLE
+                        //msDb.clearTableDb("Pupils"); //NEVER CLEAR THIS TABLE. ONLY LAZY UPDATING IN NEW TASK
                         msDb.clearTableDb("Events");
-                        message.Display("TABLES Pupils and Events MsDb DATABASE was cleared", "Warn");
+                        message.Display("TABLES Events MsDb DATABASE was cleared", "Warn");
                         actionAtMidnight();
                     }
                 }
