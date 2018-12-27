@@ -26,7 +26,21 @@ namespace eljur_notifier.EljurNS
         {
             int EljurAccountId = msDb.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));          
             String FullFIO = msDb.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
-            message.Display("Notify about FirstPass by student " + FullFIO + " was send to " + EljurAccountId + " EljurAccountId", "Warn");
+            String Clas = msDb.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            TimeSpan StartTimeLessons = msDb.getStartTimeLessonsByClas(Clas);
+            //TimeSpan EndTimeLessons = msDb.getEndTimeLessonsByClas(Clas);
+ 
+            //var timeNow = DateTime.Now.TimeOfDay;
+            var timeNow = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
+            if (timeNow > StartTimeLessons)
+            {
+                msDb.SetStatusCameTooLate(Convert.ToInt32(PupilIdOldAndTime[0]));
+                message.Display("Notify about student " + FullFIO + " who came too late was sent to " + EljurAccountId + " EljurAccountId", "Warn");
+            }
+            else
+            {
+                message.Display("Notify about FirstPass by student " + FullFIO + " was sent to " + EljurAccountId + " EljurAccountId", "Warn");
+            }            
             return true;
         } 
 

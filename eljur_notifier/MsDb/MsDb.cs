@@ -365,7 +365,7 @@ namespace eljur_notifier.MsDbNS
                 {
                     var colums = new object[reader.FieldCount];
                     reader.GetValues(colums);
-                    message.Display(string.Format("{0}", colums[0].ToString()), "trace");
+                    message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
                     EljurAccountId = Convert.ToInt32(colums[0]);
                     //break;
                 }
@@ -373,6 +373,50 @@ namespace eljur_notifier.MsDbNS
             command.Dispose();
             dbcon.Close();
             return EljurAccountId;
+        }
+
+        public TimeSpan getStartTimeLessonsByClas(String Clas)
+        {
+            TimeSpan StartTimeLessons = TimeSpan.Parse("00:00:01"); 
+            dbcon.Open();
+            SqlCommand command = new SqlCommand("SELECT StartTimeLessons FROM Schedules where Clas = '" + Clas + "'", dbcon);
+            message.Display("SELECT StartTimeLessons FROM Schedules where Clas = '" + Clas + "'", "Warn");
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var colums = new object[reader.FieldCount];
+                    reader.GetValues(colums);
+                    message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
+                    StartTimeLessons = TimeSpan.Parse(colums[0].ToString());
+                    //break;
+                }
+            }
+            command.Dispose();
+            dbcon.Close();
+            return StartTimeLessons;
+        }
+
+        public TimeSpan getEndTimeLessonsByClas(String Clas)
+        {
+            TimeSpan EndTimeLessons = TimeSpan.Parse("23:59:59");
+            dbcon.Open();
+            SqlCommand command = new SqlCommand("SELECT EndTimeLessons FROM Schedules where Clas = '" + Clas + "'", dbcon);
+            message.Display("SELECT EndTimeLessons FROM Schedules where Clas = '" + Clas + "'", "Warn");
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var colums = new object[reader.FieldCount];
+                    reader.GetValues(colums);
+                    message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
+                    EndTimeLessons = TimeSpan.Parse(colums[0].ToString());
+                    //break;
+                }
+            }
+            command.Dispose();
+            dbcon.Close();
+            return EndTimeLessons;
         }
 
         public void SetStatusNotifyWasSend(int PupilIdOld)
@@ -388,6 +432,21 @@ namespace eljur_notifier.MsDbNS
                 }
             }
         }
+
+        public void SetStatusCameTooLate(int PupilIdOld)
+        {
+            using (this.StaffCtx = new StaffContext())
+            {
+                var result = StaffCtx.Events.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
+                if (result != null)
+                {
+                    result.EventName = "Опоздал";
+                    StaffCtx.SaveChanges();
+                    message.Display("CameTooLate to " + PupilIdOld + " PupilIdOld was set", "Trace");
+                }
+            }
+        }
+
 
         public Boolean IsTableExist(String TableName)
         {

@@ -100,7 +100,7 @@ namespace eljur_notifier.FirebirdNS
             if (this.beforeDt == Convert.ToDateTime("2000-12-31 23:59:59"))
             {
                 this.afterDt = DateTime.Now;
-                this.afterDt = this.afterDt.Add(new TimeSpan(-6, -15, 0));// NEED COMMENT OUT THIS!!!!!!!!!!!!!!!
+                this.afterDt = this.afterDt.Add(new TimeSpan(-15, -25, 0));// NEED COMMENT OUT THIS!!!!!!!!!!!!!!!
                 this.beforeDt = this.afterDt.Subtract(IntervalRequest); //Add(new TimeSpan(0, -1, 0));
             }
             else
