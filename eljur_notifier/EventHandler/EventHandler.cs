@@ -70,6 +70,29 @@ namespace eljur_notifier.EventHandlerNS
             }        
         }
 
+        public async Task CatchEventFirstPass(CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {          
+                if (msDb.IsDbExist(msDb.dbcon))
+                {
+                    MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass(config, msDb);
+                    msDbCatcherFirstPass.catchFirstPass();
+                }
+                else
+                {
+                    try
+                    {
+                        throw new Exception();
+                    }
+                    catch (Exception ex)
+                    {
+                        message.Display("Cannot connect to MsDb from Task CatchEventFirstPass", "Fatal", ex);
+                    }
+                }
+                await Task.Delay(10000);
+            }
+        }
 
         public async Task SendNotifyParents(CancellationToken cancellationToken)
         {

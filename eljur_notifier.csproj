@@ -133,10 +133,12 @@
     <Compile Include="eljur_notifier\AppCommon\SMTP.cs" />
     <Compile Include="eljur_notifier\DbCommon\DbCommon.cs" />
     <Compile Include="eljur_notifier\DbCommon\DbCommonCommunicationInf.cs" />
+    <Compile Include="eljur_notifier\Eljur\EljurApiSender.cs" />
     <Compile Include="eljur_notifier\EventHandler\EventHandler.cs" />
     <Compile Include="eljur_notifier\FireBird\Firebird.cs" />
-    <Compile Include="eljur_notifier\MsDb\EljurApiRequester.cs" />
+    <Compile Include="eljur_notifier\Eljur\EljurApiRequester.cs" />
     <Compile Include="eljur_notifier\MsDb\MsDb.cs" />
+    <Compile Include="eljur_notifier\MsDb\MsDbCatcherFirstPass.cs" />
     <Compile Include="eljur_notifier\MsDb\MsDbChecker.cs" />
     <Compile Include="eljur_notifier\Program.cs" />
     <Compile Include="Migrations\201812191123066_InitialCreate.cs" />

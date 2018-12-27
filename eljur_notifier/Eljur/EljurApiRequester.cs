@@ -7,7 +7,7 @@ using eljur_notifier.AppCommon;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace eljur_notifier.MsDbNS
+namespace eljur_notifier.EljurNS
 {
     class EljurApiRequester
     {
@@ -26,7 +26,7 @@ namespace eljur_notifier.MsDbNS
 
         public String[] getClases()
         {
-            String[] ClasesArr = new String[5];
+            String[] ClasesArr = new String[33];
             ClasesArr[0] = "1А";
             ClasesArr[1] = "1Б";
             ClasesArr[2] = "1В";

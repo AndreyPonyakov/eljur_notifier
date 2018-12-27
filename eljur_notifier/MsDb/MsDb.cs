@@ -9,6 +9,7 @@ using eljur_notifier;
 using eljur_notifier.StaffModel;
 using eljur_notifier.DbCommon;
 using eljur_notifier.AppCommon;
+using eljur_notifier.EljurNS;
 
 
 
@@ -161,11 +162,11 @@ namespace eljur_notifier.MsDbNS
                                 result.EventTime = TimeSpan.Parse(row[0].ToString());
 
 
-                                String Clas = getClasByPupilIdOld(PupilIdOld);
+                                //String Clas = getClasByPupilIdOld(PupilIdOld);
                                 //String FullFIO = getFullFIOByPupilIdOld(PupilIdOld);
 
-                                TimeSpan StartTimeLessons = elRequester.getStartTimeLessonsByClas(Clas);
-                                TimeSpan EndTimeLessons = elRequester.getEndTimeLessonsByClas(Clas);
+                                //TimeSpan StartTimeLessons = elRequester.getStartTimeLessonsByClas(Clas);
+                                //TimeSpan EndTimeLessons = elRequester.getEndTimeLessonsByClas(Clas);
 
 
                                 StaffCtx.SaveChanges();
@@ -305,6 +306,38 @@ namespace eljur_notifier.MsDbNS
             dbcon.Close();
             return Clas;
         }
+
+        public int getEljurAccountIdByPupilIdOld(int PupilIdOld)
+        {
+            int EljurAccountId = 0;
+            dbcon.Open();
+            SqlCommand command = new SqlCommand("SELECT EljurAccountId FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon);
+            SqlDataReader reader = command.ExecuteReader();
+            message.Display("SELECT EljurAccountId FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
+            while (reader.Read())
+            {
+                message.Display(String.Format("{0}", reader[0]), "Trace");
+                EljurAccountId = Convert.ToInt32(reader[0]);
+                break;
+            }
+            dbcon.Close();
+            return EljurAccountId;
+        }
+
+        public void SetStatusNotifyWasSend(int PupilIdOld)
+        {
+            using (this.StaffCtx = new StaffContext())
+            {
+                var result = StaffCtx.Events.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
+                if (result != null)
+                {
+                    result.NotifyWasSend = true;
+                    StaffCtx.SaveChanges();
+                    message.Display("Status NotifyWasSend to " + PupilIdOld + " PupilIdOld was set", "Trace");
+                }
+            }
+        }
+
 
 
 

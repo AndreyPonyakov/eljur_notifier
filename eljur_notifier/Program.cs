@@ -42,10 +42,12 @@ namespace eljur_notifier
 
             var SendNotifyParents = EventHandler.SendNotifyParents(cancellationTokenSource.Token);
 
+            var CatchEventFirstPass = EventHandler.CatchEventFirstPass(cancellationTokenSource.Token);
+
             var CheckMsDb = EventHandler.ChecTimekMsDb(cancellationTokenSource.Token, new Action(delegate
             {
                 cancellationTokenSource.Cancel();
-                Task.WaitAll(GetDataFb, SendNotifyParents);
+                Task.WaitAll(GetDataFb, SendNotifyParents, CatchEventFirstPass);
                 Task.Delay(60000);
                 //restart
                 SqlConnection.ClearAllPools();                              
