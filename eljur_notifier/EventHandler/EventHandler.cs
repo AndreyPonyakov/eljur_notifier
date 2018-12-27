@@ -90,9 +90,9 @@ namespace eljur_notifier.EventHandlerNS
                     catch (Exception ex)
                     {
                         message.Display("Cannot connect to MsDb from Task CatchEventFirstPass", "Fatal", ex);
-                    }
+                    } 
                 }
-                await Task.Delay(1000);
+                await Task.Delay(10000);
             }
         }
 

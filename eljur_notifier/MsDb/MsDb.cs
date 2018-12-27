@@ -27,7 +27,6 @@ namespace eljur_notifier.MsDbNS
         {
             this.message = new Message();
             this.ConnectStr = ConnectStr;
-            //SqlConnection.ClearAllPools();
             this.dbcon = new SqlConnection(ConnectStr);
             if (IsTableExist("Pupils"))
             {
@@ -35,13 +34,13 @@ namespace eljur_notifier.MsDbNS
             }
             else
             {
-                this.createDb(ConnectStr);
+                this.createCleanMsDb(ConnectStr);
             }            
             while (this.IsDbExist(dbcon, "MsDb constructor") == false) { }
         }
 
 
-        public void createDb(String conStr)
+        public void createCleanMsDb(String conStr)
         {
             using (this.StaffCtx = new StaffContext())
             {
@@ -129,7 +128,6 @@ namespace eljur_notifier.MsDbNS
                     StaffCtx.Pupils.Add(Student);
                     StaffCtx.SaveChanges();
                     message.Display("Student success saved", "Warn");
-
                 }
                 var students = StaffCtx.Pupils;
                 Console.WriteLine("List of objects:");
@@ -140,6 +138,37 @@ namespace eljur_notifier.MsDbNS
 
             }
         }
+
+        public void FillScheduleDb()
+        {
+            using (this.StaffCtx = new StaffContext())
+            {
+                EljurApiRequester elRequester = new EljurApiRequester();
+                var Clases = elRequester.getClases();
+                foreach (String clas in Clases)
+                {
+
+                    Schedule ScheduleItem = new Schedule();
+                    ScheduleItem.Clas = clas;
+                    TimeSpan StartTimeLessons = elRequester.getStartTimeLessonsByClas(clas);
+                    ScheduleItem.StartTimeLessons = StartTimeLessons;
+                    TimeSpan EndTimeLessons = elRequester.getEndTimeLessonsByClas(clas);
+                    ScheduleItem.EndTimeLessons = EndTimeLessons;
+                 
+                    StaffCtx.Schedules.Add(ScheduleItem);
+                    StaffCtx.SaveChanges();
+                    message.Display("ScheduleItem success saved", "Warn");
+                }
+                var Schedules = StaffCtx.Schedules;
+                message.Display("List of objects: ", "Warn");
+                foreach (Schedule s in Schedules)
+                {
+                    Console.WriteLine("{0}.{1} - {2} - {3}", s.ScheduleId, s.Clas, s.StartTimeLessons, s.EndTimeLessons);
+                }
+
+            }
+        }
+
 
 
         public void CheckEventsDb(List<object[]> curEvents)

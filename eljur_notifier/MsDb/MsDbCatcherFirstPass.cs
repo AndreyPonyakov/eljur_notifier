@@ -36,16 +36,10 @@ namespace eljur_notifier.MsDbNS
                 while (reader.Read())
                 {
                     var PupilIdOldAndTime = new object[reader.FieldCount];
-                    //message.Display("reader.FieldCount " + reader.FieldCount.ToString(), "Trace");
-                    reader.GetValues(PupilIdOldAndTime);
-                    //message.Display("PupilIdOldAndTime[0] " + PupilIdOldAndTime[0].ToString(), "Trace");
-                    //message.Display("PupilIdOldAndTime[1] " + PupilIdOldAndTime[1].ToString(), "Trace");
+                    reader.GetValues(PupilIdOldAndTime);  
                     message.Display(String.Format("{0} - {1}", PupilIdOldAndTime[0].ToString(), PupilIdOldAndTime[1].ToString()), "Trace");
                     int PupilIdOld = Convert.ToInt32(PupilIdOldAndTime[0]);
-                    TimeSpan EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
-                    //object[] PupilIdOldAndTime = new object[2];
-                    //PupilIdOldAndTime[0] = PupilIdOld;
-                    //PupilIdOldAndTime[1] = EventTime;                 
+                    TimeSpan EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());             
                     rows.Add(PupilIdOldAndTime);
                 }
             }

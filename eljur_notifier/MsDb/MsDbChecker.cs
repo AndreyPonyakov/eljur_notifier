@@ -28,7 +28,7 @@ namespace eljur_notifier.MsDbNS
             this.timeFromDel = new TimeSpan(23, 58, 59);
             this.timeToDel = new TimeSpan(23, 59, 59);
             this.CheckMsDb();
-            if (msDb.IsTableExist("Pupils"))
+            if (msDb.IsTableExist("Pupils") && msDb.IsTableExist("Schedules"))
             {
                 message.Display("msDb already exist", "Warn");
             }
@@ -120,10 +120,11 @@ namespace eljur_notifier.MsDbNS
             //msDb = new MsDb(config.ConStrMsDB); //DON'T DO THIS TERRABLE THING HERE!!!
             msDb.dbcon = new SqlConnection(config.ConStrMsDB);
 
-            msDb.createDb(config.ConStrMsDB);
+            msDb.createCleanMsDb(config.ConStrMsDB);
             
             var AllStaff = firebird.getAllStaff();
             msDb.FillStaffDb(AllStaff);
+            msDb.FillScheduleDb();
         }
     }
 }

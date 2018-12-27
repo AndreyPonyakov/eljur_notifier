@@ -13,7 +13,7 @@ namespace eljur_notifier.StaffModel
         [Key]
         public int ScheduleId { get; set; }
         [MaxLength(10)]
-        public string Clas { get; set; }
+        public String Clas { get; set; }
         public TimeSpan StartTimeLessons { get; set; }
         public TimeSpan EndTimeLessons { get; set; }
     }
