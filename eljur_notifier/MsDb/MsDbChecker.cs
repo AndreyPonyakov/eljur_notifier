@@ -28,7 +28,15 @@ namespace eljur_notifier.MsDbNS
             this.timeFromDel = new TimeSpan(23, 58, 59);
             this.timeToDel = new TimeSpan(23, 59, 59);
             this.CheckMsDb();
-            this.CreateMsDb();
+            if (msDb.IsTableExist("Pupils"))
+            {
+                message.Display("msDb already exist", "Warn");
+            }
+            else
+            {
+                this.CreateMsDb();
+            }
+           
         }
         public void CheckTime(Action actionAtMidnight)
         {
@@ -38,7 +46,7 @@ namespace eljur_notifier.MsDbNS
             if (timeNow > timeFromDel && timeNow < timeToDel)
             {
                 message.Display("between " + timeFromDel.ToString() + " and " + timeToDel.ToString(), "Warn");
-                if (msDb.IsDbExist(msDb.dbcon))
+                if (msDb.IsDbExist(msDb.dbcon, "CheckTime func"))
                 {
                     DateTime CreationDate = msDb.getModifyDate();
                     message.Display("DATABASE was created: " + CreationDate.ToString(), "Warn");
@@ -60,7 +68,7 @@ namespace eljur_notifier.MsDbNS
                 else
                 {
                     message.Display("Cannot connect to database MsDb from CheckTime(Action actionAtMidnight)", "Warn");
-                    SqlConnection.ClearAllPools();
+                    //SqlConnection.ClearAllPools();
                     msDb.dbcon = new SqlConnection(config.ConStrMsDB);
                     CreateMsDb();
                 }
@@ -69,11 +77,11 @@ namespace eljur_notifier.MsDbNS
         }
         public void CheckMsDb()
         {
-            SqlConnection.ClearAllPools();
+            //SqlConnection.ClearAllPools();
             msDb.dbcon = new SqlConnection(config.ConStrMsDB);
 
-            message.Display("MsSQLDB is exist: " + msDb.IsDbExist(msDb.dbcon).ToString(), "Warn");        
-            if (msDb.IsDbExist(msDb.dbcon))
+            message.Display("MsSQLDB is exist: " + msDb.IsDbExist(msDb.dbcon, "CheckMsDb func").ToString(), "Warn");        
+            if (msDb.IsDbExist(msDb.dbcon, "CheckMsDb func"))
             {      
                 DateTime ModifyDate = msDb.getModifyDate();
                 message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
@@ -108,7 +116,7 @@ namespace eljur_notifier.MsDbNS
         }
         public void CreateMsDb()
         {
-            SqlConnection.ClearAllPools();
+            //SqlConnection.ClearAllPools();
             //msDb = new MsDb(config.ConStrMsDB); //DON'T DO THIS TERRABLE THING HERE!!!
             msDb.dbcon = new SqlConnection(config.ConStrMsDB);
 

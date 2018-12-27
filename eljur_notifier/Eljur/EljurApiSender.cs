@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using eljur_notifier.AppCommon;
 using eljur_notifier.MsDbNS;
+using System.Data.SqlClient;
 
 namespace eljur_notifier.EljurNS
 {
@@ -23,9 +24,8 @@ namespace eljur_notifier.EljurNS
 
         public Boolean SendNotifyFirstPass(object[] PupilIdOldAndTime)
         {
-            int EljurAccountId = msDb.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            int EljurAccountId = msDb.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));          
             String FullFIO = msDb.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
-
             message.Display("Notify about FirstPass by student " + FullFIO + " was send to " + EljurAccountId + " EljurAccountId", "Warn");
             return true;
         } 

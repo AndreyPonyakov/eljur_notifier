@@ -29,8 +29,15 @@ namespace eljur_notifier.MsDbNS
             this.ConnectStr = ConnectStr;
             //SqlConnection.ClearAllPools();
             this.dbcon = new SqlConnection(ConnectStr);
-            this.createDb(ConnectStr);
-            while (this.IsDbExist(dbcon) == false) { }
+            if (IsTableExist("Pupils"))
+            {
+                message.Display("msDb already exist", "Warn");
+            }
+            else
+            {
+                this.createDb(ConnectStr);
+            }            
+            while (this.IsDbExist(dbcon, "MsDb constructor") == false) { }
         }
 
 
@@ -260,14 +267,18 @@ namespace eljur_notifier.MsDbNS
             DateTime ModifyDate = new DateTime();
             dbcon.Open();
             SqlCommand command = new SqlCommand("SELECT modify_date FROM sys.tables order by modify_date", dbcon);
-            SqlDataReader reader = command.ExecuteReader();
-            message.Display("SELECT modify_date FROM sys.tables order by modify_date", "Warn");
-            while (reader.Read())
+            
+            using (SqlDataReader reader = command.ExecuteReader())
             {
-                message.Display(String.Format("{0}", reader[0]), "Trace");
-                ModifyDate = Convert.ToDateTime(reader[0].ToString());
-                break;
+                message.Display("SELECT modify_date FROM sys.tables order by modify_date", "Warn");
+                while (reader.Read())
+                {
+                    message.Display(String.Format("{0}", reader[0]), "Trace");
+                    ModifyDate = Convert.ToDateTime(reader[0].ToString());
+                    break;
+                }
             }
+            command.Dispose();
             dbcon.Close();
             return ModifyDate;
         }
@@ -277,15 +288,18 @@ namespace eljur_notifier.MsDbNS
         {
             String FullFIO = "Default FullFIO";
             dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon);
-            SqlDataReader reader = command.ExecuteReader();
+            SqlCommand command = new SqlCommand("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon);            
             message.Display("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
-            while (reader.Read())
+            using (SqlDataReader reader = command.ExecuteReader())
             {
-                message.Display(String.Format("{0}", reader[0]), "Trace");
-                FullFIO = reader[0].ToString();
-                break;
+                while (reader.Read())
+                {
+                    message.Display(String.Format("{0}", reader[0]), "Trace");
+                    FullFIO = reader[0].ToString();
+                    break;
+                }
             }
+            command.Dispose();
             dbcon.Close();
             return FullFIO;
         }
@@ -294,15 +308,18 @@ namespace eljur_notifier.MsDbNS
         {
             String Clas = "Default Clas";
             dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT Clas FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon);
-            SqlDataReader reader = command.ExecuteReader();
+            SqlCommand command = new SqlCommand("SELECT Clas FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon);           
             message.Display("SELECT Clas FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
-            while (reader.Read())
+            using (SqlDataReader reader = command.ExecuteReader())
             {
-                message.Display(String.Format("{0}", reader[0]), "Trace");
-                Clas = reader[0].ToString();
-                break;
+                while (reader.Read())
+                {
+                    message.Display(String.Format("{0}", reader[0]), "Trace");
+                    Clas = reader[0].ToString();
+                    break;
+                }
             }
+            command.Dispose();
             dbcon.Close();
             return Clas;
         }
@@ -311,15 +328,20 @@ namespace eljur_notifier.MsDbNS
         {
             int EljurAccountId = 0;
             dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT EljurAccountId FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon);
-            SqlDataReader reader = command.ExecuteReader();
-            message.Display("SELECT EljurAccountId FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
-            while (reader.Read())
+            SqlCommand command = new SqlCommand("SELECT EljurAccountId FROM Pupils where PupilIdOld = '" + PupilIdOld + "'", dbcon);          
+            message.Display("SELECT eljuraccountid FROM Pupils where PupilIdOld = '" + PupilIdOld + "'", "Warn");
+            using (SqlDataReader reader = command.ExecuteReader())
             {
-                message.Display(String.Format("{0}", reader[0]), "Trace");
-                EljurAccountId = Convert.ToInt32(reader[0]);
-                break;
+                while (reader.Read())
+                {
+                    var colums = new object[reader.FieldCount];
+                    reader.GetValues(colums);
+                    message.Display(string.Format("{0}", colums[0].ToString()), "trace");
+                    EljurAccountId = Convert.ToInt32(colums[0]);
+                    //break;
+                }
             }
+            command.Dispose();
             dbcon.Close();
             return EljurAccountId;
         }
@@ -338,9 +360,22 @@ namespace eljur_notifier.MsDbNS
             }
         }
 
-
-
-
-
+        public Boolean IsTableExist(String TableName)
+        {
+            dbcon.Open();
+            SqlCommand sqlCommand = new SqlCommand("SELECT 'TableExist' FROM (SELECT name FROM sys.tables UNION SELECT name FROM sys.views) T WHERE name = @Name", dbcon);
+            sqlCommand.Parameters.AddWithValue("@name", TableName);
+            if (sqlCommand.ExecuteScalar().ToString() == "TableExist")
+            {
+                message.Display("TableExist " + TableName + " in msDb", "Warn");
+                dbcon.Close();
+                return true;
+            }
+            else
+            {
+                dbcon.Close();
+                return false;
+            }
+        }
     }
 }

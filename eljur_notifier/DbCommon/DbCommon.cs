@@ -11,7 +11,7 @@ namespace eljur_notifier.DbCommon
 {
     class DbCommonClass : IDbCommonInf
     {  
-        public Boolean IsDbExist(IDbConnection db)
+        public Boolean IsDbExist(IDbConnection db, String FromWhere)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace eljur_notifier.DbCommon
             {
                 // Cannot connect to database
                 Message message = new Message();
-                message.Display("Cannot connect to database", "Error", ex);
+                message.Display("Cannot connect to database from " + FromWhere + " code string", "Error", ex);
                 return false;
             }
         }

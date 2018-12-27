@@ -28,28 +28,38 @@ namespace eljur_notifier.MsDbNS
         {
 
             msDb.dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT PupilIdOld, EventTime FROM Events WHERE NotifyWasSend = 0 AND EventName = 'Первый проход' ORDER BY EventTime", msDb.dbcon);
-            SqlDataReader reader = command.ExecuteReader();
+            SqlCommand command = new SqlCommand("SELECT PupilIdOld, EventTime FROM Events WHERE NotifyWasSend = 0 AND EventName = 'Первый проход' ORDER BY EventTime", msDb.dbcon);        
             message.Display("SELECT PupilIdOld, EventTime FROM Events WHERE NotifyWasSend = 0 AND EventName = 'Первый проход' ORDER BY EventTime", "Warn");
-            while (reader.Read())
+            var rows = new List<object[]>();
+            using (SqlDataReader reader = command.ExecuteReader())
             {
-                message.Display(String.Format("{0} - {0}", reader[0].ToString(), reader[1].ToString()), "Trace");
-                int PupilIdOld = Convert.ToInt32(reader[0]);
-                TimeSpan EventTime = TimeSpan.Parse(reader[1].ToString());
-                object[] PupilIdOldAndTime = new object[2];
-                PupilIdOldAndTime[0] = PupilIdOld;
-                PupilIdOldAndTime[1] = EventTime;
+                while (reader.Read())
+                {
+                    var PupilIdOldAndTime = new object[reader.FieldCount];
+                    //message.Display("reader.FieldCount " + reader.FieldCount.ToString(), "Trace");
+                    reader.GetValues(PupilIdOldAndTime);
+                    //message.Display("PupilIdOldAndTime[0] " + PupilIdOldAndTime[0].ToString(), "Trace");
+                    //message.Display("PupilIdOldAndTime[1] " + PupilIdOldAndTime[1].ToString(), "Trace");
+                    message.Display(String.Format("{0} - {1}", PupilIdOldAndTime[0].ToString(), PupilIdOldAndTime[1].ToString()), "Trace");
+                    int PupilIdOld = Convert.ToInt32(PupilIdOldAndTime[0]);
+                    TimeSpan EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
+                    //object[] PupilIdOldAndTime = new object[2];
+                    //PupilIdOldAndTime[0] = PupilIdOld;
+                    //PupilIdOldAndTime[1] = EventTime;                 
+                    rows.Add(PupilIdOldAndTime);
+                }
+            }
+            command.Dispose();
+            msDb.dbcon.Close();
+
+            foreach (object[] PupilIdOldAndTime in rows)
+            {
                 Boolean result = eljurApiSender.SendNotifyFirstPass(PupilIdOldAndTime);
                 if (result == true)
                 {
-                    msDb.SetStatusNotifyWasSend(PupilIdOld);
+                    msDb.SetStatusNotifyWasSend(Convert.ToInt32(PupilIdOldAndTime[0]));
                 }
-                //break;
             }
-            msDb.dbcon.Close();
-           
         }
-
-
     }
 }

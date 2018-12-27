@@ -23,47 +23,48 @@ namespace eljur_notifier.FirebirdNS
         {
             this.ConnectStr = ConnectStr;
             this.dbcon = new FbConnection(ConnectStr);
-            this.IsDbExistVar = this.IsDbExist(dbcon);
+            this.IsDbExistVar = this.IsDbExist(dbcon, "Firebird constructor");
             this.message = new Message();
 
             if (!this.IsDbExistVar)
             {
-                message.Display("Firebird database doesn't exist. Program will be closed!", "Fatal",  new Exception());               
+                message.Display("Firebird database doesn't exist. Program will be closed!", "Fatal", new Exception());
             }
             this.beforeDt = Convert.ToDateTime("2000-12-31 23:59:59");
             this.afterDt = Convert.ToDateTime("2000-12-31 23:59:59");
         }
 
-    
+
 
         public List<object[]> getOneStaff(int staffNumber)
         {
             this.dbcon.Open();
             FbCommand command = this.dbcon.CreateCommand();
             command.CommandText = "select * from STAFF";
-            FbDataReader reader = command.ExecuteReader();
             int count = 0;
             int count_staff = 0;
             var staff = new List<object[]>();
 
-            while (reader.Read())
+            using (FbDataReader reader = command.ExecuteReader())
             {
-                if (count == staffNumber || staffNumber == -1)
+                while (reader.Read())
                 {
-                    var columns = new object[reader.FieldCount];
-                    reader.GetValues(columns);
-                    staff.Add(columns);
-                    //Console.WriteLine(staff);
-                    //Console.WriteLine("staff[" + count + "][id]: " + staff[count_staff][0].ToString());
-                    //Console.WriteLine("staff[" + count + "][LastName]: " + staff[count_staff][1].ToString());
-                    //Console.WriteLine("staff[" + count + "][FirstName]: " + staff[count_staff][2].ToString());
-                    //Console.WriteLine("staff[" + count + "][MiddleName]: " + staff[count_staff][3].ToString());
-                    count_staff++;
+                    if (count == staffNumber || staffNumber == -1)
+                    {
+                        var columns = new object[reader.FieldCount];
+                        reader.GetValues(columns);
+                        staff.Add(columns);
+                        //Console.WriteLine(staff);
+                        //Console.WriteLine("staff[" + count + "][id]: " + staff[count_staff][0].ToString());
+                        //Console.WriteLine("staff[" + count + "][LastName]: " + staff[count_staff][1].ToString());
+                        //Console.WriteLine("staff[" + count + "][FirstName]: " + staff[count_staff][2].ToString());
+                        //Console.WriteLine("staff[" + count + "][MiddleName]: " + staff[count_staff][3].ToString());
+                        count_staff++;
+                    }
+                    count++;
                 }
-                count++;
             }
             Console.WriteLine("count: " + count);
-            reader.Close();
             command.Dispose();
             this.dbcon.Close();
             return staff;
@@ -79,15 +80,19 @@ namespace eljur_notifier.FirebirdNS
             var rows = new List<object[]>();
             FbCommand command = this.dbcon.CreateCommand();
             command.CommandText = SqlQuery;
-            FbDataReader reader = command.ExecuteReader();
-            while (reader.Read())
+            using (FbDataReader reader = command.ExecuteReader())
             {
-                var columns = new object[reader.FieldCount];
-                reader.GetValues(columns);
-                rows.Add(columns);
+
+                while (reader.Read())
+                {
+                    var columns = new object[reader.FieldCount];
+                    reader.GetValues(columns);
+                    rows.Add(columns);
+                }
+                command.Dispose();
+                this.dbcon.Close();
+                return rows;
             }
-            this.dbcon.Close();
-            return rows; 
         }
 
         public void SetBeforeDtAndAfterDt(TimeSpan IntervalRequest)

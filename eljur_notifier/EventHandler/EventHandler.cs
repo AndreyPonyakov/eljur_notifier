@@ -37,7 +37,7 @@ namespace eljur_notifier.EventHandlerNS
             {
                 DateTime startTime = DateTime.Now;
                 List<object[]> curEvents = firebird.getStaffByTimeStamp(config);
-                if (msDb.IsDbExist(msDb.dbcon))
+                if (msDb.IsDbExist(msDb.dbcon, "Task GetDataFb"))
                 {
                     msDb.CheckEventsDb(curEvents);
                 }
@@ -75,7 +75,7 @@ namespace eljur_notifier.EventHandlerNS
         {
             while (!cancellationToken.IsCancellationRequested)
             {          
-                if (msDb.IsDbExist(msDb.dbcon))
+                if (msDb.IsDbExist(msDb.dbcon, "Task CatchEventFirstPass"))
                 {
                     MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass(config, msDb);
                     msDbCatcherFirstPass.catchFirstPass();
@@ -84,14 +84,15 @@ namespace eljur_notifier.EventHandlerNS
                 {
                     try
                     {
-                        throw new Exception();
+                        msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+                        //throw new Exception();
                     }
                     catch (Exception ex)
                     {
                         message.Display("Cannot connect to MsDb from Task CatchEventFirstPass", "Fatal", ex);
                     }
                 }
-                await Task.Delay(10000);
+                await Task.Delay(1000);
             }
         }
 

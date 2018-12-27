@@ -9,7 +9,7 @@ namespace eljur_notifier.DbCommon
 {
     interface IDbCommonInf
     {
-        Boolean IsDbExist(IDbConnection db);
+        Boolean IsDbExist(IDbConnection db, String FromWhere);
  
         
     }
