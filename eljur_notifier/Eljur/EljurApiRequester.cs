@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using eljur_notifier.AppCommon;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using eljur_notifier.MsDbNS;
 
 namespace eljur_notifier.EljurNS
 {
     class EljurApiRequester
     {
         internal protected Message message { get; set; }
+        internal protected MsDb msDb { get; set; }
         internal protected JObject rules { get; set; }
         internal protected String clas { get; set; }
         internal protected String[] clases { get; set; }
@@ -19,9 +21,10 @@ namespace eljur_notifier.EljurNS
         internal protected TimeSpan startTimeLessons { get; set; }
         internal protected TimeSpan endTimeLessons { get; set; }
 
-        public EljurApiRequester()
+        public EljurApiRequester(MsDb MsDb)
         {
             this.message = new Message();
+            this.msDb = MsDb;
         }
 
         public String[] getClases()
@@ -118,9 +121,20 @@ namespace eljur_notifier.EljurNS
 
         public String getClasByFullFIO(String FullFIO)
         {
+            int PupilIdOld = msDb.getPupilIdOldByFullFio(FullFIO);
+            String Clas = msDb.getClasByPupilIdOld(PupilIdOld);
+
+            //NEED REALISATION OF THIS REQUEST
+            //this.clas = this.getClasByFullFIO(FullFIO);
             Random random = new Random();
-            String clas = random.Next(1, 11).ToString() + RandomString(1);
+            clas = random.Next(1, 11).ToString() + RandomString(1);
             //message.Display(clas, "Trace");
+            
+            //Every time when Requester would work this we will update our Table Pupils by new correct data from ElJur
+            if (Clas != clas)
+            {
+                msDb.SetClasByPupilIdOld(PupilIdOld, clas);
+            }
             return clas;
         }
 

@@ -108,7 +108,7 @@ namespace eljur_notifier.MsDbNS
         {
             using (this.StaffCtx = new StaffContext())
             {
-                EljurApiRequester elRequester = new EljurApiRequester();
+                EljurApiRequester elRequester = new EljurApiRequester(this);
                 foreach (object[] row in AllStaff)
                 {
 
@@ -143,7 +143,7 @@ namespace eljur_notifier.MsDbNS
         {
             using (this.StaffCtx = new StaffContext())
             {
-                EljurApiRequester elRequester = new EljurApiRequester();
+                EljurApiRequester elRequester = new EljurApiRequester(this);
                 var Clases = elRequester.getClases();
                 foreach (String clas in Clases)
                 {
@@ -176,7 +176,7 @@ namespace eljur_notifier.MsDbNS
         {
             using (this.StaffCtx = new StaffContext())
             {
-                EljurApiRequester elRequester = new EljurApiRequester();
+                EljurApiRequester elRequester = new EljurApiRequester(this);
                 foreach (object[] row in curEvents)
                 {
                     if (row[1] == DBNull.Value)
@@ -241,8 +241,8 @@ namespace eljur_notifier.MsDbNS
         {
             using (this.StaffCtx = new StaffContext())
             {
-                EljurApiRequester elRequester = new EljurApiRequester();
-                String[] ClasesArr = elRequester.getClases();
+                EljurApiRequester elRequester = new EljurApiRequester(this);
+                String[] ClasesArr = elRequester.getClases();             
                 foreach (String clas in ClasesArr)
                 {
                     Schedule ScheduleItem = new Schedule();
@@ -252,9 +252,8 @@ namespace eljur_notifier.MsDbNS
                     StaffCtx.Schedules.Add(ScheduleItem);
                     StaffCtx.SaveChanges();
                     message.Display("ScheduleItem success saved", "Warn");
-                }
+                }              
             }
-
         }
 
         public void deleteDb(String conStr)
@@ -326,6 +325,28 @@ namespace eljur_notifier.MsDbNS
             dbcon.Close();
             return FullFIO;
         }
+
+
+        public int getPupilIdOldByFullFio(String FullFIO)
+        {
+            int PupilIdOld = 0;
+            dbcon.Open();
+            SqlCommand command = new SqlCommand("SELECT PupilIdOld FROM Pupils WHERE FullFIO = '" + FullFIO + "'", dbcon);
+            message.Display("SELECT PupilIdOld FROM Pupils WHERE FullFIO = '" + FullFIO + "'", "Warn");
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    message.Display(String.Format("{0}", reader[0]), "Trace");
+                    PupilIdOld = Convert.ToInt32(reader[0]);
+                    break;
+                }
+            }
+            command.Dispose();
+            dbcon.Close();
+            return PupilIdOld;
+        }
+
 
         public String getClasByPupilIdOld(int PupilIdOld)
         {
@@ -454,7 +475,22 @@ namespace eljur_notifier.MsDbNS
                 }
             }
         }
-        
+
+
+        public void SetClasByPupilIdOld(int PupilIdOld, String Clas)
+        {
+            using (this.StaffCtx = new StaffContext())
+            {
+                var result = StaffCtx.Pupils.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
+                if (result != null)
+                {
+                    result.Clas = Clas;
+                    StaffCtx.SaveChanges();
+                    message.Display("Clas to " + PupilIdOld + " PupilIdOld was updated", "Info");
+                }
+            }
+        }
+
 
 
         public Boolean IsTableExist(String TableName)

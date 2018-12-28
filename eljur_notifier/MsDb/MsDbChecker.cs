@@ -27,6 +27,11 @@ namespace eljur_notifier.MsDbNS
             this.firebird = Firebird;
             this.timeFromDel = new TimeSpan(23, 58, 59);
             this.timeToDel = new TimeSpan(23, 59, 59);
+            this.CheckSomeIssuesInConstructor();
+        }
+
+        public void CheckSomeIssuesInConstructor()
+        {
             this.CheckMsDb();
             if (msDb.IsTableExist("Pupils") && msDb.IsTableExist("Schedules"))
             {
@@ -38,16 +43,23 @@ namespace eljur_notifier.MsDbNS
             }
             if (msDb.IsTableEmpty("Schedules"))
             {
-                message.Display("Schedules is Empty", "Warn");           
+                message.Display("Schedules is Empty", "Warn");
                 msDb.FillSchedulesDb();
             }
             else
             {
                 message.Display("Schedules is not Empty", "Warn");
-                msDb.clearTableDb("Schedules");
-                msDb.FillSchedulesDb();
+                //msDb.clearTableDb("Schedules");
+                //msDb.FillSchedulesDb();
             }
+            if ((Convert.ToInt32(DateTime.Today.Day) == 1) && (Convert.ToInt32(DateTime.Today.Month) == 9))
+            {
+                message.Display("Today is 01.09 and we will change all Pupils in Pupils Table", "Info");
+                this.CreateMsDb();
+            }
+
         }
+
         public void CheckTime(Action actionAtMidnight)
         {
             var timeNow = DateTime.Now.TimeOfDay;

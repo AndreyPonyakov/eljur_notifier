@@ -23,14 +23,20 @@ namespace eljur_notifier.EljurNS
         }
 
         public Boolean SendNotifyFirstPass(object[] PupilIdOldAndTime)
-        {
+        {           
             int EljurAccountId = msDb.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));          
             String FullFIO = msDb.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+
             String Clas = msDb.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+
+            if ((Convert.ToInt32(DateTime.Today.Day) ==1) && (Convert.ToInt32(DateTime.Today.Month) == 9))
+            {
+                message.Display("Today is 01.09 and we will change all classes in Pupils Table", "Info");
+                EljurApiRequester eljurApiRequester = new EljurApiRequester(msDb);
+                Clas = eljurApiRequester.getClasByFullFIO(FullFIO);
+            }
+
             TimeSpan StartTimeLessons = msDb.getStartTimeLessonsByClas(Clas);
-            //TimeSpan EndTimeLessons = msDb.getEndTimeLessonsByClas(Clas);
- 
-            //var timeNow = DateTime.Now.TimeOfDay;
             var EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
             if (EventTime > StartTimeLessons)
             {

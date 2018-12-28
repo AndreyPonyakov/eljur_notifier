@@ -30,6 +30,16 @@ namespace eljur_notifier
 
         public static void Run(string[] args)
         {
+            //Console.WriteLine(DateTime.Today.ToShortDateString());
+            //Console.WriteLine(DateTime.Today.Month );
+            //Console.WriteLine(DateTime.Today.Day );
+            //if ((Convert.ToInt32(DateTime.Today.Day) == 28) && (Convert.ToInt32(DateTime.Today.Month) == 12))
+            //{
+            //    Console.WriteLine("True");
+            //}
+
+            //Console.ReadKey();
+
             Message message = new Message();
             Config Config = new Config();         
             Firebird Firebird = new Firebird(Config.ConStrFbDB);        
@@ -52,7 +62,7 @@ namespace eljur_notifier
             {
                 cancellationTokenSource.Cancel();
                 Task.WaitAll(GetDataFb, SendNotifyParents, CatchEventFirstPass, CatchEventLastPass);
-                Task.Delay(60000);
+                Task.Delay(120000);
                 //restart                              
                 Run(MainMethodArgs.ToArray());
 
