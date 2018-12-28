@@ -46,6 +46,8 @@ namespace eljur_notifier
 
             var CatchEventLastPass = EventHandler.CatchEventLastPass(cancellationTokenSource.Token);
 
+          
+
             var CheckMsDb = EventHandler.ChecTimekMsDb(cancellationTokenSource.Token, new Action(delegate
             {
                 cancellationTokenSource.Cancel();

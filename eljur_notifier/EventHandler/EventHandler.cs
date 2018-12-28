@@ -60,7 +60,9 @@ namespace eljur_notifier.EventHandlerNS
                 message.Display("sleepTime is: " + sleepTime.ToString(), "Trace");
                 await Task.Delay(sleepTime);
             }
-        }
+        }        
+
+      
 
         public async Task ChecTimekMsDb(CancellationToken cancellationToken, Action actionAtMidnight)
         {

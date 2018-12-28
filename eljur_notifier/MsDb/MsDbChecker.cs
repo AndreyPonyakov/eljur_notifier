@@ -36,7 +36,17 @@ namespace eljur_notifier.MsDbNS
             {
                 this.CreateMsDb();
             }
-           
+            if (msDb.IsTableEmpty("Schedules"))
+            {
+                message.Display("Schedules is Empty", "Warn");           
+                msDb.FillSchedulesDb();
+            }
+            else
+            {
+                message.Display("Schedules is not Empty", "Warn");
+                msDb.clearTableDb("Schedules");
+                msDb.FillSchedulesDb();
+            }
         }
         public void CheckTime(Action actionAtMidnight)
         {
@@ -48,9 +58,9 @@ namespace eljur_notifier.MsDbNS
                 message.Display("between " + timeFromDel.ToString() + " and " + timeToDel.ToString(), "Warn");
                 if (msDb.IsDbExist(msDb.dbcon, "CheckTime func"))
                 {
-                    DateTime CreationDate = msDb.getModifyDate();
-                    message.Display("DATABASE was created: " + CreationDate.ToString(), "Warn");
-                    TimeSpan diff = DateTime.Now.Subtract(CreationDate);
+                    DateTime ModifyDate = msDb.getModifyDate();
+                    message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
+                    TimeSpan diff = DateTime.Now.Subtract(ModifyDate);
                     if (diff.TotalMilliseconds < 10000)
                     {
                         message.Display("diff is " + diff.TotalMilliseconds.ToString(), "Warn");
@@ -61,7 +71,9 @@ namespace eljur_notifier.MsDbNS
                         //msDb.deleteDb(config.ConStrMsDB); // NEVER DELETE THIS DATABASE WHOLE
                         //msDb.clearTableDb("Pupils"); //NEVER CLEAR THIS TABLE. ONLY LAZY UPDATING IN NEW TASK
                         msDb.clearTableDb("Events");
-                        message.Display("TABLES Events MsDb DATABASE was cleared", "Warn");
+                        msDb.clearTableDb("Schedules");
+                        message.Display("TABLE Events MsDb DATABASE was cleared", "Warn");
+                        message.Display("TABLE Schedules MsDb DATABASE was cleared", "Warn");
                         actionAtMidnight();
                     }
                 }
@@ -90,13 +102,6 @@ namespace eljur_notifier.MsDbNS
                 {
                     message.Display("DATABASE MsDb was modified Today!!!", "Warn");
                 }
-                else
-                {   
-                    // DO NOTHING HERE!!!
-                    //msDb.deleteDb(config.ConStrMsDB);
-                    //message.Display("DATABASE MsDb was deleted because it was created not Today!!!", "Warn");
-                    //CreateMsDb();
-                }
             }
             else
             {
@@ -107,11 +112,7 @@ namespace eljur_notifier.MsDbNS
                 catch (Exception ex)
                 {
                     message.Display("Cannot connect to MsDb", "Fatal", ex);
-                }
-                //message.Display("Cannot connect to database MsDb from CheckMsDb()", "Warn");
-                //SqlConnection.ClearAllPools();
-                //msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-                //CreateMsDb();                                
+                }                                
             }
         }
         public void CreateMsDb()
@@ -124,7 +125,7 @@ namespace eljur_notifier.MsDbNS
             
             var AllStaff = firebird.getAllStaff();
             msDb.FillStaffDb(AllStaff);
-            msDb.FillScheduleDb();
+            msDb.FillSchedulesDb();
         }
     }
 }

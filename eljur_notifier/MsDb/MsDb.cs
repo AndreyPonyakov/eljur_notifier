@@ -139,7 +139,7 @@ namespace eljur_notifier.MsDbNS
             }
         }
 
-        public void FillScheduleDb()
+        public void UpdateSchedulesDb()
         {
             using (this.StaffCtx = new StaffContext())
             {
@@ -148,14 +148,15 @@ namespace eljur_notifier.MsDbNS
                 foreach (String clas in Clases)
                 {
 
-                    Schedule ScheduleItem = new Schedule();
-                    ScheduleItem.Clas = clas;
-                    TimeSpan StartTimeLessons = elRequester.getStartTimeLessonsByClas(clas);
-                    ScheduleItem.StartTimeLessons = StartTimeLessons;
-                    TimeSpan EndTimeLessons = elRequester.getEndTimeLessonsByClas(clas);
-                    ScheduleItem.EndTimeLessons = EndTimeLessons;
-                 
-                    StaffCtx.Schedules.Add(ScheduleItem);
+                    var ScheduleItem = StaffCtx.Schedules.SingleOrDefault(e => e.Clas == clas);
+                    if (ScheduleItem != null)
+                    {
+                        TimeSpan StartTimeLessons = elRequester.getStartTimeLessonsByClas(clas);
+                        ScheduleItem.StartTimeLessons = StartTimeLessons;
+                        TimeSpan EndTimeLessons = elRequester.getEndTimeLessonsByClas(clas);
+                        ScheduleItem.EndTimeLessons = EndTimeLessons;
+                    }
+
                     StaffCtx.SaveChanges();
                     message.Display("ScheduleItem success saved", "Warn");
                 }
@@ -236,7 +237,7 @@ namespace eljur_notifier.MsDbNS
 
         }
 
-        public void FillSchedulesDb(List<object[]> curEvents)
+        public void FillSchedulesDb()
         {
             using (this.StaffCtx = new StaffContext())
             {
@@ -473,5 +474,24 @@ namespace eljur_notifier.MsDbNS
                 return false;
             }
         }
+
+        public Boolean IsTableEmpty(String TableName)
+        {
+            dbcon.Open();
+            SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM " + TableName, dbcon);
+            int result = int.Parse(sqlCommand.ExecuteScalar().ToString());
+            if (result == 0)
+            {
+                message.Display("Table " + TableName + " is EMPTY in msDb", "Warn");
+                dbcon.Close();
+                return true;
+            }
+            else
+            {
+                dbcon.Close();
+                return false;
+            }
+        }
+
     }
 }
