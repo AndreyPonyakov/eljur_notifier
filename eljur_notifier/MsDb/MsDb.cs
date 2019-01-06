@@ -19,15 +19,17 @@ namespace eljur_notifier.MsDbNS
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
+        internal protected String ConnectStr { get; set; }
         internal protected SqlConnection dbcon { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
 
 
-        public MsDb(Config config)
+        public MsDb(Config Config)
         {
-            this.config = config;
+            this.config = Config;
+            this.ConnectStr = config.ConStrMsDB;
             this.message = new Message();
-            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
+            using (this.dbcon = new SqlConnection(ConnectStr))
             {
                 if (IsTableExist("Pupils"))
                 {
@@ -37,7 +39,6 @@ namespace eljur_notifier.MsDbNS
                 { 
                     this.createCleanMsDb(config.ConStrMsDB);
                 }
-                while (this.IsDbExist(dbcon, "MsDb constructor") == false) { Console.WriteLine(config.ConStrMsDB); }
             }
         }
 

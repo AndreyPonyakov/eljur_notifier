@@ -37,20 +37,23 @@ namespace eljur_notifier.EventHandlerNS
             {
                 DateTime startTime = DateTime.Now;
                 List<object[]> curEvents = firebird.getStaffByTimeStamp(config);
-                if (msDb.IsDbExist(msDb.dbcon, "Task GetDataFb"))
+                using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
                 {
-                    msDb.CheckEventsDb(curEvents);
-                }
-                else
-                {
-                    try
+                    if (msDb.IsDbExist(msDb.dbcon, "Task GetDataFb"))
                     {
-                        msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+                        msDb.CheckEventsDb(curEvents);
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        message.Display("Cannot connect to MsDb from Task GetDataFb", "Fatal", ex);
-                    }                  
+                        try
+                        {
+                            msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+                        }
+                        catch (Exception ex)
+                        {
+                            message.Display("Cannot connect to MsDb from Task GetDataFb", "Fatal", ex);
+                        }
+                    }
                 }
                                       
                 TimeSpan deltaTime = DateTime.Now - startTime;
@@ -75,23 +78,25 @@ namespace eljur_notifier.EventHandlerNS
         public async Task CatchEventFirstPass(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
-            {          
-                if (msDb.IsDbExist(msDb.dbcon, "Task CatchEventFirstPass"))
+            {
+                using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
                 {
-                    MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass(config, msDb);
-                    msDbCatcherFirstPass.catchFirstPass();
-                }
-                else
-                {
-                    try
+                    if (msDb.IsDbExist(msDb.dbcon, "Task CatchEventFirstPass"))
                     {
-                        msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-                        //throw new Exception();
+                        MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass(config, msDb);
+                        msDbCatcherFirstPass.catchFirstPass();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        message.Display("Cannot connect to MsDb from Task CatchEventFirstPass", "Fatal", ex);
-                    } 
+                        try
+                        {
+                            msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+                        }
+                        catch (Exception ex)
+                        {
+                            message.Display("Cannot connect to MsDb from Task CatchEventFirstPass", "Fatal", ex);
+                        }
+                    }
                 }
                 await Task.Delay(10000);
             }
@@ -101,21 +106,24 @@ namespace eljur_notifier.EventHandlerNS
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                if (msDb.IsDbExist(msDb.dbcon, "Task CatchEventLastPass"))
+                using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
                 {
-                    MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass(config, msDb);
-                    msDbCatcherLastPass.catchLastPass();
-                }
-                else
-                {
-                    try
+                    if (msDb.IsDbExist(msDb.dbcon, "Task CatchEventLastPass"))
                     {
-                        msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-                        //throw new Exception();
+                        MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass(config, msDb);
+                        msDbCatcherLastPass.catchLastPass();
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        message.Display("Cannot connect to MsDb from Task CatchEventLastPass", "Fatal", ex);
+                        try
+                        {
+                            msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+                            //throw new Exception();
+                        }
+                        catch (Exception ex)
+                        {
+                            message.Display("Cannot connect to MsDb from Task CatchEventLastPass", "Fatal", ex);
+                        }
                     }
                 }
                 await Task.Delay(10000);
