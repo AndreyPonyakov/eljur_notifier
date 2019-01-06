@@ -2,8 +2,21 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="eljur_notifier.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
+    <Setting Name="EljurApiTocken" Type="System.String" Scope="User">
+      <Value Profile="(Default)">dfdssdfsfDFsfdsdgsdffWe52345EDFsd</Value>
+    </Setting>
+    <Setting Name="FrenchLeaveInterval" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">900000</Value>
+    </Setting>
+    <Setting Name="ConfigsTreeIdResourceInput1" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8677</Value>
+    </Setting>
+    <Setting Name="ConfigsTreeIdResourceInput2" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">9256</Value>
+    </Setting>
     <Setting Name="ConStrFirebird" Type="System.String" Scope="User">
-      <Value Profile="(Default)">          User=SYSDBA;
+      <Value Profile="(Default)">          
+          User=SYSDBA;
           Password=masterkey;
           Database=D:/School/Backup_PERCo_04.10.18/Backup_PERCo_04.10.18/4.10.18_9.23/NEWBASE.FDB;
           Port=3050;
@@ -15,22 +28,20 @@
           MinPoolSize=0;
           MaxPoolSize=50;
           Packet Size=8192;
-ServerType=0;</Value>
+          ServerType=0;
+        </Value>
     </Setting>
     <Setting Name="IntervalRequest" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">5900</Value>
+      <Value Profile="(Default)">10000</Value>
     </Setting>
-    <Setting Name="EljurApiTocken" Type="System.String" Scope="User">
-      <Value Profile="(Default)">dfdssdfsfDFsfdsdgsdffWe52345EDFsd</Value>
+    <Setting Name="IntervalSleepBeforeReset" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">120000</Value>
     </Setting>
-    <Setting Name="FrenchLeaveInterval" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">900000</Value>
+    <Setting Name="ConfigsTreeIdResourceOutput1" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">8564</Value>
     </Setting>
-    <Setting Name="fdgd" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="Параметр" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
+    <Setting Name="ConfigsTreeIdResourceOutput2" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">9369</Value>
     </Setting>
   </Settings>
 </SettingsFile>

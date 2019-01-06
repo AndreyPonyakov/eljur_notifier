@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using eljur_notifier.FirebirdNS;
@@ -25,7 +22,7 @@ namespace eljur_notifier.EventHandlerNS
             this.message = new Message();
             this.config = new Config();
             this.firebird = new Firebird(config.ConStrFbDB);
-            this.msDb = new MsDb(config.ConStrMsDB);
+            this.msDb = new MsDb(config);
             this.msDbChecker = new MsDbChecker(config, msDb, firebird);
             this.eventHandlerEljur = new EventHandlerEljur(config, msDb, firebird, msDbChecker);
             this.cancellationTokenSource = new CancellationTokenSource();
@@ -41,13 +38,11 @@ namespace eljur_notifier.EventHandlerNS
 
             var CatchEventLastPass = eventHandlerEljur.CatchEventLastPass(cancellationTokenSource.Token);
 
-
-
             var CheckMsDb = eventHandlerEljur.ChecTimekMsDb(cancellationTokenSource.Token, new Action(delegate
             {
                 cancellationTokenSource.Cancel();
                 Task.WaitAll(GetDataFb, SendNotifyParents, CatchEventFirstPass, CatchEventLastPass);
-                Task.Delay(120000);
+                Task.Delay(TimeSpan.FromMilliseconds(config.IntervalSleepBeforeReset));
                 //restart                              
                 Run(args);
 

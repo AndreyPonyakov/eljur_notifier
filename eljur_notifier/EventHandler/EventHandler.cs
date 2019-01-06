@@ -46,7 +46,6 @@ namespace eljur_notifier.EventHandlerNS
                     try
                     {
                         msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-                        //throw new Exception();
                     }
                     catch (Exception ex)
                     {

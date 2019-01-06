@@ -18,25 +18,27 @@ namespace eljur_notifier.MsDbNS
     class MsDb : DbCommonClass
     {
         internal protected Message message { get; set; }
-        internal protected String ConnectStr { get; set; }
+        internal protected Config config { get; set; }
         internal protected SqlConnection dbcon { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
 
 
-        public MsDb(String ConnectStr)
+        public MsDb(Config config)
         {
+            this.config = config;
             this.message = new Message();
-            this.ConnectStr = ConnectStr;
-            this.dbcon = new SqlConnection(ConnectStr);
-            if (IsTableExist("Pupils"))
+            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
             {
-                message.Display("msDb already exist", "Warn");
+                if (IsTableExist("Pupils"))
+                {
+                    message.Display("msDb already exist", "Warn");
+                }
+                else
+                { 
+                    this.createCleanMsDb(config.ConStrMsDB);
+                }
+                while (this.IsDbExist(dbcon, "MsDb constructor") == false) { Console.WriteLine(config.ConStrMsDB); }
             }
-            else
-            {
-                this.createCleanMsDb(ConnectStr);
-            }            
-            while (this.IsDbExist(dbcon, "MsDb constructor") == false) { }
         }
 
 
@@ -164,7 +166,7 @@ namespace eljur_notifier.MsDbNS
                 message.Display("List of objects: ", "Warn");
                 foreach (Schedule s in Schedules)
                 {
-                    Console.WriteLine("{0}.{1} - {2} - {3}", s.ScheduleId, s.Clas, s.StartTimeLessons, s.EndTimeLessons);
+                    message.Display(s.ScheduleId +"."+ s.Clas +"-"+ s.StartTimeLessons + "-" + s.EndTimeLessons, "Trace");
                 }
 
             }
@@ -192,8 +194,8 @@ namespace eljur_notifier.MsDbNS
                     {
                         if (result.EventName == "Первый проход" || result.EventName == "Вернулся" || result.EventName == "Опоздал")
                         {
-                            //register only output configs_tree_id_resource
-                            if (row[3].ToString() == "8564" || row[3].ToString() == "9369")
+                            //register only OUTPUT configs_tree_id_resource
+                            if (row[3].ToString() == config.ConfigsTreeIdResourceOutput1.ToString() || row[3].ToString() == config.ConfigsTreeIdResourceOutput2.ToString())
                             {
                                 result.EventName = "Вышел";
                                 result.EventTime = TimeSpan.Parse(row[0].ToString());
@@ -205,9 +207,9 @@ namespace eljur_notifier.MsDbNS
                         }
                         else if (result.EventName == "Вышел" || result.EventName == "Прогул")
                         {
-                            if (row[3].ToString() == "8677" || row[3].ToString() == "9256")
-                            {
-                                //register only input configs_tree_id_resource
+                            //register only INPUT configs_tree_id_resource
+                            if (row[3].ToString() == config.ConfigsTreeIdResourceInput1.ToString() || row[3].ToString() == config.ConfigsTreeIdResourceInput2.ToString())
+                            {                   
                                 result.EventName = "Вернулся";
                                 result.EventTime = TimeSpan.Parse(row[0].ToString());
                                 result.NotifyWasSend = false;
@@ -218,8 +220,8 @@ namespace eljur_notifier.MsDbNS
                     }
                     else
                     {
-                        //register only input configs_tree_id_resource
-                        if (row[3].ToString() == "8677" || row[3].ToString() == "9256")
+                        //register only INPUT configs_tree_id_resource
+                        if (row[3].ToString() == config.ConfigsTreeIdResourceInput1.ToString() || row[3].ToString() == config.ConfigsTreeIdResourceInput2.ToString())
                         {
                             Event Event = new Event();
                             Event.PupilIdOld = PupilIdOld;
@@ -230,11 +232,8 @@ namespace eljur_notifier.MsDbNS
                             message.Display("Школьник с id " + PupilIdOld + "  пришёл в школу в " + row[0].ToString(), "Trace");
                         }
                     }
-
                 }
-
             }
-
         }
 
         public void FillSchedulesDb()
@@ -287,21 +286,23 @@ namespace eljur_notifier.MsDbNS
         public DateTime getModifyDate()
         {
             DateTime ModifyDate = new DateTime();
-            dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT modify_date FROM sys.tables order by modify_date", dbcon);
-            
-            using (SqlDataReader reader = command.ExecuteReader())
+            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
             {
-                message.Display("SELECT modify_date FROM sys.tables order by modify_date", "Warn");
-                while (reader.Read())
+                dbcon.Open();
+                using (SqlCommand command = new SqlCommand("SELECT modify_date FROM sys.tables order by modify_date", dbcon))
                 {
-                    message.Display(String.Format("{0}", reader[0]), "Trace");
-                    ModifyDate = Convert.ToDateTime(reader[0].ToString());
-                    break;
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        message.Display("SELECT modify_date FROM sys.tables order by modify_date", "Warn");
+                        while (reader.Read())
+                        {
+                            message.Display(String.Format("{0}", reader[0]), "Trace");
+                            ModifyDate = Convert.ToDateTime(reader[0].ToString());
+                            break;
+                        }
+                    }
                 }
             }
-            command.Dispose();
-            dbcon.Close();
             return ModifyDate;
         }
 
@@ -309,20 +310,23 @@ namespace eljur_notifier.MsDbNS
         public String getFullFIOByPupilIdOld(int PupilIdOld)
         {
             String FullFIO = "Default FullFIO";
-            dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon);            
-            message.Display("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
-            using (SqlDataReader reader = command.ExecuteReader())
+            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
             {
-                while (reader.Read())
+                dbcon.Open();
+                using (SqlCommand command = new SqlCommand("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon))
                 {
-                    message.Display(String.Format("{0}", reader[0]), "Trace");
-                    FullFIO = reader[0].ToString();
-                    break;
+                    message.Display("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            message.Display(String.Format("{0}", reader[0]), "Trace");
+                            FullFIO = reader[0].ToString();
+                            break;
+                        }
+                    }
                 }
             }
-            command.Dispose();
-            dbcon.Close();
             return FullFIO;
         }
 
@@ -330,20 +334,23 @@ namespace eljur_notifier.MsDbNS
         public int getPupilIdOldByFullFio(String FullFIO)
         {
             int PupilIdOld = 0;
-            dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT PupilIdOld FROM Pupils WHERE FullFIO = '" + FullFIO + "'", dbcon);
-            message.Display("SELECT PupilIdOld FROM Pupils WHERE FullFIO = '" + FullFIO + "'", "Warn");
-            using (SqlDataReader reader = command.ExecuteReader())
+            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
             {
-                while (reader.Read())
+                dbcon.Open();
+                using (SqlCommand command = new SqlCommand("SELECT PupilIdOld FROM Pupils WHERE FullFIO = '" + FullFIO + "'", dbcon))
                 {
-                    message.Display(String.Format("{0}", reader[0]), "Trace");
-                    PupilIdOld = Convert.ToInt32(reader[0]);
-                    break;
+                    message.Display("SELECT PupilIdOld FROM Pupils WHERE FullFIO = '" + FullFIO + "'", "Warn");
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            message.Display(String.Format("{0}", reader[0]), "Trace");
+                            PupilIdOld = Convert.ToInt32(reader[0]);
+                            break;
+                        }
+                    }
                 }
             }
-            command.Dispose();
-            dbcon.Close();
             return PupilIdOld;
         }
 
@@ -351,86 +358,98 @@ namespace eljur_notifier.MsDbNS
         public String getClasByPupilIdOld(int PupilIdOld)
         {
             String Clas = "Default Clas";
-            dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT Clas FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon);           
-            message.Display("SELECT Clas FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
-            using (SqlDataReader reader = command.ExecuteReader())
+            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
             {
-                while (reader.Read())
+                dbcon.Open();
+                using (SqlCommand command = new SqlCommand("SELECT Clas FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon))
                 {
-                    message.Display(String.Format("{0}", reader[0]), "Trace");
-                    Clas = reader[0].ToString();
-                    break;
+                    message.Display("SELECT Clas FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            message.Display(String.Format("{0}", reader[0]), "Trace");
+                            Clas = reader[0].ToString();
+                            break;
+                        }
+                    }
                 }
             }
-            command.Dispose();
-            dbcon.Close();
             return Clas;
         }
 
         public int getEljurAccountIdByPupilIdOld(int PupilIdOld)
         {
             int EljurAccountId = 0;
-            dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT EljurAccountId FROM Pupils where PupilIdOld = '" + PupilIdOld + "'", dbcon);          
-            message.Display("SELECT eljuraccountid FROM Pupils where PupilIdOld = '" + PupilIdOld + "'", "Warn");
-            using (SqlDataReader reader = command.ExecuteReader())
+            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
             {
-                while (reader.Read())
+                dbcon.Open();
+                using (SqlCommand command = new SqlCommand("SELECT EljurAccountId FROM Pupils where PupilIdOld = '" + PupilIdOld + "'", dbcon))
                 {
-                    var colums = new object[reader.FieldCount];
-                    reader.GetValues(colums);
-                    message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
-                    EljurAccountId = Convert.ToInt32(colums[0]);
-                    //break;
+                    message.Display("SELECT eljuraccountid FROM Pupils where PupilIdOld = '" + PupilIdOld + "'", "Warn");
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var colums = new object[reader.FieldCount];
+                            reader.GetValues(colums);
+                            message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
+                            EljurAccountId = Convert.ToInt32(colums[0]);
+                            //break;
+                        }
+                    }
                 }
             }
-            command.Dispose();
-            dbcon.Close();
             return EljurAccountId;
         }
 
         public TimeSpan getStartTimeLessonsByClas(String Clas)
         {
-            TimeSpan StartTimeLessons = TimeSpan.Parse("00:00:01"); 
-            dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT StartTimeLessons FROM Schedules where Clas = '" + Clas + "'", dbcon);
-            message.Display("SELECT StartTimeLessons FROM Schedules where Clas = '" + Clas + "'", "Warn");
-            using (SqlDataReader reader = command.ExecuteReader())
+            TimeSpan StartTimeLessons = TimeSpan.Parse("00:00:01");
+            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
             {
-                while (reader.Read())
+                dbcon.Open();
+                using (SqlCommand command = new SqlCommand("SELECT StartTimeLessons FROM Schedules where Clas = '" + Clas + "'", dbcon))
                 {
-                    var colums = new object[reader.FieldCount];
-                    reader.GetValues(colums);
-                    message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
-                    StartTimeLessons = TimeSpan.Parse(colums[0].ToString());
-                    //break;
+                    message.Display("SELECT StartTimeLessons FROM Schedules where Clas = '" + Clas + "'", "Warn");
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var colums = new object[reader.FieldCount];
+                            reader.GetValues(colums);
+                            message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
+                            StartTimeLessons = TimeSpan.Parse(colums[0].ToString());
+                            //break;
+                        }
+                    }
                 }
             }
-            command.Dispose();
-            dbcon.Close();
             return StartTimeLessons;
         }
 
         public TimeSpan getEndTimeLessonsByClas(String Clas)
         {
             TimeSpan EndTimeLessons = TimeSpan.Parse("23:59:59");
-            dbcon.Open();
-            SqlCommand command = new SqlCommand("SELECT EndTimeLessons FROM Schedules where Clas = '" + Clas + "'", dbcon);
-            message.Display("SELECT EndTimeLessons FROM Schedules where Clas = '" + Clas + "'", "Warn");
-            using (SqlDataReader reader = command.ExecuteReader())
+            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
             {
-                while (reader.Read())
+                dbcon.Open();
+                using (SqlCommand command = new SqlCommand("SELECT EndTimeLessons FROM Schedules where Clas = '" + Clas + "'", dbcon))
                 {
-                    var colums = new object[reader.FieldCount];
-                    reader.GetValues(colums);
-                    message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
-                    EndTimeLessons = TimeSpan.Parse(colums[0].ToString());
-                    //break;
+                    message.Display("SELECT EndTimeLessons FROM Schedules where Clas = '" + Clas + "'", "Warn");
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            var colums = new object[reader.FieldCount];
+                            reader.GetValues(colums);
+                            message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
+                            EndTimeLessons = TimeSpan.Parse(colums[0].ToString());
+                            //break;
+                        }
+                    }
                 }
             }
-            command.Dispose();
-            dbcon.Close();
             return EndTimeLessons;
         }
 
@@ -495,37 +514,43 @@ namespace eljur_notifier.MsDbNS
 
         public Boolean IsTableExist(String TableName)
         {
-            dbcon.Open();
-            SqlCommand sqlCommand = new SqlCommand("SELECT 'TableExist' FROM (SELECT name FROM sys.tables UNION SELECT name FROM sys.views) T WHERE name = @Name", dbcon);
-            sqlCommand.Parameters.AddWithValue("@name", TableName);
-            if (sqlCommand.ExecuteScalar().ToString() == "TableExist")
+            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
             {
-                message.Display("TableExist " + TableName + " in msDb", "Warn");
-                dbcon.Close();
-                return true;
-            }
-            else
-            {
-                dbcon.Close();
-                return false;
+                dbcon.Open();
+                using (SqlCommand sqlCommand = new SqlCommand("SELECT 'TableExist' FROM (SELECT name FROM sys.tables UNION SELECT name FROM sys.views) T WHERE name = @Name", dbcon))
+                {
+                    sqlCommand.Parameters.AddWithValue("@name", TableName);
+                    if (sqlCommand.ExecuteScalar().ToString() == "TableExist")
+                    {
+                        message.Display("TableExist " + TableName + " in msDb", "Warn");
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
         }
 
         public Boolean IsTableEmpty(String TableName)
         {
-            dbcon.Open();
-            SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM " + TableName, dbcon);
-            int result = int.Parse(sqlCommand.ExecuteScalar().ToString());
-            if (result == 0)
+            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
             {
-                message.Display("Table " + TableName + " is EMPTY in msDb", "Warn");
-                dbcon.Close();
-                return true;
-            }
-            else
-            {
-                dbcon.Close();
-                return false;
+                dbcon.Open();
+                using (SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM " + TableName, dbcon))
+                {
+                    int result = int.Parse(sqlCommand.ExecuteScalar().ToString());
+                    if (result == 0)
+                    {
+                        message.Display("Table " + TableName + " is EMPTY in msDb", "Warn");
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
             }
         }
 

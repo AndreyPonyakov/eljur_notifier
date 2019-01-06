@@ -25,42 +25,6 @@ namespace eljur_notifier.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"          User=SYSDBA;
-          Password=masterkey;
-          Database=D:/School/Backup_PERCo_04.10.18/Backup_PERCo_04.10.18/4.10.18_9.23/NEWBASE.FDB;
-          Port=3050;
-          Dialect=3;
-          Charset=WIN1251;
-          Role=;
-          Connection lifetime=30;
-          Pooling=true;
-          MinPoolSize=0;
-          MaxPoolSize=50;
-          Packet Size=8192;
-ServerType=0;")]
-        public string ConStrFirebird {
-            get {
-                return ((string)(this["ConStrFirebird"]));
-            }
-            set {
-                this["ConStrFirebird"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5900")]
-        public double IntervalRequest {
-            get {
-                return ((double)(this["IntervalRequest"]));
-            }
-            set {
-                this["IntervalRequest"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("dfdssdfsfDFsfdsdgsdffWe52345EDFsd")]
         public string EljurApiTocken {
             get {
@@ -83,21 +47,101 @@ ServerType=0;")]
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool fdgd {
+        [global::System.Configuration.DefaultSettingValueAttribute("8677")]
+        public int ConfigsTreeIdResourceInput1 {
             get {
-                return ((bool)(this["fdgd"]));
+                return ((int)(this["ConfigsTreeIdResourceInput1"]));
+            }
+            set {
+                this["ConfigsTreeIdResourceInput1"] = value;
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Параметр {
+        [global::System.Configuration.DefaultSettingValueAttribute("9256")]
+        public int ConfigsTreeIdResourceInput2 {
             get {
-                return ((bool)(this["Параметр"]));
+                return ((int)(this["ConfigsTreeIdResourceInput2"]));
+            }
+            set {
+                this["ConfigsTreeIdResourceInput2"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"          
+          User=SYSDBA;
+          Password=masterkey;
+          Database=D:/School/Backup_PERCo_04.10.18/Backup_PERCo_04.10.18/4.10.18_9.23/NEWBASE.FDB;
+          Port=3050;
+          Dialect=3;
+          Charset=WIN1251;
+          Role=;
+          Connection lifetime=30;
+          Pooling=true;
+          MinPoolSize=0;
+          MaxPoolSize=50;
+          Packet Size=8192;
+          ServerType=0;
+        ")]
+        public string ConStrFirebird {
+            get {
+                return ((string)(this["ConStrFirebird"]));
+            }
+            set {
+                this["ConStrFirebird"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public double IntervalRequest {
+            get {
+                return ((double)(this["IntervalRequest"]));
+            }
+            set {
+                this["IntervalRequest"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("120000")]
+        public double IntervalSleepBeforeReset {
+            get {
+                return ((double)(this["IntervalSleepBeforeReset"]));
+            }
+            set {
+                this["IntervalSleepBeforeReset"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8564")]
+        public int ConfigsTreeIdResourceOutput1 {
+            get {
+                return ((int)(this["ConfigsTreeIdResourceOutput1"]));
+            }
+            set {
+                this["ConfigsTreeIdResourceOutput1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("9369")]
+        public int ConfigsTreeIdResourceOutput2 {
+            get {
+                return ((int)(this["ConfigsTreeIdResourceOutput2"]));
+            }
+            set {
+                this["ConfigsTreeIdResourceOutput2"] = value;
             }
         }
     }
