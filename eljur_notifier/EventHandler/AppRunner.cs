@@ -32,16 +32,14 @@ namespace eljur_notifier.EventHandlerNS
         {
             var GetDataFb = eventHandlerEljur.GetDataFb(cancellationTokenSource.Token);
 
-            var SendNotifyParents = eventHandlerEljur.SendNotifyParents(cancellationTokenSource.Token);
-
             var CatchEventFirstPass = eventHandlerEljur.CatchEventFirstPass(cancellationTokenSource.Token);
 
             var CatchEventLastPass = eventHandlerEljur.CatchEventLastPass(cancellationTokenSource.Token);
 
-            var CheckMsDb = eventHandlerEljur.ChecTimekMsDb(cancellationTokenSource.Token, new Action(delegate
+            var CheckMsDb = eventHandlerEljur.CheckTimekMsDb(cancellationTokenSource.Token, new Action(delegate
             {
                 cancellationTokenSource.Cancel();
-                Task.WaitAll(GetDataFb, SendNotifyParents, CatchEventFirstPass, CatchEventLastPass);
+                Task.WaitAll(GetDataFb, CatchEventFirstPass, CatchEventLastPass);
                 Task.Delay(TimeSpan.FromMilliseconds(config.IntervalSleepBeforeReset));
                 //restart                              
                 Run(args);

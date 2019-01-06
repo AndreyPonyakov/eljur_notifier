@@ -30,6 +30,28 @@ namespace eljur_notifier.EventHandlerNS
 
         }
 
+        public void WrapperToActionWithMsDb(Action actionWithMsDb, String TaskName)
+        {
+            using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
+            {
+                if (msDb.IsDbExist(msDb.dbcon, "Task " + TaskName))
+                {
+                    actionWithMsDb();
+                }
+                else
+                {
+                    try
+                    {
+                        msDb.dbcon = new SqlConnection(config.ConStrMsDB);
+                    }
+                    catch (Exception ex)
+                    {
+                        message.Display("Cannot connect to MsDb from Task " + TaskName, "Fatal", ex);
+                    }
+                }
+            }
+
+        }
 
         public async Task GetDataFb(CancellationToken cancellationToken) 
         {
@@ -37,25 +59,10 @@ namespace eljur_notifier.EventHandlerNS
             {
                 DateTime startTime = DateTime.Now;
                 List<object[]> curEvents = firebird.getStaffByTimeStamp(config);
-                using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
+                WrapperToActionWithMsDb(new Action(delegate
                 {
-                    if (msDb.IsDbExist(msDb.dbcon, "Task GetDataFb"))
-                    {
-                        msDb.CheckEventsDb(curEvents);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-                        }
-                        catch (Exception ex)
-                        {
-                            message.Display("Cannot connect to MsDb from Task GetDataFb", "Fatal", ex);
-                        }
-                    }
-                }
-                                      
+                    msDb.CheckEventsDb(curEvents);
+                }), "GetDataFb");
                 TimeSpan deltaTime = DateTime.Now - startTime;
                 TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(config.IntervalRequest);
                 TimeSpan sleepTime = IntervalRequest - deltaTime;
@@ -66,7 +73,7 @@ namespace eljur_notifier.EventHandlerNS
 
       
 
-        public async Task ChecTimekMsDb(CancellationToken cancellationToken, Action actionAtMidnight)
+        public async Task CheckTimekMsDb(CancellationToken cancellationToken, Action actionAtMidnight)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
@@ -79,25 +86,11 @@ namespace eljur_notifier.EventHandlerNS
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
+                WrapperToActionWithMsDb(new Action(delegate
                 {
-                    if (msDb.IsDbExist(msDb.dbcon, "Task CatchEventFirstPass"))
-                    {
-                        MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass(config, msDb);
-                        msDbCatcherFirstPass.catchFirstPass();
-                    }
-                    else
-                    {
-                        try
-                        {
-                            msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-                        }
-                        catch (Exception ex)
-                        {
-                            message.Display("Cannot connect to MsDb from Task CatchEventFirstPass", "Fatal", ex);
-                        }
-                    }
-                }
+                    MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass(config, msDb);
+                    msDbCatcherFirstPass.catchFirstPass();
+                }), "CatchEventFirstPass");
                 await Task.Delay(10000);
             }
         }
@@ -106,42 +99,16 @@ namespace eljur_notifier.EventHandlerNS
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
+                WrapperToActionWithMsDb(new Action(delegate
                 {
-                    if (msDb.IsDbExist(msDb.dbcon, "Task CatchEventLastPass"))
-                    {
-                        MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass(config, msDb);
-                        msDbCatcherLastPass.catchLastPass();
-                    }
-                    else
-                    {
-                        try
-                        {
-                            msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-                            //throw new Exception();
-                        }
-                        catch (Exception ex)
-                        {
-                            message.Display("Cannot connect to MsDb from Task CatchEventLastPass", "Fatal", ex);
-                        }
-                    }
-                }
+                    MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass(config, msDb);
+                    msDbCatcherLastPass.catchLastPass();
+                }), "CatchEventLastPass");
                 await Task.Delay(10000);
             }
         }
 
-        public async Task SendNotifyParents(CancellationToken cancellationToken)
-        {
-            String EljurApiTocken = config.EljurApiTocken;
-            Double FrenchLeaveInterval = config.FrenchLeaveInterval;
 
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                Console.WriteLine("I'm from second task!!!!");             
-                await Task.Delay(1000);
-            }
-
-        }
 
 
 

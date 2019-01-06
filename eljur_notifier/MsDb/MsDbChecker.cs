@@ -68,37 +68,38 @@ namespace eljur_notifier.MsDbNS
             if (timeNow > timeFromDel && timeNow < timeToDel)
             {
                 message.Display("between " + timeFromDel.ToString() + " and " + timeToDel.ToString(), "Warn");
-                if (msDb.IsDbExist(msDb.dbcon, "CheckTime func"))
+                using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
                 {
-                    DateTime ModifyDate = msDb.getModifyDate();
-                    message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
-                    TimeSpan diff = DateTime.Now.Subtract(ModifyDate);
-                    if (diff.TotalMilliseconds < 10000)
+                    if (msDb.IsDbExist(msDb.dbcon, "CheckTime func"))
                     {
-                        message.Display("diff is " + diff.TotalMilliseconds.ToString(), "Warn");
-                        message.Display("DATABASE MsDb was modify recently!!! No needed to clear tables again!!!", "Warn");
+                        DateTime ModifyDate = msDb.getModifyDate();
+                        message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
+                        TimeSpan diff = DateTime.Now.Subtract(ModifyDate);
+                        if (diff.TotalMilliseconds < 30000)
+                        {
+                            message.Display("diff is " + diff.TotalMilliseconds.ToString(), "Warn");
+                            message.Display("DATABASE MsDb was modify recently!!! No needed to clear tables again!!!", "Warn");
+                        }
+                        else
+                        {
+                            //msDb.deleteDb(config.ConStrMsDB); // NEVER DELETE THIS DATABASE WHOLE
+                            msDb.clearTableDb("Pupils"); //CLEAR ALL TABLES
+                            message.Display("TABLE Pupils MsDb DATABASE was cleared", "Warn");
+                            msDb.clearTableDb("Events");
+                            message.Display("TABLE Events MsDb DATABASE was cleared", "Warn");
+                            msDb.clearTableDb("Schedules");                        
+                            message.Display("TABLE Schedules MsDb DATABASE was cleared", "Warn");
+                            actionAtMidnight();
+                        }
                     }
                     else
                     {
-                        //msDb.deleteDb(config.ConStrMsDB); // NEVER DELETE THIS DATABASE WHOLE
-                        //msDb.clearTableDb("Pupils"); //NEVER CLEAR THIS TABLE. ONLY LAZY UPDATING IN NEW TASK
-                        msDb.clearTableDb("Events");
-                        msDb.clearTableDb("Schedules");
-                        message.Display("TABLE Events MsDb DATABASE was cleared", "Warn");
-                        message.Display("TABLE Schedules MsDb DATABASE was cleared", "Warn");
-                        actionAtMidnight();
+                        message.Display("Cannot connect to database MsDb from CheckTime(Action actionAtMidnight)", "Warn");
                     }
                 }
-                else
-                {
-                    message.Display("Cannot connect to database MsDb from CheckTime(Action actionAtMidnight)", "Warn");
-                    //SqlConnection.ClearAllPools();
-                    msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-                    CreateMsDb();
-                }
-                
             }          
         }
+
         public void CheckMsDb()
         {
             //SqlConnection.ClearAllPools();
