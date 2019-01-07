@@ -24,21 +24,24 @@ namespace eljur_notifier.MsDbNS.CheckerNS
         internal protected ScheduleFiller scheduleFiller { get; set; }
         internal protected Config config { get; set; }
         internal protected Requester requester { get; set; }
-        internal protected TimeSpan timeFromDel { get; set; }
-        internal protected TimeSpan timeToDel { get; set; }
+        internal protected TimeChecker timeChecker { get; set; }
+        internal protected ExistChecker existChecker { get; set; }
+        internal protected EmptyChecker emptyChecker { get; set; }
+
 
         public MsDbChecker(Config Config, MsDb MsDb, Firebird Firebird)
         {
             this.message = new Message();
             this.msDb = MsDb;
             this.config = Config;
-            this.firebird = Firebird;
-            this.timeFromDel = new TimeSpan(23, 58, 59);
-            this.timeToDel = new TimeSpan(23, 59, 59);            
+            this.firebird = Firebird;            
             this.msDbCreator = new MsDbCreator(config);
             this.msDbFiller = new MsDbFiller(config);
             this.scheduleFiller = new ScheduleFiller(config);
             this.requester = new Requester(config);
+            this.timeChecker = new TimeChecker(config, msDb);
+            this.existChecker = new ExistChecker(config);
+            this.emptyChecker = new EmptyChecker(config);
             this.CheckSomeIssuesInConstructor();
             
         }
@@ -54,7 +57,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             {
                 msDbCreator.CreateMsDb();
             }
-            if (msDb.IsTableEmpty("Schedules"))
+            if (emptyChecker.IsTableEmpty("Schedules"))
             {
                 message.Display("Schedules is Empty", "Warn");
                 scheduleFiller.FillSchedulesDb();
@@ -73,45 +76,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
 
         }
 
-        public void CheckTime(Action actionAtMidnight)
-        {
-            var timeNow = DateTime.Now.TimeOfDay;
-            //timeFromDel = new TimeSpan(18, 55, 0);
-            //timeToDel = new TimeSpan(20, 25, 0);
-            if (timeNow > timeFromDel && timeNow < timeToDel)
-            {
-                message.Display("between " + timeFromDel.ToString() + " and " + timeToDel.ToString(), "Warn");
-                using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
-                {
-                    if (msDb.IsDbExist(msDb.dbcon, "CheckTime func"))
-                    {
-                        DateTime ModifyDate = requester.getModifyDate();
-                        message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
-                        TimeSpan diff = DateTime.Now.Subtract(ModifyDate);
-                        if (diff.TotalMilliseconds < 30000)
-                        {
-                            message.Display("diff is " + diff.TotalMilliseconds.ToString(), "Warn");
-                            message.Display("DATABASE MsDb was modify recently!!! No needed to clear tables again!!!", "Warn");
-                        }
-                        else
-                        {
-                            //msDb.deleteDb(config.ConStrMsDB); // NEVER DELETE THIS DATABASE WHOLE
-                            msDb.clearTableDb("Pupils"); //CLEAR ALL TABLES
-                            message.Display("TABLE Pupils MsDb DATABASE was cleared", "Warn");
-                            msDb.clearTableDb("Events");
-                            message.Display("TABLE Events MsDb DATABASE was cleared", "Warn");
-                            msDb.clearTableDb("Schedules");                        
-                            message.Display("TABLE Schedules MsDb DATABASE was cleared", "Warn");
-                            actionAtMidnight();
-                        }
-                    }
-                    else
-                    {
-                        message.Display("Cannot connect to database MsDb from CheckTime(Action actionAtMidnight)", "Warn");
-                    }
-                }
-            }          
-        }
+        
 
         public void CheckMsDb()
         {

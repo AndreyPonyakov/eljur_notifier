@@ -15,6 +15,7 @@ namespace eljur_notifier.EventHandlerNS
         internal protected MsDb msDb { get; set; }
         internal protected Firebird firebird { get; set; }
         internal protected MsDbChecker msDbChecker { get; set; }
+        internal protected TimeChecker timeChecker { get; set; }     
         internal protected EventHandlerEljur eventHandlerEljur { get; set; }
         internal protected CancellationTokenSource cancellationTokenSource { get; set; }
 
@@ -25,7 +26,8 @@ namespace eljur_notifier.EventHandlerNS
             this.firebird = new Firebird(config.ConStrFbDB);
             this.msDb = new MsDb(config);
             this.msDbChecker = new MsDbChecker(config, msDb, firebird);
-            this.eventHandlerEljur = new EventHandlerEljur(config, msDb, firebird, msDbChecker);
+            this.timeChecker = new TimeChecker(config, msDb);
+            this.eventHandlerEljur = new EventHandlerEljur(config, msDb, firebird, timeChecker);
             this.cancellationTokenSource = new CancellationTokenSource();
         }
 

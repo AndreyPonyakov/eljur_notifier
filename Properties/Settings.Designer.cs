@@ -144,5 +144,41 @@ namespace eljur_notifier.Properties {
                 this["ConfigsTreeIdResourceOutput2"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("23:57:59")]
+        public global::System.TimeSpan timeFromDel {
+            get {
+                return ((global::System.TimeSpan)(this["timeFromDel"]));
+            }
+            set {
+                this["timeFromDel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("23:59:59")]
+        public global::System.TimeSpan timeToDel {
+            get {
+                return ((global::System.TimeSpan)(this["timeToDel"]));
+            }
+            set {
+                this["timeToDel"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300000")]
+        public double IntervalDel {
+            get {
+                return ((double)(this["IntervalDel"]));
+            }
+            set {
+                this["IntervalDel"] = value;
+            }
+        }
     }
 }

@@ -138,6 +138,9 @@
     <Compile Include="eljur_notifier\EventHandler\EventHandler.cs" />
     <Compile Include="eljur_notifier\FireBird\Firebird.cs" />
     <Compile Include="eljur_notifier\Eljur\EljurApiRequester.cs" />
+    <Compile Include="eljur_notifier\MsDb\Checker\EmptyChecker.cs" />
+    <Compile Include="eljur_notifier\MsDb\Checker\ExistChecker.cs" />
+    <Compile Include="eljur_notifier\MsDb\Checker\TimeChecker.cs" />
     <Compile Include="eljur_notifier\MsDb\Creator\CleanCreator.cs" />
     <Compile Include="eljur_notifier\MsDb\Creator\MsDbCreator.cs" />
     <Compile Include="eljur_notifier\MsDb\Filler\MsDbFiller.cs" />

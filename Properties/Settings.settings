@@ -43,5 +43,14 @@
     <Setting Name="ConfigsTreeIdResourceOutput2" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">9369</Value>
     </Setting>
+    <Setting Name="timeFromDel" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">23:57:59</Value>
+    </Setting>
+    <Setting Name="timeToDel" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">23:59:59</Value>
+    </Setting>
+    <Setting Name="IntervalDel" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">300000</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

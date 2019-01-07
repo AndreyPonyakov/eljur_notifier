@@ -20,15 +20,15 @@ namespace eljur_notifier.EventHandlerNS
         internal protected Config config { get; set; }
         internal protected MsDb msDb { get; set; }
         internal protected Firebird firebird { get; set; }
-
-        internal protected MsDbChecker msDbChecker { get; set; }
-        public EventHandlerEljur(Config Config, MsDb MsDb, Firebird Firebird, MsDbChecker MsDbChecker)
+        internal protected TimeChecker timeChecker { get; set; }
+        
+        public EventHandlerEljur(Config Config, MsDb MsDb, Firebird Firebird, TimeChecker timeChecker)
         {
             this.message = new Message();
             this.config = Config;
             this.msDb = MsDb;
             this.firebird = Firebird;
-            this.msDbChecker = MsDbChecker;
+            this.timeChecker = timeChecker;
 
         }
 
@@ -79,7 +79,7 @@ namespace eljur_notifier.EventHandlerNS
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                msDbChecker.CheckTime(actionAtMidnight);
+                timeChecker.CheckTime(actionAtMidnight);
                 await Task.Delay(1000);
             }        
         }
