@@ -14,19 +14,17 @@ namespace eljur_notifier.FirebirdNS
     {
         internal protected FbConnection dbcon { get; set; }
         internal protected String ConnectStr { get; set; }
-        internal protected Boolean IsDbExistVar { get; set; }
         internal protected DateTime beforeDt { get; set; }
         internal protected DateTime afterDt { get; set; }
         internal protected Message message { get; set; }
 
         public Firebird(String ConnectStr)
         {
+            this.message = new Message();
             this.ConnectStr = ConnectStr;
             this.dbcon = new FbConnection(ConnectStr);
-            this.IsDbExistVar = this.IsDbExist(dbcon, "Firebird constructor");
-            this.message = new Message();
-
-            if (!this.IsDbExistVar)
+          
+            if (!this.IsDbExist(dbcon, "Firebird constructor"))
             {
                 message.Display("Firebird database doesn't exist. Program will be closed!", "Fatal", new Exception());
             }

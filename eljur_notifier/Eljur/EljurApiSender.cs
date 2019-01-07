@@ -6,41 +6,45 @@ using System.Threading.Tasks;
 using eljur_notifier.AppCommon;
 using eljur_notifier.MsDbNS;
 using System.Data.SqlClient;
+using eljur_notifier.MsDbNS.RequesterNS;
+using eljur_notifier.MsDbNS.SetterNS;
 
 namespace eljur_notifier.EljurNS
 {
     class EljurApiSender
     {
         internal protected Message message { get; set; }
-        internal protected MsDb msDb { get; set; }
         internal protected Config config { get; set; }
+        internal protected Requester requester { get; set; }
+        internal protected Setter setter { get; set; }
 
-        public EljurApiSender(Config Config, MsDb MsDb)
+        public EljurApiSender(Config Config)
         {
             this.message = new Message();
-            this.msDb = MsDb;
             this.config = Config;
+            this.requester = new Requester(config);
+            this.setter = new Setter(config);
         }
 
         public Boolean SendNotifyFirstPass(object[] PupilIdOldAndTime)
         {           
-            int EljurAccountId = msDb.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));          
-            String FullFIO = msDb.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            int EljurAccountId = requester.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));          
+            String FullFIO = requester.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
 
-            String Clas = msDb.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            String Clas = requester.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
 
             if ((Convert.ToInt32(DateTime.Today.Day) ==1) && (Convert.ToInt32(DateTime.Today.Month) == 9))
             {
                 message.Display("Today is 01.09 and we will change all classes in Pupils Table", "Info");
-                EljurApiRequester eljurApiRequester = new EljurApiRequester(msDb);
+                EljurApiRequester eljurApiRequester = new EljurApiRequester(config);
                 Clas = eljurApiRequester.getClasByFullFIO(FullFIO);
             }
 
-            TimeSpan StartTimeLessons = msDb.getStartTimeLessonsByClas(Clas);
+            TimeSpan StartTimeLessons = requester.getStartTimeLessonsByClas(Clas);
             var EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
             if (EventTime > StartTimeLessons)
             {
-                msDb.SetStatusCameTooLate(Convert.ToInt32(PupilIdOldAndTime[0]));
+                setter.SetStatusCameTooLate(Convert.ToInt32(PupilIdOldAndTime[0]));
                 message.Display("Notify about student " + FullFIO + " who came too late was sent to " + EljurAccountId + " EljurAccountId", "Warn");
             }
             else
@@ -52,10 +56,10 @@ namespace eljur_notifier.EljurNS
 
         public Boolean SendNotifyLastPass(object[] PupilIdOldAndTime)
         {
-            int EljurAccountId = msDb.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
-            String FullFIO = msDb.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
-            String Clas = msDb.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
-            TimeSpan EndTimeLessons = msDb.getEndTimeLessonsByClas(Clas);
+            int EljurAccountId = requester.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            String FullFIO = requester.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            String Clas = requester.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            TimeSpan EndTimeLessons = requester.getEndTimeLessonsByClas(Clas);
 
             var EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
             var EventTimePlus15Min = EventTime.Add(new TimeSpan(0, 15, 0));
@@ -71,7 +75,7 @@ namespace eljur_notifier.EljurNS
                 else
                 {
                     message.Display("Notify about student " + FullFIO + " who went home too early was sent to " + EljurAccountId + " EljurAccountId", "Warn");
-                    msDb.SetStatusWentHomeTooEarly(Convert.ToInt32(PupilIdOldAndTime[0]));
+                    setter.SetStatusWentHomeTooEarly(Convert.ToInt32(PupilIdOldAndTime[0]));
                     return true;
                 }          
             }

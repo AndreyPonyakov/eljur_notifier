@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using eljur_notifier.AppCommon;
 using eljur_notifier.StaffModel;
 
-namespace eljur_notifier.MsDbNS.Creator
+namespace eljur_notifier.MsDbNS.CreatorNS
 {
     class CleanCreator
     {
@@ -15,6 +15,7 @@ namespace eljur_notifier.MsDbNS.Creator
 
         public CleanCreator()
         {
+            this.message = new Message();
 
         }
 

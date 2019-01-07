@@ -7,9 +7,11 @@ using System.Threading;
 using System.Data.SqlClient;
 using eljur_notifier.AppCommon;
 using eljur_notifier.FirebirdNS;
-using eljur_notifier.MsDbNS.Creator;
+using eljur_notifier.MsDbNS.CreatorNS;
+using eljur_notifier.MsDbNS.FillerNS;
+using eljur_notifier.MsDbNS.RequesterNS;
 
-namespace eljur_notifier.MsDbNS
+namespace eljur_notifier.MsDbNS.CheckerNS
 {
     class MsDbChecker
     {
@@ -17,7 +19,11 @@ namespace eljur_notifier.MsDbNS
         internal protected Firebird firebird { get; set; }
         internal protected MsDb msDb { get; set; }
         internal protected CleanCreator cleanCreator { get; set; }
+        internal protected MsDbCreator msDbCreator { get; set; }
+        internal protected MsDbFiller msDbFiller { get; set; }
+        internal protected ScheduleFiller scheduleFiller { get; set; }
         internal protected Config config { get; set; }
+        internal protected Requester requester { get; set; }
         internal protected TimeSpan timeFromDel { get; set; }
         internal protected TimeSpan timeToDel { get; set; }
 
@@ -28,8 +34,13 @@ namespace eljur_notifier.MsDbNS
             this.config = Config;
             this.firebird = Firebird;
             this.timeFromDel = new TimeSpan(23, 58, 59);
-            this.timeToDel = new TimeSpan(23, 59, 59);
+            this.timeToDel = new TimeSpan(23, 59, 59);            
+            this.msDbCreator = new MsDbCreator(config);
+            this.msDbFiller = new MsDbFiller(config);
+            this.scheduleFiller = new ScheduleFiller(config);
+            this.requester = new Requester(config);
             this.CheckSomeIssuesInConstructor();
+            
         }
 
         public void CheckSomeIssuesInConstructor()
@@ -41,23 +52,23 @@ namespace eljur_notifier.MsDbNS
             }
             else
             {
-                this.CreateMsDb();
+                msDbCreator.CreateMsDb();
             }
             if (msDb.IsTableEmpty("Schedules"))
             {
                 message.Display("Schedules is Empty", "Warn");
-                msDb.FillSchedulesDb();
+                scheduleFiller.FillSchedulesDb();
             }
             else
             {
                 message.Display("Schedules is not Empty", "Warn");
-                //msDb.clearTableDb("Schedules");
-                //msDb.FillSchedulesDb();
+                msDb.clearTableDb("Schedules");
+                scheduleFiller.FillSchedulesDb();
             }
             if ((Convert.ToInt32(DateTime.Today.Day) == 1) && (Convert.ToInt32(DateTime.Today.Month) == 9))
             {
                 message.Display("Today is 01.09 and we will change all Pupils in Pupils Table", "Info");
-                this.CreateMsDb();
+                msDbCreator.CreateMsDb();
             }
 
         }
@@ -74,7 +85,7 @@ namespace eljur_notifier.MsDbNS
                 {
                     if (msDb.IsDbExist(msDb.dbcon, "CheckTime func"))
                     {
-                        DateTime ModifyDate = msDb.getModifyDate();
+                        DateTime ModifyDate = requester.getModifyDate();
                         message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
                         TimeSpan diff = DateTime.Now.Subtract(ModifyDate);
                         if (diff.TotalMilliseconds < 30000)
@@ -110,7 +121,7 @@ namespace eljur_notifier.MsDbNS
             message.Display("MsSQLDB is exist: " + msDb.IsDbExist(msDb.dbcon, "CheckMsDb func").ToString(), "Warn");        
             if (msDb.IsDbExist(msDb.dbcon, "CheckMsDb func"))
             {      
-                DateTime ModifyDate = msDb.getModifyDate();
+                DateTime ModifyDate = requester.getModifyDate();
                 message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
                 DateTime dateOnly = ModifyDate.Date;
                 if (dateOnly == DateTime.Today)
@@ -130,18 +141,6 @@ namespace eljur_notifier.MsDbNS
                 }                                
             }
         }
-        public void CreateMsDb()
-        {
-            //SqlConnection.ClearAllPools();
-            //msDb = new MsDb(config.ConStrMsDB); //DON'T DO THIS TERRABLE THING HERE!!!
-            msDb.dbcon = new SqlConnection(config.ConStrMsDB);
 
-            this.cleanCreator = new CleanCreator();
-            cleanCreator.createCleanMsDb(config.ConStrMsDB);
-            
-            var AllStaff = firebird.getAllStaff();
-            msDb.FillStaffDb(AllStaff);
-            msDb.FillSchedulesDb();
-        }
     }
 }

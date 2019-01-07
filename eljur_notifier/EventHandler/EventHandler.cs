@@ -8,7 +8,9 @@ using System.Data.SqlClient;
 using eljur_notifier;
 using eljur_notifier.FirebirdNS;
 using eljur_notifier.MsDbNS;
+using eljur_notifier.MsDbNS.CheckerNS;
 using eljur_notifier.AppCommon;
+using eljur_notifier.MsDbNS.CatcherNS;
 
 namespace eljur_notifier.EventHandlerNS
 {

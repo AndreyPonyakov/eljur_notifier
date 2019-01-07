@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using eljur_notifier.FirebirdNS;
 using eljur_notifier.MsDbNS;
+using eljur_notifier.MsDbNS.CheckerNS;
 using eljur_notifier.AppCommon;
 
 namespace eljur_notifier.EventHandlerNS

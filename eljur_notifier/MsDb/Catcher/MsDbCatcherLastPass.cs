@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 using eljur_notifier.AppCommon;
 using System.Data.SqlClient;
 using eljur_notifier.EljurNS;
+using eljur_notifier.MsDbNS.SetterNS;
 
-namespace eljur_notifier.MsDbNS
+namespace eljur_notifier.MsDbNS.CatcherNS
 {
     class MsDbCatcherLastPass
     {
         internal protected Message message { get; set; }
         internal protected MsDb msDb { get; set; }
         internal protected Config config { get; set; }
+        internal protected Setter setter { get; set; }
         internal protected EljurApiSender eljurApiSender { get; set; }
 
         public MsDbCatcherLastPass(Config Config, MsDb MsDb)
@@ -21,7 +23,8 @@ namespace eljur_notifier.MsDbNS
             this.message = new Message();
             this.msDb = MsDb;
             this.config = Config;
-            this.eljurApiSender = new EljurApiSender(config, msDb);
+            this.setter = new Setter(config);
+            this.eljurApiSender = new EljurApiSender(config);
         }
 
         public void catchLastPass() 
@@ -51,7 +54,7 @@ namespace eljur_notifier.MsDbNS
                 Boolean result = eljurApiSender.SendNotifyLastPass(PupilIdOldAndTime);
                 if (result == true)
                 {
-                    msDb.SetStatusNotifyWasSend(Convert.ToInt32(PupilIdOldAndTime[0]));
+                    setter.SetStatusNotifyWasSend(Convert.ToInt32(PupilIdOldAndTime[0]));
                 }
             }
         }
