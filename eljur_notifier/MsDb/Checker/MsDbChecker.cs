@@ -10,6 +10,7 @@ using eljur_notifier.FirebirdNS;
 using eljur_notifier.MsDbNS.CreatorNS;
 using eljur_notifier.MsDbNS.FillerNS;
 using eljur_notifier.MsDbNS.RequesterNS;
+using eljur_notifier.MsDbNS.CleanerNS;
 
 namespace eljur_notifier.MsDbNS.CheckerNS
 {
@@ -27,6 +28,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
         internal protected TimeChecker timeChecker { get; set; }
         internal protected ExistChecker existChecker { get; set; }
         internal protected EmptyChecker emptyChecker { get; set; }
+        internal protected Cleaner cleaner { get; set; }
 
 
         public MsDbChecker(Config Config, MsDb MsDb, Firebird Firebird)
@@ -42,6 +44,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             this.timeChecker = new TimeChecker(config, msDb);
             this.existChecker = new ExistChecker(config);
             this.emptyChecker = new EmptyChecker(config);
+            this.cleaner = new Cleaner();
             this.CheckSomeIssuesInConstructor();
             
         }
@@ -49,7 +52,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
         public void CheckSomeIssuesInConstructor()
         {
             this.CheckMsDb();
-            if (msDb.IsTableExist("Pupils") && msDb.IsTableExist("Schedules"))
+            if (existChecker.IsTableExist("Pupils") && existChecker.IsTableExist("Schedules"))
             {
                 message.Display("msDb already exist", "Warn");
             }
@@ -65,13 +68,14 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             else
             {
                 message.Display("Schedules is not Empty", "Warn");
-                msDb.clearTableDb("Schedules");
+                cleaner.clearTableDb("Schedules");
                 scheduleFiller.FillSchedulesDb();
             }
             if ((Convert.ToInt32(DateTime.Today.Day) == 1) && (Convert.ToInt32(DateTime.Today.Month) == 9))
             {
                 message.Display("Today is 01.09 and we will change all Pupils in Pupils Table", "Info");
-                msDbCreator.CreateMsDb();
+                //Now the data is updated every day
+                //msDbCreator.CreateMsDb();
             }
 
         }
@@ -80,30 +84,30 @@ namespace eljur_notifier.MsDbNS.CheckerNS
 
         public void CheckMsDb()
         {
-            //SqlConnection.ClearAllPools();
-            msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-
-            message.Display("MsSQLDB is exist: " + msDb.IsDbExist(msDb.dbcon, "CheckMsDb func").ToString(), "Warn");        
-            if (msDb.IsDbExist(msDb.dbcon, "CheckMsDb func"))
-            {      
-                DateTime ModifyDate = requester.getModifyDate();
-                message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
-                DateTime dateOnly = ModifyDate.Date;
-                if (dateOnly == DateTime.Today)
-                {
-                    message.Display("DATABASE MsDb was modified Today!!!", "Warn");
-                }
-            }
-            else
+            using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
             {
-                try
+                message.Display("MsSQLDB is exist: " + msDb.IsDbExist(msDb.dbcon, "CheckMsDb func").ToString(), "Warn");
+                if (msDb.IsDbExist(msDb.dbcon, "CheckMsDb func"))
                 {
-                    throw new Exception();
+                    DateTime ModifyDate = requester.getModifyDate();
+                    message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
+                    DateTime dateOnly = ModifyDate.Date;
+                    if (dateOnly == DateTime.Today)
+                    {
+                        message.Display("DATABASE MsDb was modified Today!!!", "Warn");
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    message.Display("Cannot connect to MsDb", "Fatal", ex);
-                }                                
+                    try
+                    {
+                        throw new Exception();
+                    }
+                    catch (Exception ex)
+                    {
+                        message.Display("Cannot connect to MsDb", "Fatal", ex);
+                    }
+                }
             }
         }
 

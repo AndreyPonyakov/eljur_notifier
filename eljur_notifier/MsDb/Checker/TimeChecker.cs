@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using eljur_notifier.AppCommon;
 using System.Data.SqlClient;
 using eljur_notifier.MsDbNS.RequesterNS;
+using eljur_notifier.MsDbNS.CleanerNS;
 
 namespace eljur_notifier.MsDbNS.CheckerNS
 {
@@ -19,12 +20,15 @@ namespace eljur_notifier.MsDbNS.CheckerNS
         internal protected SqlConnection dbcon { get; set; }
         internal protected ExistChecker existChecker { get; set; }
         internal protected Requester requester { get; set; }
+        internal protected Cleaner cleaner { get; set; }
 
         public TimeChecker(Config Config, MsDb MsDb)
         {
+            this.message = new Message();
             this.msDb = MsDb;
             this.config = Config;
             this.requester = new Requester(config);
+            this.cleaner = new Cleaner();
             //this.timeFromDel = new TimeSpan(23, 57, 59);
             //this.timeToDel = new TimeSpan(23, 59, 59);
             this.existChecker = new ExistChecker(config);
@@ -52,14 +56,8 @@ namespace eljur_notifier.MsDbNS.CheckerNS
                         }
                         else
                         {
-                            //msDb.deleteDb(config.ConStrMsDB); // NEVER DELETE THIS DATABASE WHOLE
                             //CLEAR ALL TABLES
-                            msDb.clearTableDb("Events");
-                            message.Display("TABLE Events MsDb DATABASE was cleared", "Warn");
-                            msDb.clearTableDb("Pupils"); 
-                            message.Display("TABLE Pupils MsDb DATABASE was cleared", "Warn");
-                            msDb.clearTableDb("Schedules");
-                            message.Display("TABLE Schedules MsDb DATABASE was cleared", "Warn");
+                            cleaner.clearAllTables();
                             actionAtMidnight();
                         }
                     }

@@ -16,6 +16,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
 
         public EmptyChecker(Config Config)
         {
+            this.message = new Message();
             this.config = Config;
         }
 

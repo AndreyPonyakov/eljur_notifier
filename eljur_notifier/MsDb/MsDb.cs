@@ -11,6 +11,7 @@ using eljur_notifier.DbCommon;
 using eljur_notifier.AppCommon;
 using eljur_notifier.EljurNS;
 using eljur_notifier.MsDbNS.CreatorNS;
+using eljur_notifier.MsDbNS.CheckerNS;
 
 
 
@@ -20,35 +21,33 @@ namespace eljur_notifier.MsDbNS
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
-        internal protected CleanCreator cleanCreator { get; set; }
+        internal protected MsDbCreator msDbCreator { get; set; }
         internal protected String ConnectStr { get; set; }
         internal protected SqlConnection dbcon { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
+        internal protected ExistChecker existChecker { get; set; }
 
 
         public MsDb(Config Config)
         {
             this.config = Config;
-            this.cleanCreator = new CleanCreator();
+            this.msDbCreator = new MsDbCreator(config);
             this.ConnectStr = config.ConStrMsDB;
             this.message = new Message();
+            this.existChecker = new ExistChecker(config);
             using (this.dbcon = new SqlConnection(ConnectStr))
             {
-                if (IsTableExist("Pupils"))
+                if (this.existChecker.IsTableExist("Pupils"))
                 {
                     message.Display("msDb already exist", "Warn");
                 }
                 else
                 {
-                    cleanCreator.createCleanMsDb(config.ConStrMsDB);
+                    msDbCreator.CreateMsDb();
                 }
             }
         }
-
-            
-        
-
-
+          
 
         public void CheckEventsDb(List<object[]> curEvents)
         {
@@ -133,43 +132,9 @@ namespace eljur_notifier.MsDbNS
             }
         }
 
-        public void clearTableDb(String TableName)
-        {
-            using (this.StaffCtx = new StaffContext())
-            {
-                this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [" + TableName + "]");
-            }
-
-        }
-
         
 
-
-        
-
-
-
-        public Boolean IsTableExist(String TableName)
-        {
-            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
-            {
-                dbcon.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("SELECT 'TableExist' FROM (SELECT name FROM sys.tables UNION SELECT name FROM sys.views) T WHERE name = @Name", dbcon))
-                {
-                    sqlCommand.Parameters.AddWithValue("@name", TableName);
-                    if (sqlCommand.ExecuteScalar().ToString() == "TableExist")
-                    {
-                        message.Display("TableExist " + TableName + " in msDb", "Warn");
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-            }
-        }
-
+       
        
 
     }
