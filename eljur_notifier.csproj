@@ -138,6 +138,7 @@
     <Compile Include="eljur_notifier\EventHandler\EventHandler.cs" />
     <Compile Include="eljur_notifier\FireBird\Firebird.cs" />
     <Compile Include="eljur_notifier\Eljur\EljurApiRequester.cs" />
+    <Compile Include="eljur_notifier\MsDb\Creator\CleanCreator.cs" />
     <Compile Include="eljur_notifier\MsDb\MsDb.cs" />
     <Compile Include="eljur_notifier\MsDb\MsDbCatcherFirstPass.cs" />
     <Compile Include="eljur_notifier\MsDb\MsDbCatcherLastPass.cs" />

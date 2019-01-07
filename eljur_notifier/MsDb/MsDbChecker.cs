@@ -7,6 +7,7 @@ using System.Threading;
 using System.Data.SqlClient;
 using eljur_notifier.AppCommon;
 using eljur_notifier.FirebirdNS;
+using eljur_notifier.MsDbNS.Creator;
 
 namespace eljur_notifier.MsDbNS
 {
@@ -15,6 +16,7 @@ namespace eljur_notifier.MsDbNS
         internal protected Message message { get; set; }
         internal protected Firebird firebird { get; set; }
         internal protected MsDb msDb { get; set; }
+        internal protected CleanCreator cleanCreator { get; set; }
         internal protected Config config { get; set; }
         internal protected TimeSpan timeFromDel { get; set; }
         internal protected TimeSpan timeToDel { get; set; }
@@ -134,7 +136,8 @@ namespace eljur_notifier.MsDbNS
             //msDb = new MsDb(config.ConStrMsDB); //DON'T DO THIS TERRABLE THING HERE!!!
             msDb.dbcon = new SqlConnection(config.ConStrMsDB);
 
-            msDb.createCleanMsDb(config.ConStrMsDB);
+            this.cleanCreator = new CleanCreator();
+            cleanCreator.createCleanMsDb(config.ConStrMsDB);
             
             var AllStaff = firebird.getAllStaff();
             msDb.FillStaffDb(AllStaff);
