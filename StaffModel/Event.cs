@@ -16,10 +16,7 @@ namespace eljur_notifier.StaffModel
         public int PupilIdOld { get; set; }
         public TimeSpan EventTime { get; set; }
         [MaxLength(500)]
-        public string EventName { get; set; }       
-        public Boolean NotifyEnable { get; set; }
-        public Boolean NotifyEnableDirector { get; set; }
+        public string EventName { get; set; }          
         public Boolean NotifyWasSend { get; set; }
-        public Boolean NotifyWasSendDirector { get; set; }
     }
 }

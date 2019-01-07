@@ -56,16 +56,15 @@ namespace eljur_notifier.MsDbNS
                 firstStudent.FullFIO = "Иван Иванов Иванович";
                 firstStudent.Clas = "1Б";
                 firstStudent.EljurAccountId = 666;
+                firstStudent.NotifyEnable = false;
 
                 Event firstEvent = new Event();
                 firstEvent.EventId = 1;
                 firstEvent.PupilIdOld = 5001;
                 firstEvent.EventTime = DateTime.Now.TimeOfDay;
-                firstEvent.EventName = "Прогул";
-                firstEvent.NotifyEnable = true;
-                firstEvent.NotifyEnableDirector = true;
+                firstEvent.EventName = "Прогул";                 
                 firstEvent.NotifyWasSend = false;
-                firstEvent.NotifyWasSendDirector = false;
+       
 
 
                 Schedule firstScheduleToDayItem = new Schedule();
@@ -87,11 +86,11 @@ namespace eljur_notifier.MsDbNS
                 Console.WriteLine("List of objects:");
                 foreach (Pupil p in students)
                 {
-                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5}", p.PupilIdOld, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Clas);
+                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5} - {6}", p.PupilIdOld, p.FirstName, p.LastName, p.MiddleName, p.FullFIO, p.Clas, p.NotifyEnable);
                 }
                 foreach (Event e in evets)
                 {
-                    Console.WriteLine("{0}.{1} - {2} - {3} - {4} - {5} - {6}- {7}", e.EventId, e.PupilIdOld, e.EventTime, e.EventName, e.NotifyEnable, e.NotifyEnableDirector, e.NotifyWasSend, e.NotifyWasSendDirector);
+                    Console.WriteLine("{0}.{1} - {2} - {3} - {4}", e.EventId, e.PupilIdOld, e.EventTime, e.EventName, e.NotifyWasSend);
                 }
                 foreach (Schedule s in schedules)
                 {

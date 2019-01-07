@@ -171,6 +171,10 @@
     <Compile Include="Migrations\201812262325177_Schedule_was_added.Designer.cs">
       <DependentUpon>201812262325177_Schedule_was_added.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901071030212_delEnables.cs" />
+    <Compile Include="Migrations\201901071030212_delEnables.Designer.cs">
+      <DependentUpon>201901071030212_delEnables.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -235,6 +239,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201812262325177_Schedule_was_added.resx">
       <DependentUpon>201812262325177_Schedule_was_added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901071030212_delEnables.resx">
+      <DependentUpon>201901071030212_delEnables.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
