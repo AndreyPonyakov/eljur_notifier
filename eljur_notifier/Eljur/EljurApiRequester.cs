@@ -16,8 +16,8 @@ namespace eljur_notifier.EljurNS
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
-        internal protected Requester requester { get; set; }
-        internal protected Setter setter { get; set; }
+        internal protected MsDbRequester msDbRequester { get; set; }
+        internal protected MsDbSetter msDbSetter { get; set; }
         internal protected JObject rules { get; set; }
         internal protected String clas { get; set; }
         internal protected String[] clases { get; set; }
@@ -29,8 +29,8 @@ namespace eljur_notifier.EljurNS
         {
             this.message = new Message();
             this.config = Config;
-            this.requester = new Requester(config);
-            this.setter = new Setter(config);
+            this.msDbRequester = new MsDbRequester(config);
+            this.msDbSetter = new MsDbSetter(config);
         }
 
         public String[] getClases()
@@ -75,8 +75,8 @@ namespace eljur_notifier.EljurNS
 
         public String getClasByFullFIO(String FullFIO)
         {
-            int PupilIdOld = requester.getPupilIdOldByFullFio(FullFIO);
-            String Clas = requester.getClasByPupilIdOld(PupilIdOld);
+            int PupilIdOld = msDbRequester.getPupilIdOldByFullFio(FullFIO);
+            String Clas = msDbRequester.getClasByPupilIdOld(PupilIdOld);
 
             //NEED REALISATION OF THIS REQUEST
             //this.clas = this.getClasByFullFIO(FullFIO);
@@ -87,7 +87,7 @@ namespace eljur_notifier.EljurNS
             //Every time when Requester would work this we will update our Table Pupils by new correct data from ElJur
             if (Clas != clas)
             {
-                setter.SetClasByPupilIdOld(PupilIdOld, clas);
+                msDbSetter.SetClasByPupilIdOld(PupilIdOld, clas);
             }
             return clas;
         }

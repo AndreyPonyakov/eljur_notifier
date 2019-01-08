@@ -8,13 +8,13 @@ using eljur_notifier.StaffModel;
 
 namespace eljur_notifier.MsDbNS.SetterNS
 {
-    class Setter
+    class MsDbSetter
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
 
-        public Setter(Config Config)
+        public MsDbSetter(Config Config)
         {
             this.message = new Message();
             this.config = Config;

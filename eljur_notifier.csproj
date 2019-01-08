@@ -141,7 +141,7 @@
     <Compile Include="eljur_notifier\MsDb\Checker\EmptyChecker.cs" />
     <Compile Include="eljur_notifier\MsDb\Checker\ExistChecker.cs" />
     <Compile Include="eljur_notifier\MsDb\Checker\TimeChecker.cs" />
-    <Compile Include="eljur_notifier\MsDb\Cleaner\Cleaner.cs" />
+    <Compile Include="eljur_notifier\MsDb\Cleaner\MsDbCleaner.cs" />
     <Compile Include="eljur_notifier\MsDb\Creator\CleanCreator.cs" />
     <Compile Include="eljur_notifier\MsDb\Creator\MsDbCreator.cs" />
     <Compile Include="eljur_notifier\MsDb\Filler\MsDbFiller.cs" />
@@ -151,8 +151,9 @@
     <Compile Include="eljur_notifier\MsDb\Catcher\MsDbCatcherFirstPass.cs" />
     <Compile Include="eljur_notifier\MsDb\Catcher\MsDbCatcherLastPass.cs" />
     <Compile Include="eljur_notifier\MsDb\Checker\MsDbChecker.cs" />
-    <Compile Include="eljur_notifier\MsDb\Requester\Requester.cs" />
-    <Compile Include="eljur_notifier\MsDb\Setter\Setter.cs" />
+    <Compile Include="eljur_notifier\MsDb\Requester\MsDbRequester.cs" />
+    <Compile Include="eljur_notifier\MsDb\Saver\MsDbSaver.cs" />
+    <Compile Include="eljur_notifier\MsDb\Setter\MsDbSetter.cs" />
     <Compile Include="eljur_notifier\MsDb\Updater\MsDbUpdater.cs" />
     <Compile Include="eljur_notifier\Program.cs" />
     <Compile Include="Migrations\201812191123066_InitialCreate.cs" />

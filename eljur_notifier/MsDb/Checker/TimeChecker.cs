@@ -19,16 +19,16 @@ namespace eljur_notifier.MsDbNS.CheckerNS
         internal protected TimeSpan timeToDel { get; set; }
         internal protected SqlConnection dbcon { get; set; }
         internal protected ExistChecker existChecker { get; set; }
-        internal protected Requester requester { get; set; }
-        internal protected Cleaner cleaner { get; set; }
+        internal protected MsDbRequester msDbRequester { get; set; }
+        internal protected MsDbCleaner msDbCleaner { get; set; }
 
         public TimeChecker(Config Config, MsDb MsDb)
         {
             this.message = new Message();
             this.msDb = MsDb;
             this.config = Config;
-            this.requester = new Requester(config);
-            this.cleaner = new Cleaner();
+            this.msDbRequester = new MsDbRequester(config);
+            this.msDbCleaner = new MsDbCleaner();
             //this.timeFromDel = new TimeSpan(23, 57, 59);
             //this.timeToDel = new TimeSpan(23, 59, 59);
             this.existChecker = new ExistChecker(config);
@@ -46,7 +46,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
                 {
                     if (msDb.IsDbExist(this.dbcon, "CheckTime func"))
                     {
-                        DateTime ModifyDate = requester.getModifyDate();
+                        DateTime ModifyDate = msDbRequester.getModifyDate();
                         message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
                         TimeSpan diff = DateTime.Now.Subtract(ModifyDate);
                         if (diff.TotalMilliseconds < config.IntervalDel)
@@ -57,7 +57,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
                         else
                         {
                             //CLEAR ALL TABLES
-                            cleaner.clearAllTables();
+                            msDbCleaner.clearAllTables();
                             actionAtMidnight();
                         }
                     }

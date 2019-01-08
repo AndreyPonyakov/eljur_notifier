@@ -17,7 +17,7 @@ namespace eljur_notifier.MsDbNS.FillerNS
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
-        internal protected Requester requester { get; set; }
+        internal protected MsDbRequester msDbRequester { get; set; }
         internal protected EljurApiRequester eljurApiRequester { get; set; }
         
 
@@ -26,7 +26,7 @@ namespace eljur_notifier.MsDbNS.FillerNS
         {
             this.message = new Message();
             this.config = Config;
-            this.requester = new Requester(config);
+            this.msDbRequester = new MsDbRequester(config);
             this.eljurApiRequester = new EljurApiRequester(config);
         }
 

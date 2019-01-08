@@ -25,7 +25,7 @@ namespace eljur_notifier.EventHandlerNS
             this.config = new Config();
             this.firebird = new Firebird(config.ConStrFbDB);
             this.msDb = new MsDb(config);
-            this.msDbChecker = new MsDbChecker(config, msDb, firebird);
+            //this.msDbChecker = new MsDbChecker(config, msDb, firebird);
             this.timeChecker = new TimeChecker(config, msDb);
             this.eventHandlerEljur = new EventHandlerEljur(config, msDb, firebird, timeChecker);
             this.cancellationTokenSource = new CancellationTokenSource();

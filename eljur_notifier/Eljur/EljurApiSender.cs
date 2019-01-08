@@ -15,23 +15,23 @@ namespace eljur_notifier.EljurNS
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
-        internal protected Requester requester { get; set; }
-        internal protected Setter setter { get; set; }
+        internal protected MsDbRequester msDbRequester { get; set; }
+        internal protected MsDbSetter msDbSetter { get; set; }
 
         public EljurApiSender(Config Config)
         {
             this.message = new Message();
             this.config = Config;
-            this.requester = new Requester(config);
-            this.setter = new Setter(config);
+            this.msDbRequester = new MsDbRequester(config);
+            this.msDbSetter = new MsDbSetter(config);
         }
 
         public Boolean SendNotifyFirstPass(object[] PupilIdOldAndTime)
         {           
-            int EljurAccountId = requester.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));          
-            String FullFIO = requester.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            int EljurAccountId = msDbRequester.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));          
+            String FullFIO = msDbRequester.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
 
-            String Clas = requester.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            String Clas = msDbRequester.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
 
             if ((Convert.ToInt32(DateTime.Today.Day) ==1) && (Convert.ToInt32(DateTime.Today.Month) == 9))
             {
@@ -40,11 +40,11 @@ namespace eljur_notifier.EljurNS
                 Clas = eljurApiRequester.getClasByFullFIO(FullFIO);
             }
 
-            TimeSpan StartTimeLessons = requester.getStartTimeLessonsByClas(Clas);
+            TimeSpan StartTimeLessons = msDbRequester.getStartTimeLessonsByClas(Clas);
             var EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
             if (EventTime > StartTimeLessons)
             {
-                setter.SetStatusCameTooLate(Convert.ToInt32(PupilIdOldAndTime[0]));
+                msDbSetter.SetStatusCameTooLate(Convert.ToInt32(PupilIdOldAndTime[0]));
                 message.Display("Notify about student " + FullFIO + " who came too late was sent to " + EljurAccountId + " EljurAccountId", "Warn");
             }
             else
@@ -56,10 +56,10 @@ namespace eljur_notifier.EljurNS
 
         public Boolean SendNotifyLastPass(object[] PupilIdOldAndTime)
         {
-            int EljurAccountId = requester.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
-            String FullFIO = requester.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
-            String Clas = requester.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
-            TimeSpan EndTimeLessons = requester.getEndTimeLessonsByClas(Clas);
+            int EljurAccountId = msDbRequester.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            String FullFIO = msDbRequester.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            String Clas = msDbRequester.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
+            TimeSpan EndTimeLessons = msDbRequester.getEndTimeLessonsByClas(Clas);
 
             var EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
             var EventTimePlus15Min = EventTime.Add(new TimeSpan(0, 15, 0));
@@ -75,7 +75,7 @@ namespace eljur_notifier.EljurNS
                 else
                 {
                     message.Display("Notify about student " + FullFIO + " who went home too early was sent to " + EljurAccountId + " EljurAccountId", "Warn");
-                    setter.SetStatusWentHomeTooEarly(Convert.ToInt32(PupilIdOldAndTime[0]));
+                    msDbSetter.SetStatusWentHomeTooEarly(Convert.ToInt32(PupilIdOldAndTime[0]));
                     return true;
                 }          
             }

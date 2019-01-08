@@ -10,18 +10,18 @@ using eljur_notifier.MsDbNS.SetterNS;
 
 namespace eljur_notifier.MsDbNS.RequesterNS
 {
-    class Requester
+    class MsDbRequester
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
-        internal protected Setter setter { get; set; }
+        internal protected MsDbSetter msDbSetter { get; set; }
         internal protected SqlConnection dbcon { get; set; }
 
-        public Requester(Config Config)
+        public MsDbRequester(Config Config)
         {
             this.message = new Message();
             this.config = Config;
-            this.setter = new Setter(config);
+            this.msDbSetter = new MsDbSetter(config);
 
         }
 

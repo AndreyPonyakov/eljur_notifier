@@ -24,11 +24,11 @@ namespace eljur_notifier.MsDbNS.CheckerNS
         internal protected MsDbFiller msDbFiller { get; set; }
         internal protected ScheduleFiller scheduleFiller { get; set; }
         internal protected Config config { get; set; }
-        internal protected Requester requester { get; set; }
+        internal protected MsDbRequester msDbRequester { get; set; }
         internal protected TimeChecker timeChecker { get; set; }
         internal protected ExistChecker existChecker { get; set; }
         internal protected EmptyChecker emptyChecker { get; set; }
-        internal protected Cleaner cleaner { get; set; }
+        internal protected MsDbCleaner msDbCleaner { get; set; }
 
 
         public MsDbChecker(Config Config, MsDb MsDb, Firebird Firebird)
@@ -40,11 +40,11 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             this.msDbCreator = new MsDbCreator(config);
             this.msDbFiller = new MsDbFiller(config);
             this.scheduleFiller = new ScheduleFiller(config);
-            this.requester = new Requester(config);
+            this.msDbRequester = new MsDbRequester(config);
             this.timeChecker = new TimeChecker(config, msDb);
             this.existChecker = new ExistChecker(config);
             this.emptyChecker = new EmptyChecker(config);
-            this.cleaner = new Cleaner();
+            this.msDbCleaner = new MsDbCleaner();
             this.CheckSomeIssuesInConstructor();
             
         }
@@ -68,7 +68,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             else
             {
                 message.Display("Schedules is not Empty", "Warn");
-                cleaner.clearTableDb("Schedules");
+                msDbCleaner.clearTableDb("Schedules");
                 scheduleFiller.FillSchedulesDb();
             }
             if ((Convert.ToInt32(DateTime.Today.Day) == 1) && (Convert.ToInt32(DateTime.Today.Month) == 9))
@@ -89,7 +89,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
                 message.Display("MsSQLDB is exist: " + msDb.IsDbExist(msDb.dbcon, "CheckMsDb func").ToString(), "Warn");
                 if (msDb.IsDbExist(msDb.dbcon, "CheckMsDb func"))
                 {
-                    DateTime ModifyDate = requester.getModifyDate();
+                    DateTime ModifyDate = msDbRequester.getModifyDate();
                     message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
                     DateTime dateOnly = ModifyDate.Date;
                     if (dateOnly == DateTime.Today)
