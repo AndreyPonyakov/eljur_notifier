@@ -99,30 +99,7 @@ namespace eljur_notifier.MsDbNS
             }
         }
 
-        
-
-        public void deleteDb(String conStr)
-        {
-
-            using (SqlConnection con = new SqlConnection(conStr))
-            {
-                con.Open();
-                String sqlCommandTextSingleUser = @"
-                ALTER DATABASE " + "StaffDb" + @" SET SINGLE_USER WITH ROLLBACK IMMEDIATE;";
-                SqlCommand sqlCommandSingleUser = new SqlCommand(sqlCommandTextSingleUser, con);
-                sqlCommandSingleUser.ExecuteNonQuery();
-
-                String sqlCommandTextDeleteDB = @"
-                USE Master;
-                DROP DATABASE [" + "StaffDb" + "]";
-                SqlCommand sqlCommandDeleteDB = new SqlCommand(sqlCommandTextDeleteDB, con);
-                sqlCommandDeleteDB.ExecuteNonQuery();
-            }
-        }
-
-        
-
-       
+          
        
 
     }

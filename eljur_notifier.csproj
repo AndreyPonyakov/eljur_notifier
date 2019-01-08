@@ -145,6 +145,7 @@
     <Compile Include="eljur_notifier\MsDb\Cleaner\MsDbCleaner.cs" />
     <Compile Include="eljur_notifier\MsDb\Creator\CleanCreator.cs" />
     <Compile Include="eljur_notifier\MsDb\Creator\MsDbCreator.cs" />
+    <Compile Include="eljur_notifier\MsDb\Destructor\MsDbDestructor.cs" />
     <Compile Include="eljur_notifier\MsDb\Filler\MsDbFiller.cs" />
     <Compile Include="eljur_notifier\MsDb\Filler\ScheduleFiller.cs" />
     <Compile Include="eljur_notifier\MsDb\Filler\StaffFiller.cs" />
