@@ -23,7 +23,7 @@ namespace eljur_notifier.AppCommon
         {
             this.logger = LogManager.GetCurrentClassLogger();      
         }
-        public void Display(String MesStr, String level, Exception ex = null)
+        public void Display(String MesStr, String level, Exception ex = null, Action act = null)
         {
           
             if (ex != null)
@@ -56,6 +56,7 @@ namespace eljur_notifier.AppCommon
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 CloseProgram(new Action(delegate
                 {
+                    act?.Invoke();
                     SMTP smtp = new SMTP();
                     smtp.SendEmail(MesStr + exception.Message);
                     Console.WriteLine(MesStr);

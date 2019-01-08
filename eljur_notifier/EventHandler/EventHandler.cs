@@ -32,7 +32,7 @@ namespace eljur_notifier.EventHandlerNS
 
         }
 
-        public void WrapperToActionWithMsDb(Action actionWithMsDb, String TaskName)
+        public void WrapperToActionWithMsDb(Action actionWithMsDb, String TaskName, Action actionBeforeClosing)
         {
             using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
             {
@@ -48,14 +48,14 @@ namespace eljur_notifier.EventHandlerNS
                     }
                     catch (Exception ex)
                     {
-                        message.Display("Cannot connect to MsDb from Task " + TaskName, "Fatal", ex);
+                        message.Display("Cannot connect to MsDb from Task " + TaskName, "Fatal", ex, actionBeforeClosing);
                     }
                 }
             }
 
         }
 
-        public async Task GetDataFb(CancellationToken cancellationToken) 
+        public async Task GetDataFb(CancellationToken cancellationToken, Action actionBeforeClosing) 
         {
             try
             {
@@ -66,7 +66,7 @@ namespace eljur_notifier.EventHandlerNS
                     WrapperToActionWithMsDb(new Action(delegate
                     {
                         msDb.CheckEventsDb(curEvents);
-                    }), "GetDataFb");
+                    }), "GetDataFb", actionBeforeClosing);
                     TimeSpan deltaTime = DateTime.Now - startTime;
                     TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(config.IntervalRequest);
                     TimeSpan sleepTime = IntervalRequest - deltaTime;
@@ -76,13 +76,13 @@ namespace eljur_notifier.EventHandlerNS
             }
             catch (Exception ex)
             {
-                message.Display("An unprocessed error has occurred in Task GetDataFb. See log for more information.", "Fatal", ex);
+                message.Display("An unprocessed error has occurred in Task GetDataFb. See log for more information.", "Fatal", ex, actionBeforeClosing);
             }
         }        
 
       
 
-        public async Task CheckTimekMsDb(CancellationToken cancellationToken, Action actionAtMidnight)
+        public async Task CheckTimekMsDb(CancellationToken cancellationToken, Action actionAtMidnight, Action actionBeforeClosing)
         {
             try
             {
@@ -94,11 +94,11 @@ namespace eljur_notifier.EventHandlerNS
             }
             catch (Exception ex)
             {
-                message.Display("An unprocessed error has occurred in Task CheckTimekMsDb. See log for more information.", "Fatal", ex);
+                message.Display("An unprocessed error has occurred in Task CheckTimekMsDb. See log for more information.", "Fatal", ex, actionBeforeClosing);
             }
         }
 
-        public async Task CatchEventFirstPass(CancellationToken cancellationToken)
+        public async Task CatchEventFirstPass(CancellationToken cancellationToken, Action actionBeforeClosing)
         {
             try
             {
@@ -108,17 +108,17 @@ namespace eljur_notifier.EventHandlerNS
                     {
                         MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass(config, msDb);
                         msDbCatcherFirstPass.catchFirstPass();
-                    }), "CatchEventFirstPass");
+                    }), "CatchEventFirstPass", actionBeforeClosing);
                     await Task.Delay(10000);
                 }
             }
             catch (Exception ex)
             {
-                message.Display("An unprocessed error has occurred in Task CatchEventFirstPass. See log for more information.", "Fatal", ex);
+                message.Display("An unprocessed error has occurred in Task CatchEventFirstPass. See log for more information.", "Fatal", ex, actionBeforeClosing);
             }
         }
 
-        public async Task CatchEventLastPass(CancellationToken cancellationToken)
+        public async Task CatchEventLastPass(CancellationToken cancellationToken, Action actionBeforeClosing)
         {
             try
             {
@@ -128,13 +128,13 @@ namespace eljur_notifier.EventHandlerNS
                     {
                         MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass(config, msDb);
                         msDbCatcherLastPass.catchLastPass();
-                    }), "CatchEventLastPass");
+                    }), "CatchEventLastPass", actionBeforeClosing);
                     await Task.Delay(10000);
                 }
             }
             catch (Exception ex)
             {
-                message.Display("An unprocessed error has occurred in Task CatchEventLastPass. See log for more information.", "Fatal", ex);
+                message.Display("An unprocessed error has occurred in Task CatchEventLastPass. See log for more information.", "Fatal", ex, actionBeforeClosing);
             }
         }
 

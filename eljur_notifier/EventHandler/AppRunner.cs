@@ -21,6 +21,7 @@ namespace eljur_notifier.EventHandlerNS
         internal protected MsDbSaver msDbSaver { get; set; }
         internal protected MsDbCleaner msDbCleaner { get; set; }
         internal protected MsDbChecker msDbChecker { get; set; }
+        internal protected Action actionBeforeClosing { get; set; }
 
 
         public AppRunner(MsDbSaver MsDbSaver)
@@ -39,11 +40,11 @@ namespace eljur_notifier.EventHandlerNS
 
         public void Run(string[] args)
         {
-            var GetDataFb = eventHandlerEljur.GetDataFb(cancellationTokenSource.Token);
+            var GetDataFb = eventHandlerEljur.GetDataFb(cancellationTokenSource.Token, actionBeforeClosing);
 
-            var CatchEventFirstPass = eventHandlerEljur.CatchEventFirstPass(cancellationTokenSource.Token);
+            var CatchEventFirstPass = eventHandlerEljur.CatchEventFirstPass(cancellationTokenSource.Token, actionBeforeClosing);
 
-            var CatchEventLastPass = eventHandlerEljur.CatchEventLastPass(cancellationTokenSource.Token);
+            var CatchEventLastPass = eventHandlerEljur.CatchEventLastPass(cancellationTokenSource.Token, actionBeforeClosing);           
 
             var CheckMsDb = eventHandlerEljur.CheckTimekMsDb(cancellationTokenSource.Token, new Action(delegate
             {
@@ -55,7 +56,14 @@ namespace eljur_notifier.EventHandlerNS
                 //restart 
                 AppRunner appRunner = new AppRunner(msDbSaver);
                 appRunner.Run(args);
-            }));
+            }), actionBeforeClosing);
+
+            this.actionBeforeClosing = new Action(delegate
+            {
+                cancellationTokenSource.Cancel();
+                Task.WaitAll(GetDataFb, CatchEventFirstPass, CatchEventLastPass, CheckMsDb);
+            });
+
 
             while (true) { }
         }
