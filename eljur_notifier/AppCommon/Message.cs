@@ -49,6 +49,7 @@ namespace eljur_notifier.AppCommon
             {
                 logger.Error(ex, MesStr);
                 Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Exception information: {0}", exception);
             }
             else if (level == "Fatal")
             {

@@ -48,7 +48,7 @@ namespace eljur_notifier.EventHandlerNS
                     }
                     catch (Exception ex)
                     {
-                        message.Display("Cannot connect to MsDb from Task " + TaskName, "Fatal", ex, actionBeforeClosing);
+                        message.Display("Cannot connect to MsDb from Task " + TaskName, "Error", ex);
                     }
                 }
             }
@@ -76,7 +76,7 @@ namespace eljur_notifier.EventHandlerNS
             }
             catch (Exception ex)
             {
-                message.Display("An unprocessed error has occurred in Task GetDataFb. See log for more information.", "Fatal", ex, actionBeforeClosing);
+                message.Display("An unprocessed error has occurred in Task GetDataFb. See log for more information.", "Error", ex);
             }
         }        
 
@@ -94,7 +94,7 @@ namespace eljur_notifier.EventHandlerNS
             }
             catch (Exception ex)
             {
-                message.Display("An unprocessed error has occurred in Task CheckTimekMsDb. See log for more information.", "Fatal", ex, actionBeforeClosing);
+                message.Display("An unprocessed error has occurred in Task CheckTimekMsDb. See log for more information.", "Error", ex);
             }
         }
 
@@ -114,7 +114,7 @@ namespace eljur_notifier.EventHandlerNS
             }
             catch (Exception ex)
             {
-                message.Display("An unprocessed error has occurred in Task CatchEventFirstPass. See log for more information.", "Fatal", ex, actionBeforeClosing);
+                message.Display("An unprocessed error has occurred in Task CatchEventFirstPass. See log for more information.", "Error", ex);
             }
         }
 
@@ -134,7 +134,7 @@ namespace eljur_notifier.EventHandlerNS
             }
             catch (Exception ex)
             {
-                message.Display("An unprocessed error has occurred in Task CatchEventLastPass. See log for more information.", "Fatal", ex, actionBeforeClosing);
+                message.Display("An unprocessed error has occurred in Task CatchEventLastPass. See log for more information.", "Error", ex);
             }
         }
 
