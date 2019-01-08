@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using eljur_notifier.AppCommon;
 using eljur_notifier.StaffModel;
 using eljur_notifier.EljurNS;
+using eljur_notifier.MsDbNS.FillerNS;
+using eljur_notifier.FirebirdNS;
 
 namespace eljur_notifier.MsDbNS.Updater
 {
@@ -14,44 +16,37 @@ namespace eljur_notifier.MsDbNS.Updater
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
+        internal protected ScheduleFiller scheduleFiller { get; set; }
+        internal protected StaffFiller staffFiller { get; set; }
+        internal protected Firebird firebird { get; set; }
 
         public MsDbUpdater(Config Config)
         {
             this.message = new Message();
             this.config = Config;
+            this.scheduleFiller = new ScheduleFiller(config);
+            this.staffFiller = new StaffFiller(config);
+            this.firebird = new Firebird(config.ConStrFbDB);
         }
 
 
         public void UpdateSchedulesDb()
         {
-            using (this.StaffCtx = new StaffContext())
-            {
-                EljurApiRequester elRequester = new EljurApiRequester(config);
-                var Clases = elRequester.getClases();
-                foreach (String clas in Clases)
-                {
-                    var ScheduleItem = StaffCtx.Schedules.SingleOrDefault(e => e.Clas == clas);
-                    if (ScheduleItem != null)
-                    {
-                        TimeSpan StartTimeLessons = elRequester.getStartTimeLessonsByClas(clas);
-                        ScheduleItem.StartTimeLessons = StartTimeLessons;
-                        TimeSpan EndTimeLessons = elRequester.getEndTimeLessonsByClas(clas);
-                        ScheduleItem.EndTimeLessons = EndTimeLessons;
-                        StaffCtx.SaveChanges();
-                        message.Display("ScheduleItem success saved", "Warn");
-                    }                    
-                }
-                var Schedules = StaffCtx.Schedules;
-                message.Display("List of objects: ", "Warn");
-                foreach (Schedule s in Schedules)
-                {
-                    message.Display(s.ScheduleId + "." + s.Clas + "-" + s.StartTimeLessons + "-" + s.EndTimeLessons, "Trace");
-                }
-
-            }
+            scheduleFiller.FillSchedulesDb();
         }
 
 
+        public void UpdateStaffDb()
+        {
+            var AllStaff = firebird.getAllStaff();
+            staffFiller.FillStaffDb(AllStaff);
+        }
+
+        public void UpdateMsDb()
+        {
+            UpdateStaffDb();
+            UpdateSchedulesDb();
+        }
 
     }
 }
