@@ -5,6 +5,8 @@ using eljur_notifier.FirebirdNS;
 using eljur_notifier.MsDbNS;
 using eljur_notifier.MsDbNS.CheckerNS;
 using eljur_notifier.AppCommon;
+using eljur_notifier.MsDbNS.SaverNS;
+using eljur_notifier.MsDbNS.CleanerNS;
 
 namespace eljur_notifier.EventHandlerNS
 {
@@ -18,14 +20,19 @@ namespace eljur_notifier.EventHandlerNS
         internal protected TimeChecker timeChecker { get; set; }     
         internal protected EventHandlerEljur eventHandlerEljur { get; set; }
         internal protected CancellationTokenSource cancellationTokenSource { get; set; }
+        internal protected MsDbSaver msDbSaver { get; set; }
+        internal protected MsDbCleaner msDbCleaner { get; set; }
 
-        public AppRunner()
+
+        public AppRunner(MsDbSaver MsDbSaver)
         {
+            this.msDbSaver = MsDbSaver;
+            msDbSaver.RestoreFlags();
             this.message = new Message();
             this.config = new Config();
             this.firebird = new Firebird(config.ConStrFbDB);
-            this.msDb = new MsDb(config);
-            //this.msDbChecker = new MsDbChecker(config, msDb, firebird);
+            this.msDb = new MsDb(config);          
+            this.msDbCleaner = new MsDbCleaner();
             this.timeChecker = new TimeChecker(config, msDb);
             this.eventHandlerEljur = new EventHandlerEljur(config, msDb, firebird, timeChecker);
             this.cancellationTokenSource = new CancellationTokenSource();
@@ -43,10 +50,12 @@ namespace eljur_notifier.EventHandlerNS
             {
                 cancellationTokenSource.Cancel();
                 Task.WaitAll(GetDataFb, CatchEventFirstPass, CatchEventLastPass);
+                msDbSaver.SaveFlags();
+                msDbCleaner.clearAllTables();
                 Task.Delay(TimeSpan.FromMilliseconds(config.IntervalSleepBeforeReset));
-                //restart                              
-                Run(args);
-
+                //restart 
+                AppRunner appRunner = new AppRunner(msDbSaver);
+                appRunner.Run(args);
             }));
 
             while (true) { }

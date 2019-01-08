@@ -16,7 +16,7 @@ namespace eljur_notifier.MsDbNS.SaverNS
         internal protected Config config { get; set; }
         internal protected MsDbRequester msDbRequester { get; set; }
         internal protected SqlConnection dbcon { get; set; }
-        internal protected object[] PupilIdOldAndEnable { get; set; }
+        internal protected List<object[]> PupilIdOldAndEnableList { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
 
         public MsDbSaver(Config Config)
@@ -24,11 +24,12 @@ namespace eljur_notifier.MsDbNS.SaverNS
             this.message = new Message();
             this.config = Config;
             this.msDbRequester = new MsDbRequester(config);
+            this.PupilIdOldAndEnableList = null;
         }
 
         public void SaveFlags()
         {
-            var rows = new List<object[]>();
+            PupilIdOldAndEnableList = new List<object[]>();
             using (this.dbcon = new SqlConnection(config.ConStrMsDB))
             {
                 this.dbcon.Open();
@@ -39,12 +40,12 @@ namespace eljur_notifier.MsDbNS.SaverNS
                     {
                         while (reader.Read())
                         {
-                            PupilIdOldAndEnable = new object[reader.FieldCount];
+                            var PupilIdOldAndEnable = new object[reader.FieldCount];
                             reader.GetValues(PupilIdOldAndEnable);
                             message.Display(String.Format("{0} - {1}", PupilIdOldAndEnable[0].ToString(), PupilIdOldAndEnable[1].ToString()), "Trace");
                             int PupilIdOld = Convert.ToInt32(PupilIdOldAndEnable[0]);
                             Boolean NotifyEnable = (bool)PupilIdOldAndEnable[1];
-                            rows.Add(PupilIdOldAndEnable);
+                            PupilIdOldAndEnableList.Add(PupilIdOldAndEnable);
                         }
                     }
                 }
@@ -55,10 +56,10 @@ namespace eljur_notifier.MsDbNS.SaverNS
         {
             using (this.StaffCtx = new StaffContext())
             {
-                foreach (object[] Item in PupilIdOldAndEnable)
+                foreach (object[] Item in PupilIdOldAndEnableList)
                 {
-                    int PupilIdOld = Convert.ToInt32(PupilIdOldAndEnable[0]);
-                    Boolean NotifyEnable = (bool)PupilIdOldAndEnable[1];
+                    int PupilIdOld = Convert.ToInt32(Item[0]);
+                    Boolean NotifyEnable = (bool)Item[1];
                     var result = StaffCtx.Pupils.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
                     if (result != null)
                     {

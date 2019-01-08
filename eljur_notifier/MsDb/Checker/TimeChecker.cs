@@ -56,8 +56,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
                         }
                         else
                         {
-                            //CLEAR ALL TABLES
-                            msDbCleaner.clearAllTables();
+                            //GOTO AppRunner                          
                             actionAtMidnight();
                         }
                     }
