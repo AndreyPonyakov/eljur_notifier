@@ -3,8 +3,6 @@ using System.Linq;
 using eljur_notifier.EventHandlerNS;
 
 
-
-
 namespace eljur_notifier
 {
     class Program

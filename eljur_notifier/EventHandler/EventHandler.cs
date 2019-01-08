@@ -57,19 +57,26 @@ namespace eljur_notifier.EventHandlerNS
 
         public async Task GetDataFb(CancellationToken cancellationToken) 
         {
-            while (!cancellationToken.IsCancellationRequested)
+            try
             {
-                DateTime startTime = DateTime.Now;
-                List<object[]> curEvents = firebird.getStaffByTimeStamp(config);
-                WrapperToActionWithMsDb(new Action(delegate
+                while (!cancellationToken.IsCancellationRequested)
                 {
-                    msDb.CheckEventsDb(curEvents);
-                }), "GetDataFb");
-                TimeSpan deltaTime = DateTime.Now - startTime;
-                TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(config.IntervalRequest);
-                TimeSpan sleepTime = IntervalRequest - deltaTime;
-                message.Display("sleepTime is: " + sleepTime.ToString(), "Trace");
-                await Task.Delay(sleepTime);
+                    DateTime startTime = DateTime.Now;
+                    List<object[]> curEvents = firebird.getStaffByTimeStamp(config);
+                    WrapperToActionWithMsDb(new Action(delegate
+                    {
+                        msDb.CheckEventsDb(curEvents);
+                    }), "GetDataFb");
+                    TimeSpan deltaTime = DateTime.Now - startTime;
+                    TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(config.IntervalRequest);
+                    TimeSpan sleepTime = IntervalRequest - deltaTime;
+                    message.Display("sleepTime is: " + sleepTime.ToString(), "Trace");
+                    await Task.Delay(sleepTime);
+                }
+            }
+            catch (Exception ex)
+            {
+                message.Display("An unprocessed error has occurred in Task GetDataFb. See log for more information.", "Fatal", ex);
             }
         }        
 
@@ -77,36 +84,57 @@ namespace eljur_notifier.EventHandlerNS
 
         public async Task CheckTimekMsDb(CancellationToken cancellationToken, Action actionAtMidnight)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            try
             {
-                timeChecker.CheckTime(actionAtMidnight);
-                await Task.Delay(1000);
-            }        
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    timeChecker.CheckTime(actionAtMidnight);
+                    await Task.Delay(1000);
+                }
+            }
+            catch (Exception ex)
+            {
+                message.Display("An unprocessed error has occurred in Task CheckTimekMsDb. See log for more information.", "Fatal", ex);
+            }
         }
 
         public async Task CatchEventFirstPass(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            try
             {
-                WrapperToActionWithMsDb(new Action(delegate
+                while (!cancellationToken.IsCancellationRequested)
                 {
-                    MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass(config, msDb);
-                    msDbCatcherFirstPass.catchFirstPass();
-                }), "CatchEventFirstPass");
-                await Task.Delay(10000);
+                    WrapperToActionWithMsDb(new Action(delegate
+                    {
+                        MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass(config, msDb);
+                        msDbCatcherFirstPass.catchFirstPass();
+                    }), "CatchEventFirstPass");
+                    await Task.Delay(10000);
+                }
+            }
+            catch (Exception ex)
+            {
+                message.Display("An unprocessed error has occurred in Task CatchEventFirstPass. See log for more information.", "Fatal", ex);
             }
         }
 
         public async Task CatchEventLastPass(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            try
             {
-                WrapperToActionWithMsDb(new Action(delegate
+                while (!cancellationToken.IsCancellationRequested)
                 {
-                    MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass(config, msDb);
-                    msDbCatcherLastPass.catchLastPass();
-                }), "CatchEventLastPass");
-                await Task.Delay(10000);
+                    WrapperToActionWithMsDb(new Action(delegate
+                    {
+                        MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass(config, msDb);
+                        msDbCatcherLastPass.catchLastPass();
+                    }), "CatchEventLastPass");
+                    await Task.Delay(10000);
+                }
+            }
+            catch (Exception ex)
+            {
+                message.Display("An unprocessed error has occurred in Task CatchEventLastPass. See log for more information.", "Fatal", ex);
             }
         }
 
