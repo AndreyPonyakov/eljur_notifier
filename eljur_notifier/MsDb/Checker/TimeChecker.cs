@@ -22,11 +22,11 @@ namespace eljur_notifier.MsDbNS.CheckerNS
         internal protected MsDbRequester msDbRequester { get; set; }
         internal protected MsDbCleaner msDbCleaner { get; set; }
 
-        public TimeChecker(Config Config, MsDb MsDb)
+        public TimeChecker(Config Config)
         {
-            this.message = new Message();
-            this.msDb = MsDb;
+            this.message = new Message();          
             this.config = Config;
+            this.msDb = new MsDb(config);
             this.msDbRequester = new MsDbRequester(config);
             this.msDbCleaner = new MsDbCleaner();
             //this.timeFromDel = new TimeSpan(23, 57, 59);

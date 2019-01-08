@@ -25,7 +25,7 @@ namespace eljur_notifier.MsDbNS
         internal protected String ConnectStr { get; set; }
         internal protected SqlConnection dbcon { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
-        internal protected ExistChecker existChecker { get; set; }
+        internal protected MsDbChecker msDbChecker { get; set; }
 
 
         public MsDb(Config Config)
@@ -34,18 +34,6 @@ namespace eljur_notifier.MsDbNS
             this.msDbCreator = new MsDbCreator(config);
             this.ConnectStr = config.ConStrMsDB;
             this.message = new Message();
-            this.existChecker = new ExistChecker(config);
-            using (this.dbcon = new SqlConnection(ConnectStr))
-            {
-                if (this.existChecker.IsTableExist("Pupils"))
-                {
-                    message.Display("msDb already exist", "Warn");
-                }
-                else
-                {
-                    msDbCreator.CreateMsDb();
-                }
-            }
         }
           
 

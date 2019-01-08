@@ -17,12 +17,10 @@ namespace eljur_notifier.MsDbNS.CheckerNS
     class MsDbChecker
     {
         internal protected Message message { get; set; }
-        internal protected Firebird firebird { get; set; }
         internal protected MsDb msDb { get; set; }
         internal protected CleanCreator cleanCreator { get; set; }
         internal protected MsDbCreator msDbCreator { get; set; }
         internal protected MsDbFiller msDbFiller { get; set; }
-        internal protected ScheduleFiller scheduleFiller { get; set; }
         internal protected Config config { get; set; }
         internal protected MsDbRequester msDbRequester { get; set; }
         internal protected TimeChecker timeChecker { get; set; }
@@ -31,27 +29,25 @@ namespace eljur_notifier.MsDbNS.CheckerNS
         internal protected MsDbCleaner msDbCleaner { get; set; }
 
 
-        public MsDbChecker(Config Config, MsDb MsDb, Firebird Firebird)
+        public MsDbChecker(Config Config)
         {
-            this.message = new Message();
-            this.msDb = MsDb;
+            this.message = new Message();      
             this.config = Config;
-            this.firebird = Firebird;            
+            this.msDb = new MsDb(config);
             this.msDbCreator = new MsDbCreator(config);
             this.msDbFiller = new MsDbFiller(config);
-            this.scheduleFiller = new ScheduleFiller(config);
             this.msDbRequester = new MsDbRequester(config);
-            this.timeChecker = new TimeChecker(config, msDb);
+            this.timeChecker = new TimeChecker(config);
             this.existChecker = new ExistChecker(config);
             this.emptyChecker = new EmptyChecker(config);
             this.msDbCleaner = new MsDbCleaner();
             this.CheckSomeIssuesInConstructor();
-            
         }
 
         public void CheckSomeIssuesInConstructor()
         {
             this.CheckMsDb();
+
             if (existChecker.IsTableExist("Pupils") && existChecker.IsTableExist("Schedules"))
             {
                 message.Display("msDb already exist", "Warn");
@@ -60,17 +56,19 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             {
                 msDbCreator.CreateMsDb();
             }
-            if (emptyChecker.IsTableEmpty("Schedules"))
+
+            if (emptyChecker.IsTableEmpty("Schedules") || emptyChecker.IsTableEmpty("Pupils"))
             {
-                message.Display("Schedules is Empty", "Warn");
-                scheduleFiller.FillSchedulesDb();
+                message.Display("Schedules or Pupils is Empty", "Warn");
+                msDbCleaner.clearAllTables();
+                msDbFiller.FillMsDb();
             }
             else
             {
-                message.Display("Schedules is not Empty", "Warn");
-                msDbCleaner.clearTableDb("Schedules");
-                scheduleFiller.FillSchedulesDb();
+                message.Display("Schedules and Pupils are not Empty", "Warn");
             }
+
+
             if ((Convert.ToInt32(DateTime.Today.Day) == 1) && (Convert.ToInt32(DateTime.Today.Month) == 9))
             {
                 message.Display("Today is 01.09 and we will change all Pupils in Pupils Table", "Info");

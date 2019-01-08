@@ -22,13 +22,13 @@ namespace eljur_notifier.EventHandlerNS
         internal protected Firebird firebird { get; set; }
         internal protected TimeChecker timeChecker { get; set; }
         
-        public EventHandlerEljur(Config Config, MsDb MsDb, Firebird Firebird, TimeChecker timeChecker)
+        public EventHandlerEljur(Config Config, MsDb MsDb, Firebird Firebird)
         {
             this.message = new Message();
             this.config = Config;
             this.msDb = MsDb;
             this.firebird = Firebird;
-            this.timeChecker = timeChecker;
+            this.timeChecker = new TimeChecker(config);
 
         }
 
