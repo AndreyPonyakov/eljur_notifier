@@ -8,7 +8,7 @@ using eljur_notifier.StaffModel;
 
 namespace eljur_notifier.MsDbNS.CreatorNS
 {
-    class CleanCreator
+    public class CleanCreator
     {
         internal protected Message message { get; set; }
         internal protected StaffContext StaffCtx { get; set; }

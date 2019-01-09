@@ -8,7 +8,7 @@ using eljur_notifier.StaffModel;
 
 namespace eljur_notifier.MsDbNS.SetterNS
 {
-    class MsDbSetter
+    public class MsDbSetter
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

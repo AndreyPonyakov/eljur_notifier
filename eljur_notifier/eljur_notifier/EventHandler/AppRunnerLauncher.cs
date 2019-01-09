@@ -8,7 +8,7 @@ using eljur_notifier.AppCommon;
 
 namespace eljur_notifier.EventHandlerNS
 {
-    class AppRunnerLauncher
+    public class AppRunnerLauncher
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

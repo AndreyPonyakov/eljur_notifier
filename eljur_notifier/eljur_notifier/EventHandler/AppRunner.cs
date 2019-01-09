@@ -10,7 +10,7 @@ using eljur_notifier.MsDbNS.CleanerNS;
 
 namespace eljur_notifier.EventHandlerNS
 {
-    class AppRunner
+    public class AppRunner
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

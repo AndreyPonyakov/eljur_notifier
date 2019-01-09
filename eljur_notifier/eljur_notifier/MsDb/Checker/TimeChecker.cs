@@ -10,7 +10,7 @@ using eljur_notifier.MsDbNS.CleanerNS;
 
 namespace eljur_notifier.MsDbNS.CheckerNS
 {
-    class TimeChecker
+    public class TimeChecker
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

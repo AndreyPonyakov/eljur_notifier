@@ -9,7 +9,7 @@ using eljur_notifier.AppCommon;
 
 namespace eljur_notifier.DbCommon
 {
-    class DbCommonClass : IDbCommonInf
+    public class DbCommonClass : IDbCommonInf
     {  
         public Boolean IsDbExist(IDbConnection db, String FromWhere)
         {

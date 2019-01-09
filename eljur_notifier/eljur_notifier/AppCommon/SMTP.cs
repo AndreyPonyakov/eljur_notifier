@@ -11,7 +11,7 @@ using System.Net;
 
 namespace eljur_notifier.AppCommon
 {
-    class SMTP
+    public class SMTP
     {
         internal protected String SmtpLogin { get; set; }
         internal protected String SmtpPassword { get; set; }

@@ -9,7 +9,7 @@ using eljur_notifier.AppCommon;
 
 namespace eljur_notifier.MsDbNS.CleanerNS
 {
-    class MsDbCleaner
+    public class MsDbCleaner
     {
         internal protected Message message { get; set; }
         internal protected StaffContext StaffCtx { get; set; }

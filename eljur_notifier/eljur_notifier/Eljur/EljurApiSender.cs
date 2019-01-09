@@ -11,7 +11,7 @@ using eljur_notifier.MsDbNS.SetterNS;
 
 namespace eljur_notifier.EljurNS
 {
-    class EljurApiSender
+    public class EljurApiSender
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

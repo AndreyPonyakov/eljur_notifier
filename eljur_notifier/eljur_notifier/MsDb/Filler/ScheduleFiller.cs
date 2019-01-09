@@ -9,7 +9,7 @@ using eljur_notifier.AppCommon;
 
 namespace eljur_notifier.MsDbNS.FillerNS
 {
-    class ScheduleFiller
+    public class ScheduleFiller
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

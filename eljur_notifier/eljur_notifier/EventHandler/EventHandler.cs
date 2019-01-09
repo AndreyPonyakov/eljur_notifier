@@ -14,7 +14,7 @@ using eljur_notifier.MsDbNS.CatcherNS;
 
 namespace eljur_notifier.EventHandlerNS
 {
-    class EventHandlerEljur
+    public class EventHandlerEljur
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

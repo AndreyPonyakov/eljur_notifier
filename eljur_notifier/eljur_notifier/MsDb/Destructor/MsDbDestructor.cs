@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace eljur_notifier.MsDbNS.DestructorNS
 {
-    class MsDbDestructor
+    public class MsDbDestructor
     {
         public MsDbDestructor()
         {

@@ -8,7 +8,7 @@ using eljur_notifier.AppCommon;
 
 namespace eljur_notifier.MsDbNS.CheckerNS
 {
-    class ExistChecker
+    public class ExistChecker
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

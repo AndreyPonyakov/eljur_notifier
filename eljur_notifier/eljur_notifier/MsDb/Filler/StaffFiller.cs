@@ -12,7 +12,7 @@ using eljur_notifier.MsDbNS.RequesterNS;
 
 namespace eljur_notifier.MsDbNS.FillerNS
 {
-    class StaffFiller
+    public class StaffFiller
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

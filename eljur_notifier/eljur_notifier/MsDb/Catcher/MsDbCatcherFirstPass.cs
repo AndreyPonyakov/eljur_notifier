@@ -10,7 +10,7 @@ using eljur_notifier.MsDbNS.SetterNS;
 
 namespace eljur_notifier.MsDbNS.CatcherNS
 {
-    class MsDbCatcherFirstPass
+    public class MsDbCatcherFirstPass
     {
         internal protected Message message { get; set; }
         internal protected MsDb msDb { get; set; }

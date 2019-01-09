@@ -17,7 +17,7 @@ using eljur_notifier.MsDbNS.CheckerNS;
 
 namespace eljur_notifier.MsDbNS
 {
-    class MsDb : DbCommonClass
+    public class MsDb : DbCommonClass
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

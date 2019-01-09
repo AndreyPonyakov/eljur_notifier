@@ -7,7 +7,7 @@ using System.Configuration;
 
 namespace eljur_notifier
 {
-    class Config
+    public class Config
     {
         internal protected String ConStrFbDB { get; set; }
         internal protected Double IntervalRequest { get; set; }

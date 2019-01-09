@@ -10,7 +10,7 @@ using eljur_notifier.AppCommon;
 
 namespace eljur_notifier.FirebirdNS
 {
-    class Firebird : DbCommonClass
+    public class Firebird : DbCommonClass
     {
         internal protected FbConnection dbcon { get; set; }
         internal protected String ConnectStr { get; set; }

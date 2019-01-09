@@ -9,7 +9,7 @@ using eljur_notifier.MsDbNS.FillerNS;
 
 namespace eljur_notifier.MsDbNS.FillerNS
 {
-    class MsDbFiller
+    public class MsDbFiller
     {
         internal protected Message message { get; set; }
         internal protected Firebird firebird { get; set; }

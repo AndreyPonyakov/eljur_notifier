@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace eljur_notifier.MsDbNS.CheckerNS
 {
-    class EmptyChecker
+    public class EmptyChecker
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

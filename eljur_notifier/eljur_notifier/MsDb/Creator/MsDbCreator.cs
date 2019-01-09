@@ -9,7 +9,7 @@ using eljur_notifier.MsDbNS.FillerNS;
 
 namespace eljur_notifier.MsDbNS.CreatorNS
 {
-    class MsDbCreator
+    public class MsDbCreator
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }

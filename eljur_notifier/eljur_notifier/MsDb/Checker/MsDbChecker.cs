@@ -14,7 +14,7 @@ using eljur_notifier.MsDbNS.CleanerNS;
 
 namespace eljur_notifier.MsDbNS.CheckerNS
 {
-    class MsDbChecker
+    public class MsDbChecker
     {
         internal protected Message message { get; set; }
         internal protected MsDb msDb { get; set; }
