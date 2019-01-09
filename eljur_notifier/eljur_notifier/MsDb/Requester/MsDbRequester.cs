@@ -10,7 +10,7 @@ using eljur_notifier.MsDbNS.SetterNS;
 
 namespace eljur_notifier.MsDbNS.RequesterNS
 {
-    class MsDbRequester
+    public class MsDbRequester
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
@@ -59,6 +59,9 @@ namespace eljur_notifier.MsDbNS.RequesterNS
             }
             return PupilIdOld;
         }
+
+
+
 
         public String getClasByPupilIdOld(int PupilIdOld)
         {

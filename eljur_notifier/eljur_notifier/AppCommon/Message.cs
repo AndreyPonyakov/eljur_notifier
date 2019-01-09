@@ -15,7 +15,7 @@ using System.Net.Mail;
 
 namespace eljur_notifier.AppCommon
 {
-    class Message
+    public class Message
     {
         internal protected Logger logger { get; set; }
         internal protected Exception exception { get; set; }

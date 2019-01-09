@@ -20,3 +20,4 @@ namespace eljur_notifier.StaffModel
         public Boolean NotifyWasSend { get; set; }
     }
 }
+  
