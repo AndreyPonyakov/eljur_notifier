@@ -87,13 +87,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
                 message.Display("MsSQLDB is exist: " + msDb.IsDbExist(msDb.dbcon, "CheckMsDb func").ToString(), "Warn");
                 if (msDb.IsDbExist(msDb.dbcon, "CheckMsDb func"))
                 {
-                    DateTime ModifyDate = msDbRequester.getModifyDate();
-                    message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
-                    DateTime dateOnly = ModifyDate.Date;
-                    if (dateOnly == DateTime.Today)
-                    {
-                        message.Display("DATABASE MsDb was modified Today!!!", "Warn");
-                    }
+                    message.Display("DATABASE MsDb already exist", "Warn");                   
                 }
                 else
                 {

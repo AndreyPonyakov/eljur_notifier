@@ -45,20 +45,9 @@ namespace eljur_notifier.MsDbNS.CheckerNS
                 using (this.dbcon = new SqlConnection(config.ConStrMsDB))
                 {
                     if (msDb.IsDbExist(this.dbcon, "CheckTime func"))
-                    {
-                        DateTime ModifyDate = msDbRequester.getModifyDate();
-                        message.Display("DATABASE was modified: " + ModifyDate.ToString(), "Warn");
-                        TimeSpan diff = DateTime.Now.Subtract(ModifyDate);
-                        if (diff.TotalMilliseconds < config.IntervalDel)
-                        {
-                            message.Display("diff is " + diff.TotalMilliseconds.ToString(), "Warn");
-                            message.Display("DATABASE MsDb was modify recently!!! No needed to clear tables again!!!", "Warn");
-                        }
-                        else
-                        {
-                            //GOTO AppRunner                          
-                            actionAtMidnight();
-                        }
+                    {                     
+                        //GOTO AppRunner                          
+                        actionAtMidnight();                       
                     }
                     else
                     {

@@ -107,35 +107,5 @@ namespace eljur_notifier.MsDbNS.RequesterNS
         }
 
 
-
-        public DateTime getModifyDate()
-        {
-            DateTime ModifyDate = new DateTime();
-            return ModifyDate;
-        }
-        //{
-        //    DateTime ModifyDate = new DateTime();
-        //    using (this.dbcon = new SqlConnection(config.ConStrMsDB))
-        //    {
-        //        dbcon.Open();
-        //        using (SqlCommand command = new SqlCommand("SELECT modify_date FROM sys.tables order by modify_date", dbcon))
-        //        {
-        //            using (SqlDataReader reader = command.ExecuteReader())
-        //            {
-        //                message.Display("SELECT modify_date FROM sys.tables order by modify_date", "Warn");
-        //                while (reader.Read())
-        //                {
-        //                    message.Display(String.Format("{0}", reader[0]), "Trace");
-        //                    ModifyDate = Convert.ToDateTime(reader[0].ToString());
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return ModifyDate;
-        //}
-
-
-
     }
 }

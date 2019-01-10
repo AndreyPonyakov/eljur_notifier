@@ -21,7 +21,6 @@ namespace eljur_notifier
         internal protected int ConfigsTreeIdResourceInput2 { get; set; }
         internal protected int ConfigsTreeIdResourceOutput1 { get; set; }
         internal protected int ConfigsTreeIdResourceOutput2 { get; set; }
-        internal protected Double IntervalDel { get; set; }
         
 
         public Config()
@@ -34,7 +33,6 @@ namespace eljur_notifier
             this.ConStrMsDB = ConfigurationManager.ConnectionStrings["StaffContext"].ToString();
             this.timeFromDel = Properties.Settings.Default.timeFromDel;
             this.timeToDel = Properties.Settings.Default.timeToDel;
-            this.IntervalDel = Properties.Settings.Default.IntervalDel;
             this.ConfigsTreeIdResourceInput1 = Properties.Settings.Default.ConfigsTreeIdResourceInput1;
             this.ConfigsTreeIdResourceInput2 = Properties.Settings.Default.ConfigsTreeIdResourceInput2;
             this.ConfigsTreeIdResourceOutput1 = Properties.Settings.Default.ConfigsTreeIdResourceOutput1;

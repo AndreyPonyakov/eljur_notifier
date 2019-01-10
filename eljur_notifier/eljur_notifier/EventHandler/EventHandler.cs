@@ -32,7 +32,7 @@ namespace eljur_notifier.EventHandlerNS
 
         }
 
-        public void WrapperToActionWithMsDb(Action actionWithMsDb, String TaskName, Action actionBeforeClosing)
+        public void WrapperToActionWithMsDb(Action actionWithMsDb, String TaskName)
         {
             using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
             {
@@ -55,7 +55,7 @@ namespace eljur_notifier.EventHandlerNS
 
         }
 
-        public async Task GetDataFb(CancellationToken cancellationToken, Action actionBeforeClosing) 
+        public async Task GetDataFb(CancellationToken cancellationToken) 
         {
             try
             {
@@ -66,7 +66,7 @@ namespace eljur_notifier.EventHandlerNS
                     WrapperToActionWithMsDb(new Action(delegate
                     {
                         msDb.CheckEventsDb(curEvents);
-                    }), "GetDataFb", actionBeforeClosing);
+                    }), "GetDataFb");
                     TimeSpan deltaTime = DateTime.Now - startTime;
                     TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(config.IntervalRequest);
                     TimeSpan sleepTime = IntervalRequest - deltaTime;
@@ -82,7 +82,7 @@ namespace eljur_notifier.EventHandlerNS
 
       
 
-        public async Task CheckTimekMsDb(CancellationToken cancellationToken, Action actionAtMidnight, Action actionBeforeClosing)
+        public async Task CheckTimekMsDb(CancellationToken cancellationToken, Action actionAtMidnight)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace eljur_notifier.EventHandlerNS
             }
         }
 
-        public async Task CatchEventFirstPass(CancellationToken cancellationToken, Action actionBeforeClosing)
+        public async Task CatchEventFirstPass(CancellationToken cancellationToken)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace eljur_notifier.EventHandlerNS
                     {
                         MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass(config, msDb);
                         msDbCatcherFirstPass.catchFirstPass();
-                    }), "CatchEventFirstPass", actionBeforeClosing);
+                    }), "CatchEventFirstPass");
                     await Task.Delay(10000);
                 }
             }
@@ -118,7 +118,7 @@ namespace eljur_notifier.EventHandlerNS
             }
         }
 
-        public async Task CatchEventLastPass(CancellationToken cancellationToken, Action actionBeforeClosing)
+        public async Task CatchEventLastPass(CancellationToken cancellationToken)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace eljur_notifier.EventHandlerNS
                     {
                         MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass(config, msDb);
                         msDbCatcherLastPass.catchLastPass();
-                    }), "CatchEventLastPass", actionBeforeClosing);
+                    }), "CatchEventLastPass");
                     await Task.Delay(10000);
                 }
             }

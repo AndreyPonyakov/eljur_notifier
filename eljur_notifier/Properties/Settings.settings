@@ -49,8 +49,8 @@
     <Setting Name="timeToDel" Type="System.TimeSpan" Scope="User">
       <Value Profile="(Default)">23:59:59</Value>
     </Setting>
-    <Setting Name="IntervalDel" Type="System.Double" Scope="User">
-      <Value Profile="(Default)">300000</Value>
+    <Setting Name="Параметр" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

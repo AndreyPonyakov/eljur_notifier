@@ -171,13 +171,13 @@ namespace eljur_notifier.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("300000")]
-        public double IntervalDel {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Параметр {
             get {
-                return ((double)(this["IntervalDel"]));
+                return ((string)(this["Параметр"]));
             }
             set {
-                this["IntervalDel"] = value;
+                this["Параметр"] = value;
             }
         }
     }

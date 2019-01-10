@@ -231,9 +231,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include=".gitignore" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Migrations\201812191123066_InitialCreate.resx">
       <DependentUpon>201812191123066_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>

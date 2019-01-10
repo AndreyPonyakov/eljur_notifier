@@ -78,10 +78,5 @@ namespace eljur_notifier.MsDbNS.RequesterNS.Tests
             Assert.IsTrue(FullFIO == "Лапшина Ксения Михайловна");
         }
 
-        [TestMethod()]
-        public void getModifyDateTest()
-        {
-            Assert.Fail();
-        }
     }
 }
