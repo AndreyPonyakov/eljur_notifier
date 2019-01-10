@@ -27,12 +27,11 @@ namespace eljur_notifier.MsDbNS.RequesterNS
 
         public static string RandomString(int length)
         {
-            Random random = new Random(); 
+            Random random = new Random();
             const string chars = "АБВ";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
         }
-
 
         public int getPupilIdOldByFullFio(String FullFIO)
         {
@@ -40,159 +39,73 @@ namespace eljur_notifier.MsDbNS.RequesterNS
             {
                 var query = from p in StaffCtx.Pupils
                             where p.FullFIO == FullFIO
-                            select p.PupilIdOld;
-                int PupilIdOld = query.First();
+                            select p.PupilIdOld;          
+                int PupilIdOld = query.SingleOrDefault();
                 return PupilIdOld;
             }
         }
 
-
-
         public String getClasByPupilIdOld(int PupilIdOld)
         {
-            String Clas = "Default Clas";
-            return Clas;
+            using (this.StaffCtx = new StaffContext())
+            {
+                var query = from p in StaffCtx.Pupils
+                            where p.PupilIdOld == PupilIdOld
+                            select p.Clas;
+                String Clas = query.SingleOrDefault().ToString();
+                return Clas;
+            }
         }
-        //{
-        //    String Clas = "Default Clas";
-        //    using (this.dbcon = new SqlConnection(config.ConStrMsDB))
-        //    {
-        //        dbcon.Open();
-        //        using (SqlCommand command = new SqlCommand("SELECT Clas FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon))
-        //        {
-        //            message.Display("SELECT Clas FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
-        //            using (SqlDataReader reader = command.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    message.Display(String.Format("{0}", reader[0]), "Trace");
-        //                    Clas = reader[0].ToString();
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return Clas;
-        //}
-
-
 
         public TimeSpan getEndTimeLessonsByClas(String Clas)
         {
-            TimeSpan EndTimeLessons = TimeSpan.Parse("23:59:59");
-            return EndTimeLessons;
+            using (this.StaffCtx = new StaffContext())
+            {
+                var query = from s in StaffCtx.Schedules
+                            where s.Clas == Clas
+                            select s.EndTimeLessons;
+                TimeSpan EndTimeLessons = query.SingleOrDefault();
+                return EndTimeLessons;
+            }
         }
-        //{
-        //    TimeSpan EndTimeLessons = TimeSpan.Parse("23:59:59");
-        //    using (this.dbcon = new SqlConnection(config.ConStrMsDB))
-        //    {
-        //        dbcon.Open();
-        //        using (SqlCommand command = new SqlCommand("SELECT EndTimeLessons FROM Schedules where Clas = '" + Clas + "'", dbcon))
-        //        {
-        //            message.Display("SELECT EndTimeLessons FROM Schedules where Clas = '" + Clas + "'", "Warn");
-        //            using (SqlDataReader reader = command.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    var colums = new object[reader.FieldCount];
-        //                    reader.GetValues(colums);
-        //                    message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
-        //                    EndTimeLessons = TimeSpan.Parse(colums[0].ToString());
-        //                    //break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return EndTimeLessons;
-        //}
-
 
         public TimeSpan getStartTimeLessonsByClas(String Clas)
         {
-            TimeSpan StartTimeLessons = TimeSpan.Parse("00:00:01");
-            return StartTimeLessons;
+            using (this.StaffCtx = new StaffContext())
+            {
+                var query = from s in StaffCtx.Schedules
+                            where s.Clas == Clas
+                            select s.StartTimeLessons;
+                TimeSpan StartTimeLessons = query.SingleOrDefault();
+                return StartTimeLessons;
+            }
         }
-        //{
-        //    TimeSpan StartTimeLessons = TimeSpan.Parse("00:00:01");
-        //    using (this.dbcon = new SqlConnection(config.ConStrMsDB))
-        //    {
-        //        dbcon.Open();
-        //        using (SqlCommand command = new SqlCommand("SELECT StartTimeLessons FROM Schedules where Clas = '" + Clas + "'", dbcon))
-        //        {
-        //            message.Display("SELECT StartTimeLessons FROM Schedules where Clas = '" + Clas + "'", "Warn");
-        //            using (SqlDataReader reader = command.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    var colums = new object[reader.FieldCount];
-        //                    reader.GetValues(colums);
-        //                    message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
-        //                    StartTimeLessons = TimeSpan.Parse(colums[0].ToString());
-        //                    //break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return StartTimeLessons;
-        //}
-
 
         public int getEljurAccountIdByPupilIdOld(int PupilIdOld)
         {
-            int EljurAccountId = 0;
-            return EljurAccountId;
+            using (this.StaffCtx = new StaffContext())
+            {
+                var query = from p in StaffCtx.Pupils
+                            where p.PupilIdOld == PupilIdOld
+                            select p.EljurAccountId;
+                int EljurAccountId = query.SingleOrDefault();
+                return EljurAccountId;
+            }
         }
-        //{
-        //    int EljurAccountId = 0;
-        //    using (this.dbcon = new SqlConnection(config.ConStrMsDB))
-        //    {
-        //        dbcon.Open();
-        //        using (SqlCommand command = new SqlCommand("SELECT EljurAccountId FROM Pupils where PupilIdOld = '" + PupilIdOld + "'", dbcon))
-        //        {
-        //            message.Display("SELECT eljuraccountid FROM Pupils where PupilIdOld = '" + PupilIdOld + "'", "Warn");
-        //            using (SqlDataReader reader = command.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    var colums = new object[reader.FieldCount];
-        //                    reader.GetValues(colums);
-        //                    message.Display(string.Format("{0}", colums[0].ToString()), "Trace");
-        //                    EljurAccountId = Convert.ToInt32(colums[0]);
-        //                    //break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return EljurAccountId;
-        //}
 
 
         public String getFullFIOByPupilIdOld(int PupilIdOld)
         {
-            String FullFIO = "Default FullFIO";
-            return FullFIO;
+            using (this.StaffCtx = new StaffContext())
+            {
+                var query = from p in StaffCtx.Pupils
+                            where p.PupilIdOld == PupilIdOld
+                            select p.FullFIO;
+                String FullFIO = query.SingleOrDefault();
+                return FullFIO;
+            }
         }
-        //{
-        //    String FullFIO = "Default FullFIO";
-        //    using (this.dbcon = new SqlConnection(config.ConStrMsDB))
-        //    {
-        //        dbcon.Open();
-        //        using (SqlCommand command = new SqlCommand("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", dbcon))
-        //        {
-        //            message.Display("SELECT FullFIO FROM Pupils WHERE PupilIdOld = '" + PupilIdOld + "'", "Warn");
-        //            using (SqlDataReader reader = command.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    message.Display(String.Format("{0}", reader[0]), "Trace");
-        //                    FullFIO = reader[0].ToString();
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return FullFIO;
-        //}
+
 
 
         public DateTime getModifyDate()

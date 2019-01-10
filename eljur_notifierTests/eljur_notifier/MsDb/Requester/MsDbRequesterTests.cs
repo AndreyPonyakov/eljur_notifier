@@ -14,12 +14,6 @@ namespace eljur_notifier.MsDbNS.RequesterNS.Tests
     {
         public TestContext TestContext { get; set; }
 
-        [TestMethod()]
-        public void MsDbRequesterTest()
-        {
-            Assert.Fail();
-        }
-
         public void FixEfProviderServicesProblem()
         {
             //The Entity Framework provider type 'System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer'
@@ -28,13 +22,6 @@ namespace eljur_notifier.MsDbNS.RequesterNS.Tests
             //See http://go.microsoft.com/fwlink/?LinkId=260882 for more information.
 
             var instance = SqlProviderServices.Instance;
-        }
-
-
-        [TestMethod()]
-        public void RandomStringTest()
-        {
-            Assert.Fail();
         }
 
         [TestMethod()]
@@ -49,31 +36,46 @@ namespace eljur_notifier.MsDbNS.RequesterNS.Tests
         [TestMethod()]
         public void getClasByPupilIdOldTest()
         {
-            Assert.Fail();
+            MsDbRequester msDbRequester = new MsDbRequester();
+            String Clas = msDbRequester.getClasByPupilIdOld(5103);
+            TestContext.WriteLine(Clas);
+            Assert.IsTrue(Clas == "3А");
         }
 
         [TestMethod()]
         public void getEndTimeLessonsByClasTest()
         {
-            Assert.Fail();
+            MsDbRequester msDbRequester = new MsDbRequester();
+            TimeSpan EndTimeLessons = msDbRequester.getEndTimeLessonsByClas("3А");
+            TestContext.WriteLine(EndTimeLessons.ToString());
+            Assert.IsTrue(EndTimeLessons == TimeSpan.Parse("12:37:00"));
         }
 
         [TestMethod()]
         public void getStartTimeLessonsByClasTest()
         {
-            Assert.Fail();
+            MsDbRequester msDbRequester = new MsDbRequester();
+            TimeSpan StartTimeLessons = msDbRequester.getStartTimeLessonsByClas("3А");
+            TestContext.WriteLine(StartTimeLessons.ToString());
+            Assert.IsTrue(StartTimeLessons == TimeSpan.Parse("07:24:00"));
         }
 
         [TestMethod()]
         public void getEljurAccountIdByPupilIdOldTest()
         {
-            Assert.Fail();
+            MsDbRequester msDbRequester = new MsDbRequester();
+            int EljurAccountId = msDbRequester.getEljurAccountIdByPupilIdOld(5103);
+            TestContext.WriteLine(EljurAccountId.ToString());
+            Assert.IsTrue(EljurAccountId == 9415);
         }
 
         [TestMethod()]
         public void getFullFIOByPupilIdOldTest()
         {
-            Assert.Fail();
+            MsDbRequester msDbRequester = new MsDbRequester();
+            String FullFIO = msDbRequester.getFullFIOByPupilIdOld(5103);
+            TestContext.WriteLine(FullFIO);
+            Assert.IsTrue(FullFIO == "Лапшина Ксения Михайловна");
         }
 
         [TestMethod()]
