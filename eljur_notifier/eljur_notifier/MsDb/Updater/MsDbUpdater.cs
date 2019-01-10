@@ -8,8 +8,9 @@ using eljur_notifier.StaffModel;
 using eljur_notifier.EljurNS;
 using eljur_notifier.MsDbNS.FillerNS;
 using eljur_notifier.FirebirdNS;
+using eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS;
 
-namespace eljur_notifier.MsDbNS.Updater
+namespace eljur_notifier.MsDbNS.UpdaterNS
 {
     public class MsDbUpdater
     {
@@ -18,7 +19,7 @@ namespace eljur_notifier.MsDbNS.Updater
         internal protected StaffContext StaffCtx { get; set; }
         internal protected ScheduleFiller scheduleFiller { get; set; }
         internal protected StaffFiller staffFiller { get; set; }
-        internal protected Firebird firebird { get; set; }
+        internal protected MainStaffUpdater mainStaffUpdater { get; set; }
 
         public MsDbUpdater(Config Config)
         {
@@ -26,7 +27,7 @@ namespace eljur_notifier.MsDbNS.Updater
             this.config = Config;
             this.scheduleFiller = new ScheduleFiller(config);
             this.staffFiller = new StaffFiller(config);
-            this.firebird = new Firebird(config.ConStrFbDB);
+            this.mainStaffUpdater = new MainStaffUpdater(config);
         }
 
 
@@ -38,8 +39,7 @@ namespace eljur_notifier.MsDbNS.Updater
 
         public void UpdateStaffDb()
         {
-            var AllStaff = firebird.getAllStaff();
-            staffFiller.FillStaffDb(AllStaff);
+            mainStaffUpdater.MainUpdateStaff();
         }
 
         public void UpdateMsDb()

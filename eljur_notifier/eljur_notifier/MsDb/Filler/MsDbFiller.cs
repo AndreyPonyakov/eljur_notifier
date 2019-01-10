@@ -27,11 +27,21 @@ namespace eljur_notifier.MsDbNS.FillerNS
 
         }
 
-        public void FillMsDb()
+        public void FillOnlySchedules()
+        {
+            scheduleFiller.FillSchedulesDb();
+        }
+
+        public void FillOnlyPupils()
         {
             var AllStaff = firebird.getAllStaff();
             staffFiller.FillStaffDb(AllStaff);
-            scheduleFiller.FillSchedulesDb();
+        }
+
+        public void FillMsDb()
+        {
+            FillOnlyPupils();
+            FillOnlySchedules();
         }
 
     }

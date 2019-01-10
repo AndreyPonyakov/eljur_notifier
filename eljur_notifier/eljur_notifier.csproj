@@ -157,6 +157,10 @@
     <Compile Include="eljur_notifier\MsDb\Saver\MsDbSaver.cs" />
     <Compile Include="eljur_notifier\MsDb\Setter\MsDbSetter.cs" />
     <Compile Include="eljur_notifier\MsDb\Updater\MsDbUpdater.cs" />
+    <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\MainStaffUpdater.cs" />
+    <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\MsDbStaffUpdater.cs" />
+    <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\NewStaffAdder.cs" />
+    <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\OldStaffCleaner.cs" />
     <Compile Include="eljur_notifier\Program.cs" />
     <Compile Include="Migrations\201812191123066_InitialCreate.cs" />
     <Compile Include="Migrations\201812191123066_InitialCreate.Designer.cs">

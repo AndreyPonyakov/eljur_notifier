@@ -57,16 +57,28 @@ namespace eljur_notifier.MsDbNS.CheckerNS
                 msDbCreator.CreateMsDb();
             }
 
-            if (emptyChecker.IsTableEmpty("Schedules") || emptyChecker.IsTableEmpty("Pupils"))
+            if (emptyChecker.IsTableEmpty("Schedules"))
             {
-                message.Display("Schedules or Pupils is Empty", "Warn");
-                msDbCleaner.clearAllTables();
-                msDbFiller.FillMsDb();
+                message.Display("Schedules are Empty", "Warn");
+                msDbCleaner.clearTableDb("Schedules");
+                msDbFiller.FillOnlySchedules();
             }
             else
             {
-                message.Display("Schedules and Pupils are not Empty", "Warn");
+                message.Display("Schedules are not Empty", "Warn");
             }
+
+            if (emptyChecker.IsTableEmpty("Pupils"))
+            {
+                message.Display("Pupils are Empty", "Warn");
+                msDbCleaner.clearTableDb("Pupils");
+                msDbFiller.FillOnlyPupils();
+            }
+            else
+            {
+                message.Display("Pupils are not Empty", "Warn");
+            }
+
 
 
             if ((Convert.ToInt32(DateTime.Today.Day) == 1) && (Convert.ToInt32(DateTime.Today.Month) == 9))
@@ -97,7 +109,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
                     }
                     catch (Exception ex)
                     {
-                        message.Display("Cannot connect to MsDb", "Fatal", ex);
+                        message.Display("Cannot connect to MsDb from CheckMsDb Func", "Fatal", ex);
                     }
                 }
             }

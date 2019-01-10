@@ -29,12 +29,12 @@ namespace eljur_notifier.MsDbNS.CleanerNS
 
         }
 
-        public void clearAllTables()  
+
+
+        public void clearAllTablesBesidesPupils()
         {
             this.clearTableDb("Events");
             message.Display("TABLE Events MsDb DATABASE was cleared", "Warn");
-            this.clearTableDb("Pupils");
-            message.Display("TABLE Pupils MsDb DATABASE was cleared", "Warn");
             this.clearTableDb("Schedules");
             message.Display("TABLE Schedules MsDb DATABASE was cleared", "Warn");
         }
