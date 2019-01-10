@@ -36,7 +36,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             this.msDb = new MsDb(config);
             this.msDbCreator = new MsDbCreator(config);
             this.msDbFiller = new MsDbFiller(config);
-            this.msDbRequester = new MsDbRequester(config);
+            this.msDbRequester = new MsDbRequester();
             this.timeChecker = new TimeChecker(config);
             this.existChecker = new ExistChecker(config);
             this.emptyChecker = new EmptyChecker(config);

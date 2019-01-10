@@ -29,8 +29,8 @@ namespace eljur_notifier.EljurNS
         {
             this.message = new Message();
             this.config = Config;
-            this.msDbRequester = new MsDbRequester(config);
-            this.msDbSetter = new MsDbSetter(config);
+            this.msDbRequester = new MsDbRequester();
+            this.msDbSetter = new MsDbSetter();
         }
 
         public String[] getClases()

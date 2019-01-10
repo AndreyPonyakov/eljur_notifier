@@ -27,7 +27,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             this.message = new Message();          
             this.config = Config;
             this.msDb = new MsDb(config);
-            this.msDbRequester = new MsDbRequester(config);
+            this.msDbRequester = new MsDbRequester();
             this.msDbCleaner = new MsDbCleaner();
             //this.timeFromDel = new TimeSpan(23, 57, 59);
             //this.timeToDel = new TimeSpan(23, 59, 59);

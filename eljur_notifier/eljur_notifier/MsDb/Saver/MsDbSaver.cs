@@ -23,7 +23,7 @@ namespace eljur_notifier.MsDbNS.SaverNS
         {
             this.message = new Message();
             this.config = Config;
-            this.msDbRequester = new MsDbRequester(config);
+            this.msDbRequester = new MsDbRequester();
             this.PupilIdOldAndEnableList = null;
         }
 

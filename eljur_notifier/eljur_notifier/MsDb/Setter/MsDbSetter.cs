@@ -11,14 +11,11 @@ namespace eljur_notifier.MsDbNS.SetterNS
     public class MsDbSetter
     {
         internal protected Message message { get; set; }
-        internal protected Config config { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
 
-        public MsDbSetter(Config Config)
+        public MsDbSetter()
         {
             this.message = new Message();
-            this.config = Config;
-
         }
 
         public void SetClasByPupilIdOld(int PupilIdOld, String Clas)

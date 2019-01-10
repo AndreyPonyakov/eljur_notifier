@@ -24,7 +24,7 @@ namespace eljur_notifier.MsDbNS.CatcherNS
             this.message = new Message();
             this.msDb = MsDb;
             this.config = Config;
-            this.msDbSetter = new MsDbSetter(config);
+            this.msDbSetter = new MsDbSetter();
             this.eljurApiSender = new EljurApiSender(config);
         }
 
