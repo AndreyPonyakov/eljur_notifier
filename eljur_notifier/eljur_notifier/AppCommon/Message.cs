@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Net;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using NLog;
-using NLog.Targets;
-using NLog.Config;
-using NLog.Common;
-using System.Net.Mail;
+
 
 
 namespace eljur_notifier.AppCommonNS

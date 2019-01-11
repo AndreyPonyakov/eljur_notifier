@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
 
 namespace eljur_notifier.MsDbNS.DestructorNS
 {
     public class MsDbDestructor
     {
-        public MsDbDestructor()
-        {
-
-        }
+        public MsDbDestructor() { }
 
         public void deleteDb(String conStr)
         {

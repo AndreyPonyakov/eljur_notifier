@@ -1,33 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using eljur_notifier.StaffModel;
 using eljur_notifier.EljurNS;
 using eljur_notifier.AppCommonNS;
 
 namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
 {
-    public class MsDbStaffUpdater
+    public class MsDbStaffUpdater : EljurBaseClass
     {
-        internal protected Message message { get; set; }
-        internal protected Config config { get; set; }
-        internal protected StaffContext StaffCtx { get; set; }
-        internal protected EljurApiRequester eljurApiRequester { get; set; }
-
-        public MsDbStaffUpdater(Config Config)
-        {
-            this.message = new Message();
-            this.config = Config;
-            this.eljurApiRequester = new EljurApiRequester(config);
-        }
-
+        public MsDbStaffUpdater() : base(new Message(), new StaffContext(), new EljurApiRequester()) { }
+ 
         public void UpdateStaff(List<object[]> AllStaff)
         {
             using (this.StaffCtx = new StaffContext())
             {
-                EljurApiRequester elRequester = new EljurApiRequester(config);
 
                 foreach (object[] row in AllStaff)
                 {
@@ -40,7 +27,7 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
                         result.FullFIO = row[22].ToString();
                         result.FirstName = row[2].ToString();
 
-                        String clas = elRequester.getClasByFullFIO(row[22].ToString());
+                        String clas = eljurApiRequester.getClasByFullFIO(row[22].ToString());
                         result.Clas = clas;
 
                         int eljurAccountId = eljurApiRequester.getEljurAccountIdByFullFIO(row[22].ToString());

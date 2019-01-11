@@ -1,33 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using eljur_notifier.AppCommonNS;
 using eljur_notifier.EljurNS;
 using eljur_notifier.StaffModel;
 
 namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
 {
-    public class NewStaffAdder
+    public class NewStaffAdder : EljurBaseClass
     {
-        internal protected Message message { get; set; }
-        internal protected Config config { get; set; }
-        internal protected StaffContext StaffCtx { get; set; }
-        internal protected EljurApiRequester eljurApiRequester { get; set; }
-
-        public NewStaffAdder(Config Config)
-        {
-            this.message = new Message();
-            this.config = Config;
-            this.eljurApiRequester = new EljurApiRequester(config);
-        }
+        public NewStaffAdder() : base(new Message(), new StaffContext(), new EljurApiRequester()) { }
 
         public void AddNewPupil(List<object[]> AllStaff)
         {
             using (this.StaffCtx = new StaffContext())
             {
-                EljurApiRequester elRequester = new EljurApiRequester(config);
+                EljurApiRequester elRequester = new EljurApiRequester();
 
                 foreach (object[] row in AllStaff)
                 {

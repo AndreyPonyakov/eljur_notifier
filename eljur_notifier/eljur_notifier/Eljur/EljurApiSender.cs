@@ -1,28 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using eljur_notifier.AppCommonNS;
-using eljur_notifier.MsDbNS;
-using System.Data.SqlClient;
 using eljur_notifier.MsDbNS.RequesterNS;
 using eljur_notifier.MsDbNS.SetterNS;
 
 namespace eljur_notifier.EljurNS
 {
-    public class EljurApiSender
+    public class EljurApiSender : EljurBaseClass
     {
-        internal protected Message message { get; set; }
-        internal protected MsDbRequester msDbRequester { get; set; }
-        internal protected MsDbSetter msDbSetter { get; set; }
+        public EljurApiSender() : base(new Message(), new MsDbRequester(), new MsDbSetter()) { }
 
-        public EljurApiSender()
-        {
-            this.message = new Message();
-            this.msDbRequester = new MsDbRequester();
-            this.msDbSetter = new MsDbSetter();
-        }
 
         public Boolean SendNotifyFirstPass(object[] PupilIdOldAndTime)
         {           

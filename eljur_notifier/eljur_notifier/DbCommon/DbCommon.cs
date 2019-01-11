@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using eljur_notifier.AppCommonNS;
 
-namespace eljur_notifier.DbCommon
+namespace eljur_notifier.DbCommonNS
 {
     public class DbCommonClass : IDbCommonInf
     {  

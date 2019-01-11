@@ -9,24 +9,15 @@ using eljur_notifier.MsDbNS.FillerNS;
 
 namespace eljur_notifier.MsDbNS.FillerNS
 {
-    public class MsDbFiller
+    public class MsDbFiller : EljurBaseClass
     {
         internal protected Message message { get; set; }
         internal protected Firebird firebird { get; set; }
-        internal protected Config config { get; set; }
         internal protected StaffFiller staffFiller { get; set; }
         internal protected ScheduleFiller scheduleFiller { get; set; }
 
-        public MsDbFiller(Config Config)
-        {
-            this.message = new Message();  
-            this.config = Config;
-            this.firebird = new Firebird(config.ConStrFbDB);
-            this.staffFiller = new StaffFiller(config);
-            this.scheduleFiller = new ScheduleFiller(config);
-
-        }
-
+        public MsDbFiller() : base(new Message(), new Firebird(), new StaffFiller(), new ScheduleFiller()) { }
+  
         public void FillOnlySchedules()
         {
             scheduleFiller.FillSchedulesDb();

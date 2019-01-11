@@ -1,27 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
 using eljur_notifier.AppCommonNS;
 
 namespace eljur_notifier.MsDbNS.CheckerNS
 {
-    public class ExistChecker
+    public class ExistChecker : EljurBaseClass
     {
-        internal protected Message message { get; set; }
-        internal protected Config config { get; set; }
-        internal protected SqlConnection dbcon { get; set; }
-
-
-        public ExistChecker(Config Config)
-        {
-            this.message = new Message();
-            this.config = Config;
-
-        }
-
+        public ExistChecker() : base(new Message(), new Config(), new SqlConnection()) { }
+  
         public Boolean IsTableExist(String TableName)
         {
             using (this.dbcon = new SqlConnection(config.ConStrMsDB))

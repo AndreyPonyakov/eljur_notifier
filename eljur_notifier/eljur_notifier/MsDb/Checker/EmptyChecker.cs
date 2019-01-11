@@ -1,26 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using eljur_notifier.AppCommonNS;
 using System.Data.SqlClient;
 
 namespace eljur_notifier.MsDbNS.CheckerNS
 {
-    public class EmptyChecker
-    {
-        internal protected Message message { get; set; }
-        internal protected Config config { get; set; }
-        internal protected SqlConnection dbcon { get; set; }
-
-        public EmptyChecker(Config Config)
-        {
-            this.message = new Message();
-            this.config = Config;
-        }
-
-
+    public class EmptyChecker : EljurBaseClass
+    {     
+        public EmptyChecker() : base(new Message(), new Config(), new SqlConnection()) { }
+ 
         public Boolean IsTableEmpty(String TableName)
         {
             using (this.dbcon = new SqlConnection(config.ConStrMsDB))

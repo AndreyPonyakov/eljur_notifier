@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Data.SqlClient;
-using eljur_notifier;
 using eljur_notifier.FirebirdNS;
 using eljur_notifier.MsDbNS;
 using eljur_notifier.MsDbNS.CheckerNS;
@@ -14,47 +10,10 @@ using eljur_notifier.MsDbNS.CatcherNS;
 
 namespace eljur_notifier.EventHandlerNS
 {
-    public class EventHandlerEljur
+    public class EventHandlerEljur : EljurBaseClass
     {
-        internal protected Message message { get; set; }
-        internal protected Config config { get; set; }
-        internal protected MsDb msDb { get; set; }
-        internal protected Firebird firebird { get; set; }
-        internal protected TimeChecker timeChecker { get; set; }
-        
-        public EventHandlerEljur(Config Config, MsDb MsDb, Firebird Firebird)
-        {
-            this.message = new Message();
-            this.config = Config;
-            this.msDb = MsDb;
-            this.firebird = Firebird;
-            this.timeChecker = new TimeChecker(config);
-
-        }
-
-        public void WrapperToActionWithMsDb(Action actionWithMsDb, String TaskName)
-        {
-            using (msDb.dbcon = new SqlConnection(config.ConStrMsDB))
-            {
-                if (msDb.IsDbExist(msDb.dbcon, "Task " + TaskName))
-                {
-                    actionWithMsDb();
-                }
-                else
-                {
-                    try
-                    {
-                        msDb.dbcon = new SqlConnection(config.ConStrMsDB);
-                    }
-                    catch (Exception ex)
-                    {
-                        message.Display("Cannot connect to MsDb from Task " + TaskName, "Error", ex);
-                    }
-                }
-            }
-
-        }
-
+        public EventHandlerEljur() : base(new Message(), new Config(), new MsDb(), new Firebird(), new TimeChecker()) { }
+ 
         public async Task GetDataFb(CancellationToken cancellationToken) 
         {
             try
@@ -62,11 +21,8 @@ namespace eljur_notifier.EventHandlerNS
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     DateTime startTime = DateTime.Now;
-                    List<object[]> curEvents = firebird.getStaffByTimeStamp(config);
-                    WrapperToActionWithMsDb(new Action(delegate
-                    {
-                        msDb.CheckEventsDb(curEvents);
-                    }), "GetDataFb");
+                    List<object[]> curEvents = firebird.getStaffByTimeStamp();
+                    msDb.CheckEventsDb(curEvents);       
                     TimeSpan deltaTime = DateTime.Now - startTime;
                     TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(config.IntervalRequest);
                     TimeSpan sleepTime = IntervalRequest - deltaTime;
@@ -104,11 +60,8 @@ namespace eljur_notifier.EventHandlerNS
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    WrapperToActionWithMsDb(new Action(delegate
-                    {
-                        MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass();
-                        msDbCatcherFirstPass.catchFirstPass();
-                    }), "CatchEventFirstPass");
+                    MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass();
+                    msDbCatcherFirstPass.catchFirstPass();
                     await Task.Delay(10000);
                 }
             }
@@ -124,11 +77,8 @@ namespace eljur_notifier.EventHandlerNS
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    WrapperToActionWithMsDb(new Action(delegate
-                    {
-                        MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass();
-                        msDbCatcherLastPass.catchLastPass();
-                    }), "CatchEventLastPass");
+                    MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass();
+                    msDbCatcherLastPass.catchLastPass();
                     await Task.Delay(10000);
                 }
             }

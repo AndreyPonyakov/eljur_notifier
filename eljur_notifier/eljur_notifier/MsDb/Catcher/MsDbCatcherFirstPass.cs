@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using eljur_notifier.AppCommonNS;
 using eljur_notifier.EljurNS;
 using eljur_notifier.MsDbNS.SetterNS;

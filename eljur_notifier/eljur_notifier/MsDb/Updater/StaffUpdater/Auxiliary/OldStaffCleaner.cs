@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using eljur_notifier.AppCommonNS;
 using eljur_notifier.StaffModel;
 
 namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
 {
-    public class OldStaffCleaner
+    public class OldStaffCleaner : EljurBaseClass
     {
-        internal protected Message message { get; set; }
-        internal protected StaffContext StaffCtx { get; set; }
-
-        public OldStaffCleaner()
-        {
-            this.message = new Message();
-        }
-
+        public OldStaffCleaner() : base(new Message(), new StaffContext()) { }
+  
         public void CleanOldStaff(List<object[]> AllStaff)
         {
             using (this.StaffCtx = new StaffContext())
@@ -29,6 +21,7 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
                     {
                         StaffCtx.Pupils.Remove(p);
                         StaffCtx.SaveChanges();
+                        message.Display("Pupil with " + p.PupilIdOld + " PupilIdOld was cleared in Pupils Table", "Warn");
                     }
                 }
             }

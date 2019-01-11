@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using eljur_notifier.AppCommonNS;
 using eljur_notifier.StaffModel;
 
 namespace eljur_notifier.MsDbNS.SetterNS
 {
-    public class MsDbSetter
+    public class MsDbSetter : EljurBaseClass
     {
-        internal protected Message message { get; set; }
-        internal protected StaffContext StaffCtx { get; set; }
-
-        public MsDbSetter()
-        {
-            this.message = new Message();
-        }
+        public MsDbSetter() : base(new Message(), new StaffContext()) { }
 
         public void SetClasByPupilIdOld(int PupilIdOld, String Clas)
         {

@@ -1,28 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using eljur_notifier.StaffModel;
-using eljur_notifier.MsDbNS;
 using eljur_notifier.AppCommonNS;
-using eljur_notifier.MsDbNS.SetterNS;
 
 
 namespace eljur_notifier.MsDbNS.RequesterNS
 {
-    public class MsDbRequester
+    public class MsDbRequester : EljurBaseClass
     {
-        internal protected Message message { get; set; }
-        internal protected MsDbSetter msDbSetter { get; set; }
-        internal protected StaffContext StaffCtx { get; set; }
-
-        public MsDbRequester()
-        {
-            this.message = new Message();
-            this.msDbSetter = new MsDbSetter();
-
-        }
+        public MsDbRequester() : base(new Message(), new StaffContext()) { }
 
         public static string RandomString(int length)
         {
