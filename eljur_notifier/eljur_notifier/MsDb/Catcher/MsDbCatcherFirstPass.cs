@@ -30,8 +30,8 @@ namespace eljur_notifier.MsDbNS.CatcherNS
                                             orderby e.EventTime
                                             select new 
                                             {
-                                                PupilIdOld = Convert.ToInt32(e.PupilIdOld),
-                                                EventTime = TimeSpan.Parse(e.EventTime.ToString())
+                                                PupilIdOld = e.PupilIdOld,
+                                                EventTime = e.EventTime
                                             };
                 foreach (var PupilIdOldAndTime in PupilIdOldAndTimeRows)
                 {

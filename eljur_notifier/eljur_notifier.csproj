@@ -136,7 +136,6 @@
     <Compile Include="eljur_notifier\DbCommon\DbCommonCommunicationInf.cs" />
     <Compile Include="eljur_notifier\Eljur\EljurApiSender.cs" />
     <Compile Include="eljur_notifier\EventHandler\AppRunner.cs" />
-    <Compile Include="eljur_notifier\EventHandler\AppRunnerLauncher.cs" />
     <Compile Include="eljur_notifier\EventHandler\EventHandler.cs" />
     <Compile Include="eljur_notifier\FireBird\Firebird.cs" />
     <Compile Include="eljur_notifier\Eljur\EljurApiRequester.cs" />
@@ -155,7 +154,6 @@
     <Compile Include="eljur_notifier\MsDb\Catcher\MsDbCatcherLastPass.cs" />
     <Compile Include="eljur_notifier\MsDb\Checker\MsDbChecker.cs" />
     <Compile Include="eljur_notifier\MsDb\Requester\MsDbRequester.cs" />
-    <Compile Include="eljur_notifier\MsDb\Saver\MsDbSaver.cs" />
     <Compile Include="eljur_notifier\MsDb\Setter\MsDbSetter.cs" />
     <Compile Include="eljur_notifier\MsDb\Updater\MsDbUpdater.cs" />
     <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\MainStaffUpdater.cs" />

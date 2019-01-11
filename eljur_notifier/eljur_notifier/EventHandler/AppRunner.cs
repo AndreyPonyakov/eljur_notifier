@@ -5,7 +5,6 @@ using eljur_notifier.FirebirdNS;
 using eljur_notifier.MsDbNS;
 using eljur_notifier.MsDbNS.CheckerNS;
 using eljur_notifier.AppCommonNS;
-using eljur_notifier.MsDbNS.SaverNS;
 using eljur_notifier.MsDbNS.CleanerNS;
 using eljur_notifier.MsDbNS.UpdaterNS;
 
@@ -19,14 +18,13 @@ namespace eljur_notifier.EventHandlerNS
         internal protected Firebird firebird { get; set; }    
         internal protected EventHandlerEljur eventHandlerEljur { get; set; }
         internal protected CancellationTokenSource cancellationTokenSource { get; set; }
-        internal protected MsDbSaver msDbSaver { get; set; }
         internal protected MsDbCleaner msDbCleaner { get; set; }
         internal protected MsDbChecker msDbChecker { get; set; }
         internal protected MsDbUpdater msDbUpdater { get; set; }
         internal protected Action actionBeforeClosing { get; set; }
 
 
-        public AppRunner(MsDbSaver MsDbSaver)
+        public AppRunner()
         {
             this.message = new Message();
             this.config = new Config();
@@ -34,8 +32,6 @@ namespace eljur_notifier.EventHandlerNS
             this.msDb = new MsDb(config);
             this.msDbChecker = new MsDbChecker(config);
             this.msDbUpdater = new MsDbUpdater(config);
-            //this.msDbSaver = MsDbSaver;
-            //msDbSaver.RestoreFlags();
             this.msDbCleaner = new MsDbCleaner();
             this.eventHandlerEljur = new EventHandlerEljur(config, msDb, firebird);
             this.cancellationTokenSource = new CancellationTokenSource();
@@ -53,12 +49,11 @@ namespace eljur_notifier.EventHandlerNS
             {
                 cancellationTokenSource.Cancel();
                 Task.WaitAll(GetDataFb, CatchEventFirstPass, CatchEventLastPass);
-                ////////msDbSaver.SaveFlags();
                 msDbCleaner.clearAllTablesBesidesPupils();
                 msDbUpdater.UpdateStaffDb();
                 Task.Delay(TimeSpan.FromMilliseconds(config.IntervalSleepBeforeReset));
                 //restart 
-                AppRunner appRunner = new AppRunner(msDbSaver);
+                AppRunner appRunner = new AppRunner();
                 appRunner.Run(args);
             }));
 
