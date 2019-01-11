@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using eljur_notifier.MsDbNS.SaverNS;
-using eljur_notifier.AppCommon;
+using eljur_notifier.AppCommonNS;
 
 namespace eljur_notifier.EventHandlerNS
 {

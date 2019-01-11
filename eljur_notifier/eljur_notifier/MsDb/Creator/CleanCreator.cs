@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using eljur_notifier.AppCommon;
+using eljur_notifier.AppCommonNS;
 using eljur_notifier.StaffModel;
 
 namespace eljur_notifier.MsDbNS.CreatorNS

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Data.SqlClient;
-using eljur_notifier.AppCommon;
+using eljur_notifier.AppCommonNS;
 using eljur_notifier.FirebirdNS;
 using eljur_notifier.MsDbNS.CreatorNS;
 using eljur_notifier.MsDbNS.FillerNS;

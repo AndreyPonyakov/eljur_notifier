@@ -4,21 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using eljur_notifier.StaffModel;
-using eljur_notifier.AppCommon;
+using eljur_notifier.AppCommonNS;
 
 
 namespace eljur_notifier.MsDbNS.CleanerNS
 {
-    public class MsDbCleaner
-    {
-        internal protected Message message { get; set; }
-        internal protected StaffContext StaffCtx { get; set; }
-
+    public class MsDbCleaner: EljurBaseClassWithStaffContext
+    {       
         public MsDbCleaner()
         {
-            this.message = new Message();
+            
         }
-
 
         public void clearTableDb(String TableName)
         {
@@ -28,8 +24,6 @@ namespace eljur_notifier.MsDbNS.CleanerNS
             }
 
         }
-
-
 
         public void clearAllTablesBesidesPupils()
         {

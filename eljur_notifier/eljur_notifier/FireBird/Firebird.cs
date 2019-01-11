@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using FirebirdSql.Data.FirebirdClient;
 using eljur_notifier.DbCommon;
-using eljur_notifier.AppCommon;
+using eljur_notifier.AppCommonNS;
 
 namespace eljur_notifier.FirebirdNS
 {

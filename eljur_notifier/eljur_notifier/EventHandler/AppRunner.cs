@@ -4,7 +4,7 @@ using System.Threading;
 using eljur_notifier.FirebirdNS;
 using eljur_notifier.MsDbNS;
 using eljur_notifier.MsDbNS.CheckerNS;
-using eljur_notifier.AppCommon;
+using eljur_notifier.AppCommonNS;
 using eljur_notifier.MsDbNS.SaverNS;
 using eljur_notifier.MsDbNS.CleanerNS;
 using eljur_notifier.MsDbNS.UpdaterNS;

@@ -3,63 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.SqlClient;
-using eljur_notifier.AppCommon;
+using eljur_notifier.AppCommonNS;
 using eljur_notifier.EljurNS;
 using eljur_notifier.MsDbNS.SetterNS;
+using eljur_notifier.StaffModel;
 
 namespace eljur_notifier.MsDbNS.CatcherNS
 {
-    public class MsDbCatcherFirstPass
-    {
-        internal protected Message message { get; set; }
-        internal protected MsDb msDb { get; set; }
-        internal protected Config config { get; set; }
+    public class MsDbCatcherFirstPass: EljurBaseClassWithConfigAndStaffContext
+    {    
         internal protected MsDbSetter msDbSetter { get; set; }
         internal protected EljurApiSender eljurApiSender { get; set; }
-        internal protected SqlConnection dbcon { get; set; }
 
-        public MsDbCatcherFirstPass(Config Config, MsDb MsDb)
+        public MsDbCatcherFirstPass()
         {
-            this.message = new Message();
-            this.msDb = MsDb;
-            this.config = Config;
             this.msDbSetter = new MsDbSetter();
             this.eljurApiSender = new EljurApiSender(config);
         }
 
         public void catchFirstPass()
         {
-            var rows = new List<object[]>();
-            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
+            using (this.StaffCtx = new StaffContext())
             {
-                msDb.dbcon.Open();
-                using (SqlCommand command = new SqlCommand("SELECT PupilIdOld, EventTime FROM Events WHERE NotifyWasSend = 0 AND EventName = 'Первый проход' ORDER BY EventTime", msDb.dbcon))
+                var PupilIdOldAndTimeRows = from e in StaffCtx.Events
+                                            where e.NotifyWasSend == false && e.EventName == "Первый проход"
+                                            orderby e.EventTime
+                                            select new 
+                                            {
+                                                PupilIdOld = Convert.ToInt32(e.PupilIdOld),
+                                                EventTime = TimeSpan.Parse(e.EventTime.ToString())
+                                            };
+                foreach (var PupilIdOldAndTime in PupilIdOldAndTimeRows)
                 {
-                    message.Display("SELECT PupilIdOld, EventTime FROM Events WHERE NotifyWasSend = 0 AND EventName = 'Первый проход' ORDER BY EventTime", "Warn");
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    var PupilIdOldAndTimeMassObjects = new object[2];
+                    PupilIdOldAndTimeMassObjects[0] = PupilIdOldAndTime.PupilIdOld;
+                    PupilIdOldAndTimeMassObjects[1] = PupilIdOldAndTime.EventTime;
+                    Boolean result = eljurApiSender.SendNotifyFirstPass(PupilIdOldAndTimeMassObjects);
+                    if (result == true)
                     {
-                        while (reader.Read())
-                        {
-                            var PupilIdOldAndTime = new object[reader.FieldCount];
-                            reader.GetValues(PupilIdOldAndTime);
-                            message.Display(String.Format("{0} - {1}", PupilIdOldAndTime[0].ToString(), PupilIdOldAndTime[1].ToString()), "Trace");
-                            int PupilIdOld = Convert.ToInt32(PupilIdOldAndTime[0]);
-                            TimeSpan EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
-                            rows.Add(PupilIdOldAndTime);
-                        }
+                        msDbSetter.SetStatusNotifyWasSend(Convert.ToInt32(PupilIdOldAndTime.PupilIdOld));
                     }
                 }
+
             }
 
-            foreach (object[] PupilIdOldAndTime in rows)
-            {
-                Boolean result = eljurApiSender.SendNotifyFirstPass(PupilIdOldAndTime);
-                if (result == true)
-                {
-                    msDbSetter.SetStatusNotifyWasSend(Convert.ToInt32(PupilIdOldAndTime[0]));
-                }
-            }
             
         }
         

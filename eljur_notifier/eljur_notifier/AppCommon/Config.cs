@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 
-namespace eljur_notifier
+namespace eljur_notifier.AppCommonNS
 {
     public class Config
     {

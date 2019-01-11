@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using eljur_notifier.FirebirdNS;
-using eljur_notifier.AppCommon;
+using eljur_notifier.AppCommonNS;
 using eljur_notifier.MsDbNS.FillerNS;
 
 namespace eljur_notifier.MsDbNS.FillerNS

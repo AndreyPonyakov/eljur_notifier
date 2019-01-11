@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using eljur_notifier.StaffModel;
 using eljur_notifier.EljurNS;
-using eljur_notifier.AppCommon;
+using eljur_notifier.AppCommonNS;
 
 namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
 {

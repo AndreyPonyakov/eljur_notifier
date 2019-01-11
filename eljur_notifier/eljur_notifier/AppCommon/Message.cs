@@ -13,7 +13,7 @@ using NLog.Common;
 using System.Net.Mail;
 
 
-namespace eljur_notifier.AppCommon
+namespace eljur_notifier.AppCommonNS
 {
     public class Message
     {

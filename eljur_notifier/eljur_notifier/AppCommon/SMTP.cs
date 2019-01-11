@@ -9,7 +9,7 @@ using SendGrid.Helpers.Mail;
 using System.Net.Mail;
 using System.Net;
 
-namespace eljur_notifier.AppCommon
+namespace eljur_notifier.AppCommonNS
 {
     public class SMTP
     {

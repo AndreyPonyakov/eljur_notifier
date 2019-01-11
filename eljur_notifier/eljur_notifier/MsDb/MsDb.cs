@@ -8,7 +8,7 @@ using System.Data;
 using eljur_notifier;
 using eljur_notifier.StaffModel;
 using eljur_notifier.DbCommon;
-using eljur_notifier.AppCommon;
+using eljur_notifier.AppCommonNS;
 using eljur_notifier.EljurNS;
 using eljur_notifier.MsDbNS.CreatorNS;
 using eljur_notifier.MsDbNS.CheckerNS;
