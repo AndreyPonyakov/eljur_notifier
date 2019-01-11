@@ -9,13 +9,10 @@ using eljur_notifier.AppCommonNS;
 
 namespace eljur_notifier.MsDbNS.CleanerNS
 {
-    public class MsDbCleaner: EljurBaseClassWithStaffContext
-    {       
-        public MsDbCleaner()
-        {
+    public class MsDbCleaner: EljurBaseClass
+    {
+        public MsDbCleaner() : base(new Message(), new StaffContext()) { }
             
-        }
-
         public void clearTableDb(String TableName)
         {
             using (this.StaffCtx = new StaffContext())
@@ -24,7 +21,7 @@ namespace eljur_notifier.MsDbNS.CleanerNS
             }
 
         }
-
+        
         public void clearAllTablesBesidesPupils()
         {
             this.clearTableDb("Events");
