@@ -14,14 +14,12 @@ namespace eljur_notifier.EljurNS
     public class EljurApiSender
     {
         internal protected Message message { get; set; }
-        internal protected Config config { get; set; }
         internal protected MsDbRequester msDbRequester { get; set; }
         internal protected MsDbSetter msDbSetter { get; set; }
 
-        public EljurApiSender(Config Config)
+        public EljurApiSender()
         {
             this.message = new Message();
-            this.config = Config;
             this.msDbRequester = new MsDbRequester();
             this.msDbSetter = new MsDbSetter();
         }
@@ -30,17 +28,9 @@ namespace eljur_notifier.EljurNS
         {           
             int EljurAccountId = msDbRequester.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));          
             String FullFIO = msDbRequester.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
-
             String Clas = msDbRequester.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
-
-            if ((Convert.ToInt32(DateTime.Today.Day) ==1) && (Convert.ToInt32(DateTime.Today.Month) == 9))
-            {
-                message.Display("Today is 01.09 and we will change all classes in Pupils Table", "Info");
-                EljurApiRequester eljurApiRequester = new EljurApiRequester(config);
-                Clas = eljurApiRequester.getClasByFullFIO(FullFIO);
-            }
-
             TimeSpan StartTimeLessons = msDbRequester.getStartTimeLessonsByClas(Clas);
+
             var EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
             if (EventTime > StartTimeLessons)
             {
@@ -60,6 +50,7 @@ namespace eljur_notifier.EljurNS
             String FullFIO = msDbRequester.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
             String Clas = msDbRequester.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
             TimeSpan EndTimeLessons = msDbRequester.getEndTimeLessonsByClas(Clas);
+            Boolean NotifyEnable = msDbRequester.getNotifyEnableByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
 
             var EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
             var EventTimePlus15Min = EventTime.Add(new TimeSpan(0, 15, 0));
@@ -69,14 +60,16 @@ namespace eljur_notifier.EljurNS
             {
                 if (EventTime > EndTimeLessons)
                 {
-                    message.Display("Notify about student " + FullFIO + " who went home was sent to " + EljurAccountId + " EljurAccountId", "Warn");
-                    return true;
+                    String NotifyString = "Notify about student " + FullFIO + " who went home was sent to " + EljurAccountId + " EljurAccountId";
+                    message.Display(NotifyString, "Warn");
+                    return SendNotify(NotifyString, NotifyEnable);
                 }
                 else
                 {
-                    message.Display("Notify about student " + FullFIO + " who went home too early was sent to " + EljurAccountId + " EljurAccountId", "Warn");
+                    String NotifyString = "Notify about student " + FullFIO + " who went home too early was sent to " + EljurAccountId + " EljurAccountId";
+                    message.Display(NotifyString, "Warn");
                     msDbSetter.SetStatusWentHomeTooEarly(Convert.ToInt32(PupilIdOldAndTime[0]));
-                    return true;
+                    return SendNotify(NotifyString, NotifyEnable);
                 }          
             }
             else
@@ -84,6 +77,25 @@ namespace eljur_notifier.EljurNS
                 message.Display("Too early to make a decision. 15 minutes have not passed yet.", "Warn");
                 return false;
             }
-        }      
+
+        }
+
+        public Boolean SendNotify(String NotifyString, Boolean NotifyEnable)
+        {
+            if (NotifyEnable)
+            {
+                return true;
+            }
+            else
+            {
+                return true;
+            }
+                     
+        }
+
+
+
+
+
     }
 }

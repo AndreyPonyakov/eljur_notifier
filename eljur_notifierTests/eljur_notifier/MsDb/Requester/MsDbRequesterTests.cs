@@ -78,5 +78,13 @@ namespace eljur_notifier.MsDbNS.RequesterNS.Tests
             Assert.IsTrue(FullFIO == "Лапшина Ксения Михайловна");
         }
 
+        [TestMethod()]
+        public void getNotifyEnableByPupilIdOldTest()
+        {
+            MsDbRequester msDbRequester = new MsDbRequester();
+            Boolean NotifyEnable = msDbRequester.getNotifyEnableByPupilIdOld(5103);
+            TestContext.WriteLine(NotifyEnable.ToString());
+            Assert.IsTrue(NotifyEnable == false);
+        }
     }
 }

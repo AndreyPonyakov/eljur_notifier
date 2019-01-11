@@ -10,17 +10,10 @@ using eljur_notifier.StaffModel;
 
 namespace eljur_notifier.MsDbNS.CatcherNS
 {
-    public class MsDbCatcherFirstPass: EljurBaseClass
-    {    
-        internal protected MsDbSetter msDbSetter { get; set; }
-        internal protected EljurApiSender eljurApiSender { get; set; }
-
-        public MsDbCatcherFirstPass(): base(new Message(), new Config(), new StaffContext())
-        {
-            this.msDbSetter = new MsDbSetter();
-            this.eljurApiSender = new EljurApiSender(config);
-        }
-
+    public class MsDbCatcherFirstPass : EljurBaseClass
+    {
+        public MsDbCatcherFirstPass() : base(new Message(), new StaffContext(), new MsDbSetter(), new EljurApiSender()) { }
+   
         public void catchFirstPass()
         {
             using (this.StaffCtx = new StaffContext())

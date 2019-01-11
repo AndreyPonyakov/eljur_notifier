@@ -126,7 +126,7 @@ namespace eljur_notifier.EventHandlerNS
                 {
                     WrapperToActionWithMsDb(new Action(delegate
                     {
-                        MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass(config, msDb);
+                        MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass();
                         msDbCatcherLastPass.catchLastPass();
                     }), "CatchEventLastPass");
                     await Task.Delay(10000);

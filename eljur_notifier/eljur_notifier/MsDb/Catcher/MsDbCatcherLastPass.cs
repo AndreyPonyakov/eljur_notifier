@@ -7,64 +7,45 @@ using eljur_notifier.AppCommonNS;
 using System.Data.SqlClient;
 using eljur_notifier.EljurNS;
 using eljur_notifier.MsDbNS.SetterNS;
+using eljur_notifier.StaffModel;
 
 namespace eljur_notifier.MsDbNS.CatcherNS
 {
-    public class MsDbCatcherLastPass
+    public class MsDbCatcherLastPass : EljurBaseClass
     {
-        internal protected Message message { get; set; }
-        internal protected MsDb msDb { get; set; }
-        internal protected Config config { get; set; }
-        internal protected MsDbSetter msDbSetter { get; set; }
-        internal protected EljurApiSender eljurApiSender { get; set; }
-        internal protected SqlConnection dbcon { get; set; }
+        public MsDbCatcherLastPass() : base(new Message(), new StaffContext(), new MsDbSetter(), new EljurApiSender()) { }
 
-        public MsDbCatcherLastPass(Config Config, MsDb MsDb)
+        public void catchLastPass()
         {
-            this.message = new Message();
-            this.msDb = MsDb;
-            this.config = Config;
-            this.msDbSetter = new MsDbSetter();
-            this.eljurApiSender = new EljurApiSender(config);
-        }
 
-        public void catchLastPass() 
-        {
-            var rows = new List<object[]>();
-            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
+            using (this.StaffCtx = new StaffContext())
             {
-                msDb.dbcon.Open();
                 TimeSpan timeNow = DateTime.Now.TimeOfDay;
                 TimeSpan EventTimeNowSubstract15Min = timeNow.Add(new TimeSpan(0, -15, 0));
-                using (SqlCommand command = new SqlCommand("SELECT PupilIdOld, EventTime FROM Events WHERE NotifyWasSend = 0 AND EventName = 'Вышел' AND EventTime < '" + EventTimeNowSubstract15Min + "' ORDER BY EventTime", msDb.dbcon))
+                var PupilIdOldAndTimeRows = from e in StaffCtx.Events
+                                            where e.NotifyWasSend == false && e.EventName == "Вышел" && e.EventTime < EventTimeNowSubstract15Min
+                                            orderby e.EventTime
+                                            select new
+                                            {
+                                                PupilIdOld = e.PupilIdOld,
+                                                EventTime = e.EventTime
+                                            };
+                foreach (var PupilIdOldAndTime in PupilIdOldAndTimeRows)
                 {
-                    message.Display("SELECT PupilIdOld, EventTime FROM Events WHERE NotifyWasSend = 0 AND EventName = 'Вышел' ORDER BY EventTime", "Warn");
-
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    var PupilIdOldAndTimeMassObjects = new object[2];
+                    PupilIdOldAndTimeMassObjects[0] = PupilIdOldAndTime.PupilIdOld;
+                    PupilIdOldAndTimeMassObjects[1] = PupilIdOldAndTime.EventTime;
+                    Boolean result = eljurApiSender.SendNotifyLastPass(PupilIdOldAndTimeMassObjects);
+                    if (result == true)
                     {
-                        while (reader.Read())
-                        {
-                            var PupilIdOldAndTime = new object[reader.FieldCount];
-                            reader.GetValues(PupilIdOldAndTime);
-                            message.Display(String.Format("{0} - {1}", PupilIdOldAndTime[0].ToString(), PupilIdOldAndTime[1].ToString()), "Trace");
-                            int PupilIdOld = Convert.ToInt32(PupilIdOldAndTime[0]);
-                            TimeSpan EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
-                            rows.Add(PupilIdOldAndTime);
-                        }
+                        msDbSetter.SetStatusNotifyWasSend(Convert.ToInt32(PupilIdOldAndTime.PupilIdOld));
                     }
                 }
+
             }
-            foreach (object[] PupilIdOldAndTime in rows)
-            {
-                Boolean result = eljurApiSender.SendNotifyLastPass(PupilIdOldAndTime);
-                if (result == true)
-                {
-                    msDbSetter.SetStatusNotifyWasSend(Convert.ToInt32(PupilIdOldAndTime[0]));
-                }
-            }
+
+
         }
-
-
 
 
     }

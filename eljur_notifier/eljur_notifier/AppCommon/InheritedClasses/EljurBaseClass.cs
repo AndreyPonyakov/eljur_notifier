@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using eljur_notifier.StaffModel;
+using eljur_notifier.MsDbNS.SetterNS;
+using eljur_notifier.EljurNS;
 
 namespace eljur_notifier.AppCommonNS
 {
@@ -12,6 +14,8 @@ namespace eljur_notifier.AppCommonNS
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
+        internal protected MsDbSetter msDbSetter { get; set; }
+        internal protected EljurApiSender eljurApiSender { get; set; }
 
         public EljurBaseClass(Message Message)
         {
@@ -35,6 +39,14 @@ namespace eljur_notifier.AppCommonNS
             this.message = Message;
             this.config = Config;
             this.StaffCtx = StaffContext;
+        }
+
+        public EljurBaseClass(Message Message, StaffContext StaffContext, MsDbSetter MsDbSetter, EljurApiSender EljurApiSender)
+        {
+            this.message = Message;
+            this.StaffCtx = StaffContext;
+            this.msDbSetter = MsDbSetter;
+            this.eljurApiSender = EljurApiSender;
         }
 
     }

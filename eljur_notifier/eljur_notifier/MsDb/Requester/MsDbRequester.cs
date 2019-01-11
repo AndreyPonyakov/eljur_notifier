@@ -105,6 +105,18 @@ namespace eljur_notifier.MsDbNS.RequesterNS
             }
         }
 
+        public Boolean getNotifyEnableByPupilIdOld(int PupilIdOld)
+        {
+            using (this.StaffCtx = new StaffContext())
+            {
+                var query = from p in StaffCtx.Pupils
+                            where p.PupilIdOld == PupilIdOld
+                            select p.NotifyEnable;
+                Boolean NotifyEnable = query.SingleOrDefault();
+                return NotifyEnable;
+            }
+        }
+
 
     }
 }
