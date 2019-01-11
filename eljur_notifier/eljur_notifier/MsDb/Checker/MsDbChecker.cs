@@ -7,7 +7,6 @@ using System.Threading;
 using System.Data.SqlClient;
 using eljur_notifier.AppCommonNS;
 using eljur_notifier.FirebirdNS;
-using eljur_notifier.MsDbNS.CreatorNS;
 using eljur_notifier.MsDbNS.FillerNS;
 using eljur_notifier.MsDbNS.RequesterNS;
 using eljur_notifier.MsDbNS.CleanerNS;
@@ -18,8 +17,6 @@ namespace eljur_notifier.MsDbNS.CheckerNS
     {
         internal protected Message message { get; set; }
         internal protected MsDb msDb { get; set; }
-        internal protected CleanCreator cleanCreator { get; set; }
-        internal protected MsDbCreator msDbCreator { get; set; }
         internal protected MsDbFiller msDbFiller { get; set; }
         internal protected Config config { get; set; }
         internal protected MsDbRequester msDbRequester { get; set; }
@@ -34,7 +31,6 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             this.message = new Message();      
             this.config = Config;
             this.msDb = new MsDb(config);
-            this.msDbCreator = new MsDbCreator(config);
             this.msDbFiller = new MsDbFiller(config);
             this.msDbRequester = new MsDbRequester();
             this.timeChecker = new TimeChecker(config);
@@ -54,7 +50,8 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             }
             else
             {
-                msDbCreator.CreateMsDb();
+                //msDbCreator.CreateMsDb();
+                msDbFiller.FillMsDb();
             }
 
             if (emptyChecker.IsTableEmpty("Schedules"))

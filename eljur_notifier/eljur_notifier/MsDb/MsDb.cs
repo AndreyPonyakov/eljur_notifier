@@ -10,7 +10,6 @@ using eljur_notifier.StaffModel;
 using eljur_notifier.DbCommon;
 using eljur_notifier.AppCommonNS;
 using eljur_notifier.EljurNS;
-using eljur_notifier.MsDbNS.CreatorNS;
 using eljur_notifier.MsDbNS.CheckerNS;
 
 
@@ -21,7 +20,6 @@ namespace eljur_notifier.MsDbNS
     {
         internal protected Message message { get; set; }
         internal protected Config config { get; set; }
-        internal protected MsDbCreator msDbCreator { get; set; }
         internal protected String ConnectStr { get; set; }
         internal protected SqlConnection dbcon { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
@@ -31,7 +29,6 @@ namespace eljur_notifier.MsDbNS
         public MsDb(Config Config)
         {
             this.config = Config;
-            this.msDbCreator = new MsDbCreator(config);
             this.ConnectStr = config.ConStrMsDB;
             this.message = new Message();
         }

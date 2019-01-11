@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Data.SqlClient;
 using eljur_notifier.StaffModel;
 using eljur_notifier.MsDbNS;
 using eljur_notifier.AppCommonNS;
@@ -16,7 +15,6 @@ namespace eljur_notifier.MsDbNS.RequesterNS
     {
         internal protected Message message { get; set; }
         internal protected MsDbSetter msDbSetter { get; set; }
-        internal protected SqlConnection dbcon { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
 
         public MsDbRequester()
