@@ -11,22 +11,22 @@ namespace eljur_notifier.MsDbNS.FillerNS
 {
     public class MsDbFiller : EljurBaseClass
     {
-        public MsDbFiller() : base(new Message(), new Firebird(), new StaffFiller(), new ScheduleFiller()) { }
+        public MsDbFiller(String NameorConnectionString = "name=StaffContext") 
+            : base(new StaffFiller(NameorConnectionString), new ScheduleFiller(NameorConnectionString)) { }
   
         public void FillOnlySchedules()
         {
             scheduleFiller.FillSchedulesDb();
         }
 
-        public void FillOnlyPupils()
+        public void FillOnlyPupils(List<object[]> AllStaff)
         {
-            var AllStaff = firebird.getAllStaff();
             staffFiller.FillStaffDb(AllStaff);
         }
 
-        public void FillMsDb()
+        public void FillMsDb(List<object[]> AllStaff)
         {
-            FillOnlyPupils();
+            FillOnlyPupils(AllStaff);
             FillOnlySchedules();
         }
 

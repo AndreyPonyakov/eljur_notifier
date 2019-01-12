@@ -1,13 +1,18 @@
 ﻿using eljur_notifier.AppCommonNS;
 using eljur_notifier.MsDbNS.FillerNS;
 using eljur_notifier.MsDbNS.CleanerNS;
+using System.Collections.Generic;
 
 namespace eljur_notifier.MsDbNS.CheckerNS
 {
     public class MsDbChecker : EljurBaseClass
-    {           
-        public MsDbChecker() : base(new Message(), new MsDbFiller(), new ExistChecker(), new EmptyChecker(), new MsDbCleaner())
+    {
+        internal protected List<object[]> allStaff { get; set; }
+
+        public MsDbChecker(List<object[]> AllStaff = null) 
+            : base(new Message(), new MsDbFiller(), new ExistChecker(), new EmptyChecker(), new MsDbCleaner())
         {
+            this.allStaff = AllStaff;
             this.CheckMsDb();
         }       
 
@@ -19,7 +24,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             }
             else
             {
-                msDbFiller.FillMsDb();
+                msDbFiller.FillMsDb(allStaff);
             }
 
             if (emptyChecker.IsTableEmpty("Schedules"))
@@ -37,7 +42,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             {
                 message.Display("Pupils are Empty", "Warn");
                 msDbCleaner.clearTableDb("Pupils");
-                msDbFiller.FillOnlyPupils();
+                msDbFiller.FillOnlyPupils(allStaff);
             }
             else
             {

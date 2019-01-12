@@ -11,11 +11,16 @@ namespace eljur_notifier.MsDbNS.CleanerNS
 {
     public class MsDbCleaner: EljurBaseClass
     {
-        public MsDbCleaner() : base(new Message(), new StaffContext()) { }
+        internal protected String nameorConnectionString { get; set; }
+
+        public MsDbCleaner(String NameorConnectionString = "name=StaffContext") 
+            : base(new Message(), new StaffContext(NameorConnectionString)) {
+            this.nameorConnectionString = NameorConnectionString;
+        }
             
         public void clearTableDb(String TableName)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
                 this.StaffCtx.Database.ExecuteSqlCommand("TRUNCATE TABLE [" + TableName + "]");
             }

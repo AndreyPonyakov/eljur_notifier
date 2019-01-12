@@ -54,6 +54,12 @@ namespace eljur_notifier.AppCommonNS
             this.config = Config;
         }
 
+        public EljurBaseClass(StaffFiller StaffFiller, ScheduleFiller ScheduleFiller)
+        {
+            this.staffFiller = StaffFiller;
+            this.scheduleFiller = ScheduleFiller;
+        }
+
         public EljurBaseClass(Message Message, SqlConnection SqlConnection)
         {
             this.message = Message;

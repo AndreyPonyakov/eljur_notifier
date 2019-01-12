@@ -9,7 +9,8 @@ namespace eljur_notifier.MsDbNS.FillerNS
 {
     public class StaffFiller : EljurBaseClass
     {
-        public StaffFiller(String NameorConnectionString = "name=StaffContext") : base(new Message(), new StaffContext(NameorConnectionString), new EljurApiRequester()) { }
+        public StaffFiller(String NameorConnectionString = "name=StaffContext") 
+            : base(new Message(), new StaffContext(NameorConnectionString), new EljurApiRequester()) { }
  
         public void FillStaffDb(List<object[]> AllStaff)
         {
