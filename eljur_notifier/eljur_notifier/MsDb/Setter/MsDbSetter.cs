@@ -7,11 +7,16 @@ namespace eljur_notifier.MsDbNS.SetterNS
 {
     public class MsDbSetter : EljurBaseClass
     {
-        public MsDbSetter(String NameorConnectionString = "name=StaffContext") : base(new Message(), new StaffContext(NameorConnectionString)) { }
+        internal protected String nameorConnectionString { get; set; }
+
+        public MsDbSetter(String NameorConnectionString = "name=StaffContext") 
+            : base(new Message(), new StaffContext(NameorConnectionString)) {
+            this.nameorConnectionString = NameorConnectionString;
+        }
 
         public void SetClasByPupilIdOld(int PupilIdOld, String Clas)
         {
-            using (this.StaffCtx)
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
                 var result = StaffCtx.Pupils.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
                 if (result != null)
@@ -26,7 +31,7 @@ namespace eljur_notifier.MsDbNS.SetterNS
 
         public void SetStatusWentHomeTooEarly(int PupilIdOld)
         {
-            using (this.StaffCtx)
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
                 var result = StaffCtx.Events.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
                 if (result != null)
@@ -41,7 +46,7 @@ namespace eljur_notifier.MsDbNS.SetterNS
 
         public void SetStatusCameTooLate(int PupilIdOld)
         {
-            using (this.StaffCtx)
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
                 var result = StaffCtx.Events.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
                 if (result != null)
@@ -56,7 +61,7 @@ namespace eljur_notifier.MsDbNS.SetterNS
 
         public void SetStatusNotifyWasSend(int PupilIdOld)
         {
-            using (this.StaffCtx)
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
                 var result = StaffCtx.Events.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
                 if (result != null)

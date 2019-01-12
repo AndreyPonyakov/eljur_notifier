@@ -9,11 +9,16 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
 {
     public class NewStaffAdder : EljurBaseClass
     {
-        public NewStaffAdder(String NameorConnectionString = "name=StaffContext") : base(new Message(), new StaffContext(NameorConnectionString), new EljurApiRequester()) { }
+        internal protected String nameorConnectionString { get; set; }
+
+        public NewStaffAdder(String NameorConnectionString = "name=StaffContext") 
+            : base(new Message(), new StaffContext(NameorConnectionString), new EljurApiRequester()) {
+            this.nameorConnectionString = NameorConnectionString;
+        }
 
         public void AddNewPupil(List<object[]> AllStaff)
         {
-            using (this.StaffCtx)
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
                 var PupilsToAdd = new List<Pupil>();
                 foreach (object[] row in AllStaff)

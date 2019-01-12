@@ -9,11 +9,16 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
 {
     public class OldStaffCleaner : EljurBaseClass
     {
-        public OldStaffCleaner(String NameorConnectionString = "name=StaffContext") : base(new Message(), new StaffContext(NameorConnectionString)) { }
+        internal protected String nameorConnectionString { get; set; }
+
+        public OldStaffCleaner(String NameorConnectionString = "name=StaffContext") 
+            : base(new Message(), new StaffContext(NameorConnectionString)) {
+            this.nameorConnectionString = NameorConnectionString;
+        }
   
         public void CleanOldStaff(List<object[]> AllStaff)
         {
-            using (this.StaffCtx)
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
                 IQueryable<Pupil> Pupils = from p in StaffCtx.Pupils select p;
                 var PupilsToDel = new List<Pupil>();

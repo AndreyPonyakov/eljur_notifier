@@ -9,16 +9,23 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
 {
     public class MsDbStaffUpdater : EljurBaseClass
     {
-        public MsDbStaffUpdater() : base(new Message(), new StaffContext(), new EljurApiRequester()) { }
+        internal protected String nameorConnectionString { get; set; }
+
+        public MsDbStaffUpdater(String NameorConnectionString = "name=StaffContext")
+            : base(new Message(), new StaffContext(NameorConnectionString), new EljurApiRequester()) {
+            this.nameorConnectionString = NameorConnectionString;
+        }
  
         public void UpdateStaff(List<object[]> AllStaff)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
 
+                //var PupilsToUpdate = new List<Pupil>();
                 foreach (object[] row in AllStaff)
                 {
-                    var result = StaffCtx.Pupils.SingleOrDefault(p => p.PupilIdOld == Convert.ToInt32(row[0]));
+                    int Int32Row0 = Convert.ToInt32(row[0]);
+                    var result = StaffCtx.Pupils.SingleOrDefault(p => p.PupilIdOld == Int32Row0);
                     if (result != null)
                     {
                         result.FirstName = row[2].ToString();
@@ -31,12 +38,12 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
                         result.Clas = clas;
 
                         int eljurAccountId = eljurApiRequester.getEljurAccountIdByFullFIO(row[22].ToString());
-                        result.EljurAccountId = eljurAccountId;
-
-                        StaffCtx.SaveChanges();
+                        result.EljurAccountId = eljurAccountId;                     
                     }
 
                 }
+                StaffCtx.SaveChanges();
+
                 var students = StaffCtx.Pupils;
                 message.Display("List of objects:", "Info");
                 foreach (Pupil p in students)

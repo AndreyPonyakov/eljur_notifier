@@ -66,6 +66,7 @@
     <Compile Include="eljur_notifier\MsDb\Filler\StaffFillerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Requester\MsDbRequesterTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Setter\MsDbSetterTests.cs" />
+    <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\MsDbStaffUpdaterTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\NewStaffAdderTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\OldStaffCleanerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
