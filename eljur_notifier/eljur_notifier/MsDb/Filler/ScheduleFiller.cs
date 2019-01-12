@@ -7,11 +7,16 @@ namespace eljur_notifier.MsDbNS.FillerNS
 {
     public class ScheduleFiller : EljurBaseClass
     {
-        public ScheduleFiller() : base(new Message(), new StaffContext(), new EljurApiRequester()) { }
+        internal protected String nameorConnectionString { get; set; }
+
+        public ScheduleFiller(String NameorConnectionString = "name=StaffContext") 
+            : base(new Message(), new StaffContext(NameorConnectionString), new EljurApiRequester()) {
+            this.nameorConnectionString = NameorConnectionString;
+        }
    
         public void FillSchedulesDb()
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
                 String[] ClasesArr = eljurApiRequester.getClases();
                 foreach (String clas in ClasesArr)
