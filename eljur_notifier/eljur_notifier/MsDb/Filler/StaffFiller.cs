@@ -9,11 +9,11 @@ namespace eljur_notifier.MsDbNS.FillerNS
 {
     public class StaffFiller : EljurBaseClass
     {
-        public StaffFiller() : base(new Message(), new StaffContext(), new EljurApiRequester()) { }
+        public StaffFiller(String NameorConnectionString = "name=StaffContext") : base(new Message(), new StaffContext(NameorConnectionString), new EljurApiRequester()) { }
  
         public void FillStaffDb(List<object[]> AllStaff)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 foreach (object[] row in AllStaff)
                 {

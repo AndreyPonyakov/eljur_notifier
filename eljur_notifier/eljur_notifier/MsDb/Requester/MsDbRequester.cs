@@ -8,7 +8,7 @@ namespace eljur_notifier.MsDbNS.RequesterNS
 {
     public class MsDbRequester : EljurBaseClass
     {
-        public MsDbRequester() : base(new Message(), new StaffContext()) { }
+        public MsDbRequester(String NameorConnectionString = "name=StaffContext") : base(new Message(), new StaffContext(NameorConnectionString)) { }
 
         public static string RandomString(int length)
         {
@@ -20,7 +20,7 @@ namespace eljur_notifier.MsDbNS.RequesterNS
 
         public int getPupilIdOldByFullFio(String FullFIO)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 var query = from p in StaffCtx.Pupils
                             where p.FullFIO == FullFIO
@@ -32,7 +32,7 @@ namespace eljur_notifier.MsDbNS.RequesterNS
 
         public String getClasByPupilIdOld(int PupilIdOld)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 var query = from p in StaffCtx.Pupils
                             where p.PupilIdOld == PupilIdOld
@@ -44,7 +44,7 @@ namespace eljur_notifier.MsDbNS.RequesterNS
 
         public TimeSpan getEndTimeLessonsByClas(String Clas)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 var query = from s in StaffCtx.Schedules
                             where s.Clas == Clas
@@ -56,7 +56,7 @@ namespace eljur_notifier.MsDbNS.RequesterNS
 
         public TimeSpan getStartTimeLessonsByClas(String Clas)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 var query = from s in StaffCtx.Schedules
                             where s.Clas == Clas
@@ -68,7 +68,7 @@ namespace eljur_notifier.MsDbNS.RequesterNS
 
         public int getEljurAccountIdByPupilIdOld(int PupilIdOld)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 var query = from p in StaffCtx.Pupils
                             where p.PupilIdOld == PupilIdOld
@@ -81,7 +81,7 @@ namespace eljur_notifier.MsDbNS.RequesterNS
 
         public String getFullFIOByPupilIdOld(int PupilIdOld)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 var query = from p in StaffCtx.Pupils
                             where p.PupilIdOld == PupilIdOld
@@ -93,7 +93,7 @@ namespace eljur_notifier.MsDbNS.RequesterNS
 
         public Boolean getNotifyEnableByPupilIdOld(int PupilIdOld)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 var query = from p in StaffCtx.Pupils
                             where p.PupilIdOld == PupilIdOld

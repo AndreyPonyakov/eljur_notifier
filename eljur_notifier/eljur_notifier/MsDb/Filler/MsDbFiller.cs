@@ -11,11 +11,6 @@ namespace eljur_notifier.MsDbNS.FillerNS
 {
     public class MsDbFiller : EljurBaseClass
     {
-        internal protected Message message { get; set; }
-        internal protected Firebird firebird { get; set; }
-        internal protected StaffFiller staffFiller { get; set; }
-        internal protected ScheduleFiller scheduleFiller { get; set; }
-
         public MsDbFiller() : base(new Message(), new Firebird(), new StaffFiller(), new ScheduleFiller()) { }
   
         public void FillOnlySchedules()

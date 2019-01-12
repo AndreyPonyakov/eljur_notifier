@@ -7,11 +7,11 @@ namespace eljur_notifier.MsDbNS.SetterNS
 {
     public class MsDbSetter : EljurBaseClass
     {
-        public MsDbSetter() : base(new Message(), new StaffContext()) { }
+        public MsDbSetter(String NameorConnectionString = "name=StaffContext") : base(new Message(), new StaffContext(NameorConnectionString)) { }
 
         public void SetClasByPupilIdOld(int PupilIdOld, String Clas)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 var result = StaffCtx.Pupils.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
                 if (result != null)
@@ -26,7 +26,7 @@ namespace eljur_notifier.MsDbNS.SetterNS
 
         public void SetStatusWentHomeTooEarly(int PupilIdOld)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 var result = StaffCtx.Events.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
                 if (result != null)
@@ -41,7 +41,7 @@ namespace eljur_notifier.MsDbNS.SetterNS
 
         public void SetStatusCameTooLate(int PupilIdOld)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 var result = StaffCtx.Events.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
                 if (result != null)
@@ -56,7 +56,7 @@ namespace eljur_notifier.MsDbNS.SetterNS
 
         public void SetStatusNotifyWasSend(int PupilIdOld)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
                 var result = StaffCtx.Events.SingleOrDefault(e => e.PupilIdOld == PupilIdOld);
                 if (result != null)

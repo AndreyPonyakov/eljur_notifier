@@ -1,11 +1,12 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 
 namespace eljur_notifier.StaffModel
 {
     public class StaffContext : DbContext
     {
-        public StaffContext()
-            : base("name=StaffContext")
+        public StaffContext(String NameorConnectionString = "name=StaffContext")
+            : base(NameorConnectionString)
         {
             // Указывает EF, что если модель изменилась,
             // нужно воссоздать базу данных с новой структурой
