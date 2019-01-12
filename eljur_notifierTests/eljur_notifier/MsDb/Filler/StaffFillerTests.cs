@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data.Entity.SqlServer;
 using eljur_notifier.MsDbNS.RequesterNS;
+using eljur_notifier.MsDbNS.CleanerNS;
 
 namespace eljur_notifier.MsDbNS.FillerNS.Tests
 {
@@ -25,6 +26,7 @@ namespace eljur_notifier.MsDbNS.FillerNS.Tests
         [TestMethod()]
         public void FillStaffDbTest()
         {
+            PrepareTest();
             StaffFiller staffFiller = new StaffFiller("name=StaffContextTests");
             var AllStaff = getStaffListTest();
             staffFiller.FillStaffDb(AllStaff);
@@ -62,6 +64,12 @@ namespace eljur_notifier.MsDbNS.FillerNS.Tests
             student3[22] = "Сидоров Сидор Сидорович";
             AllStaff.Add(student3);
             return AllStaff;
+        }
+
+        void PrepareTest()
+        {
+            MsDbCleaner msDbCleaner = new MsDbCleaner("name=StaffContextTests");
+            msDbCleaner.clearTableDb("Pupils");
         }
 
 
