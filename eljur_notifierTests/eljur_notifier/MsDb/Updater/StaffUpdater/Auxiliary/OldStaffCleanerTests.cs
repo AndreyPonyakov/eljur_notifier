@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eljur_notifier.MsDbNS.RequesterNS;
+using eljur_notifier.MsDbNS.CheckerNS;
 
 namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
 {
@@ -17,6 +19,11 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             OldStaffCleaner oldStaffCleaner = new OldStaffCleaner("name=StaffContextTests");
             var AllStaff = getStaffListTest();
             oldStaffCleaner.CleanOldStaff(AllStaff);
+            EmptyChecker emptyChecker = new EmptyChecker("StaffContextTests");
+            Assert.IsTrue(true == emptyChecker.IsTableEmpty("Pupils"));
+            //MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            //String FullFIO = msDbRequester.getFullFIOByPupilIdOld(5000);
+            //Assert.IsTrue(FullFIO == "Иванов Иван Иванович");
             //Assert.Fail();
         }
 

@@ -9,17 +9,17 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
 {
     public class NewStaffAdder : EljurBaseClass
     {
-        public NewStaffAdder() : base(new Message(), new StaffContext(), new EljurApiRequester()) { }
+        public NewStaffAdder(String NameorConnectionString = "name=StaffContext") : base(new Message(), new StaffContext(NameorConnectionString), new EljurApiRequester()) { }
 
         public void AddNewPupil(List<object[]> AllStaff)
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx)
             {
-                EljurApiRequester elRequester = new EljurApiRequester();
-
+                var PupilsToAdd = new List<Pupil>();
                 foreach (object[] row in AllStaff)
                 {
-                    var result = StaffCtx.Pupils.SingleOrDefault(p => p.PupilIdOld == Convert.ToInt32(row[0]));
+                    int Int32Row0 = Convert.ToInt32(row[0]);
+                    var result = StaffCtx.Pupils.SingleOrDefault(p => p.PupilIdOld == Int32Row0);
                     if (result == null)
                     {
                         Pupil Student = new Pupil();
@@ -28,17 +28,18 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
                         Student.LastName = row[1].ToString();
                         Student.MiddleName = row[3].ToString();
                         Student.FullFIO = row[22].ToString();
-
-                        String clas = elRequester.getClasByFullFIO(Student.FullFIO);
+                        String clas = eljurApiRequester.getClasByFullFIO(Student.FullFIO);
                         Student.Clas = clas;
-
                         int eljurAccountId = eljurApiRequester.getEljurAccountIdByFullFIO(Student.FullFIO);
                         Student.EljurAccountId = eljurAccountId;
-
-                        StaffCtx.Pupils.Add(Student);
-                        StaffCtx.SaveChanges();
-                        message.Display("New Student success saved", "Warn");
+                        PupilsToAdd.Add(Student);                      
                     }
+                }
+                foreach (Pupil p in PupilsToAdd)
+                {
+                    StaffCtx.Pupils.Add(p);
+                    StaffCtx.SaveChanges();
+                    message.Display("New Student success saved", "Warn");
                 }
 
             }

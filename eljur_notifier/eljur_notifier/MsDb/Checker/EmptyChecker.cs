@@ -1,16 +1,28 @@
 ﻿using System;
 using eljur_notifier.AppCommonNS;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace eljur_notifier.MsDbNS.CheckerNS
 {
     public class EmptyChecker : EljurBaseClass
-    {     
-        public EmptyChecker() : base(new Message(), new Config(), new SqlConnection()) { }
+    {
+        internal protected String NameOfConnectionString { get; set; }
+
+        public EmptyChecker(String NameOfConnectionString = "StaffContext") 
+            : base(new Message(), new SqlConnection()) {
+            this.NameOfConnectionString = NameOfConnectionString;
+        }
  
         public Boolean IsTableEmpty(String TableName)
         {
-            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
+            var ConStrMsDBvar = ConfigurationManager.ConnectionStrings["StaffContext"].ToString();
+            if (NameOfConnectionString == "StaffContextTests")
+            {
+                ConStrMsDBvar = ConfigurationManager.ConnectionStrings["StaffContextTests"].ToString();
+            }
+            
+            using (this.dbcon = new SqlConnection(ConStrMsDBvar))
             {
                 dbcon.Open();
                 using (SqlCommand sqlCommand = new SqlCommand("SELECT COUNT(*) FROM " + TableName, dbcon))

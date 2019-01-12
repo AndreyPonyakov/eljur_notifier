@@ -11,6 +11,7 @@ namespace eljur_notifier.AppCommonNS
         internal protected String EljurApiTocken { get; set; }
         internal protected Double FrenchLeaveInterval { get; set; }
         internal protected String ConStrMsDB { get; set; }
+        internal protected String ConStrMsDBTests { get; set; }
         internal protected TimeSpan timeFromDel { get; set; }
         internal protected TimeSpan timeToDel { get; set; }
         internal protected int ConfigsTreeIdResourceInput1 { get; set; }
@@ -27,6 +28,7 @@ namespace eljur_notifier.AppCommonNS
             this.EljurApiTocken = Properties.Settings.Default.EljurApiTocken;
             this.FrenchLeaveInterval = Properties.Settings.Default.FrenchLeaveInterval;
             this.ConStrMsDB = ConfigurationManager.ConnectionStrings["StaffContext"].ToString();
+            this.ConStrMsDBTests = ConfigurationManager.ConnectionStrings["StaffContextTests"].ToString();
             this.timeFromDel = Properties.Settings.Default.timeFromDel;
             this.timeToDel = Properties.Settings.Default.timeToDel;
             this.ConfigsTreeIdResourceInput1 = Properties.Settings.Default.ConfigsTreeIdResourceInput1;

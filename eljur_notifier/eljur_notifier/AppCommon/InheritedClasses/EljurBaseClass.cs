@@ -54,6 +54,12 @@ namespace eljur_notifier.AppCommonNS
             this.config = Config;
         }
 
+        public EljurBaseClass(Message Message, SqlConnection SqlConnection)
+        {
+            this.message = Message;
+            this.dbcon = SqlConnection;
+        }
+
         public EljurBaseClass(Message Message, StaffContext StaffContext)
         {
             this.message = Message;
