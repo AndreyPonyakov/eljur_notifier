@@ -3,6 +3,7 @@ using System.Linq;
 using eljur_notifier.AppCommonNS;
 using eljur_notifier.StaffModel;
 
+
 namespace eljur_notifier.MsDbNS.SetterNS
 {
     public class MsDbSetter : EljurBaseClass
@@ -72,6 +73,84 @@ namespace eljur_notifier.MsDbNS.SetterNS
                 }
             }
         }
+
+        public void SetOneFullEventForTesting(Event TestEvent)
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                StaffCtx.Events.Add(TestEvent);
+                StaffCtx.SaveChanges();
+                message.Display("TestEvent success saved", "Warn");
+            }
+        }
+
+        public void SetDelAllEventsForTesting()
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                var rows = from e in StaffCtx.Events
+                           select e;
+                foreach (var row in rows)
+                {
+                    StaffCtx.Events.Remove(row);
+                }
+                StaffCtx.SaveChanges();
+                message.Display("TestEvent success removed", "Warn");
+            }
+        }
+
+
+        public void SetOneTestPupilForTesting(Pupil TestPupil)
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                StaffCtx.Pupils.Add(TestPupil);
+                StaffCtx.SaveChanges();
+                message.Display("TestPupil success saved", "Warn");
+            }
+        }
+
+        public void SetDelAllPupilsForTesting()
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                var rows = from p in StaffCtx.Pupils
+                           select p;
+                foreach (var row in rows)
+                {
+                    StaffCtx.Pupils.Remove(row);
+                }
+                StaffCtx.SaveChanges();
+                message.Display("TestPupil success removed", "Warn");
+            }
+        }
+
+
+        public void SetTestScheduleForTesting(Schedule TestSchedule)
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                StaffCtx.Schedules.Add(TestSchedule);
+                StaffCtx.SaveChanges();
+                message.Display("TestSchedule success saved", "Warn");
+            }
+        }
+
+        public void SetDelAllSchedulesForTesting()
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                var rows = from s in StaffCtx.Schedules
+                           select s;
+                foreach (var row in rows)
+                {
+                    StaffCtx.Schedules.Remove(row);
+                }
+                StaffCtx.SaveChanges();
+                message.Display("TestSchedule success removed", "Warn");
+            }
+        }
+
 
 
     }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using eljur_notifier.MsDbNS.FillerNS;
 using System.Data.Entity.SqlServer;
 using eljur_notifier.MsDbNS.RequesterNS;
 

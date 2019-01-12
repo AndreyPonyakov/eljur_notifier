@@ -108,6 +108,30 @@ namespace eljur_notifier.MsDbNS.RequesterNS
             }
         }
 
+        public String getEventNameByPupilIdOld(int PupilIdOld)
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                var query = from e in StaffCtx.Events
+                            where e.PupilIdOld == PupilIdOld
+                            select e.EventName;
+                String EventName = query.SingleOrDefault();
+                return EventName;
+            }
+        }
+
+        public Boolean getStatusNotifyWasSendByPupilIdOld(int PupilIdOld)
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                var query = from e in StaffCtx.Events
+                            where e.PupilIdOld == PupilIdOld
+                            select e.NotifyWasSend;
+                Boolean NotifyWasSend = query.SingleOrDefault();
+                return NotifyWasSend;
+            }
+        }
+
 
     }
 }

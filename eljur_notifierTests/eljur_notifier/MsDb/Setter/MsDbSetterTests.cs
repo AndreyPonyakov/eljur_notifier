@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data.Entity.SqlServer;
+using eljur_notifier.MsDbNS.RequesterNS;
+using eljur_notifier.StaffModel;
 
 namespace eljur_notifier.MsDbNS.SetterNS.Tests
 {
@@ -22,32 +24,86 @@ namespace eljur_notifier.MsDbNS.SetterNS.Tests
         [TestMethod()]
         public void SetClasByPupilIdOldTest()
         {
+            PrepareTestPupil();
             MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests");
-            int PupilIdOld = 5000;
-            String Clas = "1Б";
+            int PupilIdOld = 5005;
+            String Clas = "1А";
             msDbSetter.SetClasByPupilIdOld(PupilIdOld, Clas);
 
-            TestContext.WriteLine(PupilIdOld.ToString());
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            String ReqClas = msDbRequester.getClasByPupilIdOld(5005);
+            msDbSetter.SetDelAllPupilsForTesting();
 
-            Assert.Fail();
+            Assert.IsTrue(Clas == ReqClas);
+
         }
 
         [TestMethod()]
         public void SetStatusWentHomeTooEarlyTest()
         {
-            Assert.Fail();
+            PrepareTestEvent();
+            MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests");;
+            msDbSetter.SetStatusWentHomeTooEarly(5000);
+
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            String EventName = msDbRequester.getEventNameByPupilIdOld(5000);
+            msDbSetter.SetDelAllEventsForTesting();
+            Assert.IsTrue(EventName == "Прогул");
         }
 
         [TestMethod()]
         public void SetStatusCameTooLateTest()
         {
-            Assert.Fail();
+            PrepareTestEvent();
+            MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests"); ;
+            msDbSetter.SetStatusCameTooLate(5000);
+
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            String EventName = msDbRequester.getEventNameByPupilIdOld(5000);
+            msDbSetter.SetDelAllEventsForTesting();
+            Assert.IsTrue(EventName == "Опоздал");
         }
 
         [TestMethod()]
         public void SetStatusNotifyWasSendTest()
         {
-            Assert.Fail();
+            PrepareTestEvent();
+            MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests"); ;
+            msDbSetter.SetStatusNotifyWasSend(5000);
+
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            Boolean NotifyWasSend = msDbRequester.getStatusNotifyWasSendByPupilIdOld(5000);
+            msDbSetter.SetDelAllEventsForTesting();
+            Assert.IsTrue(NotifyWasSend == true);
         }
+
+        void PrepareTestEvent()
+        {
+            MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests");
+            Event TestEvent = new Event();
+            TestEvent.PupilIdOld = 5000;
+            TestEvent.EventTime = TimeSpan.FromMilliseconds(1000);
+            TestEvent.NotifyWasSend = false;
+            TestEvent.EventName = "Ушёл слишком рано";
+            msDbSetter.SetDelAllEventsForTesting();
+            msDbSetter.SetOneFullEventForTesting(TestEvent);
+
+        }
+
+        void PrepareTestPupil()
+        {
+            MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests");
+            Pupil TestPupil = new Pupil();
+            TestPupil.PupilIdOld = 5005;
+            TestPupil.FirstName = "Тест";
+            TestPupil.LastName = "Тестов";
+            TestPupil.MiddleName = "Тестович";
+            TestPupil.FullFIO = "Тестов Тест Тестович";
+            TestPupil.Clas = "1Б";
+            TestPupil.EljurAccountId = 666;
+            msDbSetter.SetDelAllPupilsForTesting();
+            msDbSetter.SetOneTestPupilForTesting(TestPupil);
+        }
+
     }
 }
