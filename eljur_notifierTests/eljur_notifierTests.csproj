@@ -69,6 +69,7 @@
     <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\MsDbStaffUpdaterTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\NewStaffAdderTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\OldStaffCleanerTests.cs" />
+    <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\MainStaffUpdaterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

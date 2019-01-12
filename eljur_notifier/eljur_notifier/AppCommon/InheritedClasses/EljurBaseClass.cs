@@ -108,9 +108,8 @@ namespace eljur_notifier.AppCommonNS
             this.eljurApiSender = EljurApiSender;
         }
 
-        public EljurBaseClass(Firebird Firebird, MsDbStaffUpdater MsDbStaffUpdater, NewStaffAdder NewStaffAdder, OldStaffCleaner OldStaffCleaner)
+        public EljurBaseClass(MsDbStaffUpdater MsDbStaffUpdater, NewStaffAdder NewStaffAdder, OldStaffCleaner OldStaffCleaner)
         {
-            this.firebird = Firebird;
             this.msDbStaffUpdater = MsDbStaffUpdater;
             this.newStaffAdder = NewStaffAdder;
             this.oldStaffCleaner = OldStaffCleaner;

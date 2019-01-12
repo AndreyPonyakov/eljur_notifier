@@ -1,4 +1,5 @@
-﻿using eljur_notifier.AppCommonNS;
+﻿using System.Collections.Generic;
+using eljur_notifier.AppCommonNS;
 using eljur_notifier.MsDbNS.FillerNS;
 using eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS;
 
@@ -13,14 +14,14 @@ namespace eljur_notifier.MsDbNS.UpdaterNS
             scheduleFiller.FillSchedulesDb();
         }
 
-        public void UpdateStaffDb()
+        public void UpdateStaffDb(List<object[]> AllStaff)
         {
-            mainStaffUpdater.MainUpdateStaff();
+            mainStaffUpdater.MainUpdateStaff(AllStaff);
         }
 
-        public void UpdateMsDb()
+        public void UpdateMsDb(List<object[]> AllStaff)
         {
-            UpdateStaffDb();
+            UpdateStaffDb(AllStaff);
             UpdateSchedulesDb();
         }
 

@@ -20,8 +20,6 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
         {
             using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
-
-                //var PupilsToUpdate = new List<Pupil>();
                 foreach (object[] row in AllStaff)
                 {
                     int Int32Row0 = Convert.ToInt32(row[0]);

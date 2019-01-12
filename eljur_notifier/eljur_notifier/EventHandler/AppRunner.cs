@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using eljur_notifier.FirebirdNS;
@@ -33,7 +34,9 @@ namespace eljur_notifier.EventHandlerNS
                 cancellationTokenSource.Cancel();
                 Task.WaitAll(GetDataFb, CatchEventFirstPass, CatchEventLastPass);
                 msDbCleaner.clearAllTablesBesidesPupils();
-                msDbUpdater.UpdateStaffDb();
+                var AllStaff = new List<object[]>();
+                AllStaff = firebird.getAllStaff();
+                msDbUpdater.UpdateStaffDb(AllStaff);
                 Task.Delay(TimeSpan.FromMilliseconds(config.IntervalSleepBeforeReset));
                 //restart 
                 AppRunner appRunner = new AppRunner();
