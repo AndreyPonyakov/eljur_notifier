@@ -6,14 +6,29 @@ namespace eljur_notifier.MsDbNS.CheckerNS
 {
     public class TimeChecker : EljurBaseClass
     {
-        public TimeChecker() : base(new Message(), new Config()) { }
+        public  TimeSpan timeFromDel { get; set; }
+        public  TimeSpan timeToDel { get; set; }
+
+        public TimeChecker(TimeSpan TimeFromDel = default(TimeSpan), TimeSpan TimeToDel = default(TimeSpan)) 
+            : base(new Message(), new Config()) {
+            if (TimeFromDel == default(TimeSpan) || TimeToDel == default(TimeSpan))
+            {
+                this.timeFromDel = config.timeFromDel;
+                this.timeToDel = config.timeToDel;
+            }
+            else
+            {
+                this.timeFromDel = TimeFromDel;
+                this.timeToDel = TimeToDel;
+            }            
+        }
 
         public void CheckTime(Action actionAtMidnight)
         {
             var timeNow = DateTime.Now.TimeOfDay;
-            if (timeNow > config.timeFromDel && timeNow < config.timeToDel)
+            if (timeNow > timeFromDel && timeNow < timeToDel)
             {
-                message.Display("Time now is between " + config.timeFromDel.ToString() + " and " + config.timeToDel.ToString(), "Warn");
+                message.Display("Time now is between " + timeFromDel.ToString() + " and " + timeToDel.ToString(), "Warn");
                 //GOTO AppRunner                          
                 actionAtMidnight();                                                         
             }

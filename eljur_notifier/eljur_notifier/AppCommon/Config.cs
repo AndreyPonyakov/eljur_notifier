@@ -5,19 +5,19 @@ namespace eljur_notifier.AppCommonNS
 {
     public class Config
     {
-        internal protected String ConStrFbDB { get; set; }
-        internal protected Double IntervalRequest { get; set; }
-        internal protected Double IntervalSleepBeforeReset { get; set; }
-        internal protected String EljurApiTocken { get; set; }
-        internal protected Double FrenchLeaveInterval { get; set; }
-        internal protected String ConStrMsDB { get; set; }
-        internal protected String ConStrMsDBTests { get; set; }
-        internal protected TimeSpan timeFromDel { get; set; }
-        internal protected TimeSpan timeToDel { get; set; }
-        internal protected int ConfigsTreeIdResourceInput1 { get; set; }
-        internal protected int ConfigsTreeIdResourceInput2 { get; set; }
-        internal protected int ConfigsTreeIdResourceOutput1 { get; set; }
-        internal protected int ConfigsTreeIdResourceOutput2 { get; set; }
+        public  String ConStrFbDB { get; set; }
+        public  Double IntervalRequest { get; set; }
+        public  Double IntervalSleepBeforeReset { get; set; }
+        public  String EljurApiTocken { get; set; }
+        public  Double FrenchLeaveInterval { get; set; }
+        public  String ConStrMsDB { get; set; }
+        public  String ConStrMsDBTests { get; set; }
+        public  TimeSpan timeFromDel { get; set; }
+        public  TimeSpan timeToDel { get; set; }
+        public  int ConfigsTreeIdResourceInput1 { get; set; }
+        public  int ConfigsTreeIdResourceInput2 { get; set; }
+        public  int ConfigsTreeIdResourceOutput1 { get; set; }
+        public  int ConfigsTreeIdResourceOutput2 { get; set; }
         
 
         public Config()

@@ -19,19 +19,26 @@ namespace eljur_notifier.MsDbNS.CheckerNS
             var ConStrMsDBvar = ConfigurationManager.ConnectionStrings[nameOfConnectionString].ToString();
             using (this.dbcon = new SqlConnection(ConStrMsDBvar))
             {
-                dbcon.Open();
-                using (SqlCommand sqlCommand = new SqlCommand("SELECT 'TableExist' FROM (SELECT name FROM sys.tables UNION SELECT name FROM sys.views) T WHERE name = @Name", dbcon))
+                try
                 {
-                    sqlCommand.Parameters.AddWithValue("@name", TableName);
-                    if (sqlCommand.ExecuteScalar().ToString() == "TableExist")
+                    dbcon.Open();
+                    using (SqlCommand sqlCommand = new SqlCommand("SELECT 'TableExist' FROM (SELECT name FROM sys.tables UNION SELECT name FROM sys.views) T WHERE name = @Name", dbcon))
                     {
-                        message.Display("TableExist " + TableName + " in msDb", "Warn");
-                        return true;
+                        sqlCommand.Parameters.AddWithValue("@name", TableName);
+                        if (sqlCommand.ExecuteScalar().ToString() == "TableExist")
+                        {
+                            message.Display("TableExist " + TableName + " in msDb", "Warn");
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
-                    else
-                    {
-                        return false;
-                    }
+                }
+                catch
+                {
+                    return false;
                 }
             }
         }

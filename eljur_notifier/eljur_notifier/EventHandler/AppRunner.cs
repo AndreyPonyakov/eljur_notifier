@@ -28,7 +28,7 @@ namespace eljur_notifier.EventHandlerNS
             {
                 var AllStaff = new List<object[]>();
                 AllStaff = firebird.getAllStaff();
-                msDbFiller.FillMsDb(AllStaff);
+                msDbUpdater.UpdateMsDb(AllStaff);
             }
             var GetDataFb = eventHandlerEljur.GetDataFb(cancellationTokenSource.Token);
 

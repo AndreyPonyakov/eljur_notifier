@@ -20,7 +20,7 @@ namespace eljur_notifier.AppCommonNS
     public class EljurBaseClass : DbCommonClass
     {
         internal protected Message message { get; set; }
-        internal protected Config config { get; set; }
+        public  Config config { get; set; }
         internal protected StaffContext StaffCtx { get; set; }
         internal protected MsDbSetter msDbSetter { get; set; }
         internal protected EljurApiSender eljurApiSender { get; set; }
@@ -86,10 +86,11 @@ namespace eljur_notifier.AppCommonNS
             this.StaffCtx = StaffContext;
         }
 
-        public EljurBaseClass(ScheduleFiller ScheduleFiller, MainStaffUpdater MainStaffUpdater)
+        public EljurBaseClass(ScheduleFiller ScheduleFiller, MainStaffUpdater MainStaffUpdater, MsDbCleaner MsDbCleaner)
         {
-            this.scheduleFiller = new ScheduleFiller();
-            this.mainStaffUpdater = new MainStaffUpdater();
+            this.scheduleFiller = ScheduleFiller;
+            this.mainStaffUpdater = MainStaffUpdater;
+            this.msDbCleaner = MsDbCleaner;
         }
 
         public EljurBaseClass(Message Message, ExistChecker ExistChecker)

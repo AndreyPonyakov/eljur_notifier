@@ -2,18 +2,27 @@
 using System;
 using System.Collections.Generic;
 using eljur_notifier.MsDbNS.RequesterNS;
+using eljur_notifier.MsDbNS.CheckerNS;
 
-namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
+
+namespace eljur_notifier.MsDbNS.UpdaterNS.Tests
 {
     [TestClass()]
-    public class MainStaffUpdaterTests
+    public class MsDbUpdaterTests
     {
         [TestMethod()]
-        public void MainUpdateStaffTest()
+        public void UpdateSchedulesDbTest()
         {
-            MainStaffUpdater mainStaffUpdater = new MainStaffUpdater("name=StaffContextTests");
+            MsDbUpdater msDbUpdater = new MsDbUpdater("name=StaffContextTests");
+            msDbUpdater.UpdateSchedulesDb();
+        }
+
+        [TestMethod()]
+        public void UpdateStaffDbTest()
+        {
+            MsDbUpdater msDbUpdater = new MsDbUpdater("name=StaffContextTests");
             var AllStaff = getStaffListTest();
-            mainStaffUpdater.MainUpdateStaff(AllStaff);
+            msDbUpdater.UpdateStaffDb(AllStaff);
 
             MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
             String FullFIO1 = msDbRequester.getFullFIOByPupilIdOld(5000);
@@ -22,6 +31,19 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             Assert.IsTrue(FullFIO1 == "Иванов Иван Иванович");
             Assert.IsTrue(FullFIO2 == "Петров Петр Петрович");
             Assert.IsTrue(FullFIO3 == "Сидоров Сидор Сидорович");
+            EmptyChecker emptyChecker = new EmptyChecker("StaffContextTests");
+            Assert.IsTrue(false == emptyChecker.IsTableEmpty("Schedules"));
+        }
+
+        [TestMethod()]
+        public void UpdateMsDbTest()
+        {
+            MsDbUpdater msDbUpdater = new MsDbUpdater("name=StaffContextTests");
+            var AllStaff = getStaffListTest();
+            msDbUpdater.UpdateMsDb(AllStaff);
+
+            EmptyChecker emptyChecker = new EmptyChecker("StaffContextTests");
+            Assert.IsTrue(false == emptyChecker.IsTableEmpty("Schedules"));
         }
 
         public List<object[]> getStaffListTest()

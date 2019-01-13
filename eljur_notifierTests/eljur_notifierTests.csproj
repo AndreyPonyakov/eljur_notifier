@@ -69,12 +69,14 @@
     <Compile Include="eljur_notifier\MsDb\Checker\EmptyCheckerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Checker\ExistCheckerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Checker\MsDbCheckerTests.cs" />
+    <Compile Include="eljur_notifier\MsDb\Checker\TimeCheckerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Cleaner\MsDbCleanerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Filler\MsDbFillerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Filler\ScheduleFillerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Filler\StaffFillerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Requester\MsDbRequesterTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Setter\MsDbSetterTests.cs" />
+    <Compile Include="eljur_notifier\MsDb\Updater\MsDbUpdaterTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\MsDbStaffUpdaterTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\NewStaffAdderTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\OldStaffCleanerTests.cs" />
