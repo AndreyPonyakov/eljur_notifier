@@ -1,27 +1,39 @@
 ﻿using System;
 using System.Data.SqlClient;
+using eljur_notifier.AppCommonNS;
+using System.Configuration;
 
 namespace eljur_notifier.MsDbNS.DestructorNS
 {
-    public class MsDbDestructor
+    public class MsDbDestructor : EljurBaseClass
     {
-        public MsDbDestructor() { }
+        internal protected String nameOfConnectionString { get; set; }
 
-        public void deleteDb(String conStr)
+        public MsDbDestructor(String NameOfConnectionString = "StaffContext")
+            : base(new Message(), new SqlConnection()){
+            this.nameOfConnectionString = NameOfConnectionString;
+        }
+
+        public void deleteDb(String nameOfConnectionString)
         {
-
-            using (SqlConnection con = new SqlConnection(conStr))
+            var ConStrMsDBvar = ConfigurationManager.ConnectionStrings[nameOfConnectionString].ToString();
+            String DbName = "StaffDbTests";
+            if (nameOfConnectionString == "StaffContext")
             {
+                DbName = "StaffDb";
+            }
+            using (SqlConnection con = new SqlConnection(ConStrMsDBvar))
+            {              
                 con.Open();
                 String sqlCommandTextSingleUser = @"
-                ALTER DATABASE " + "StaffDb" + @" SET SINGLE_USER WITH ROLLBACK IMMEDIATE;";
+                ALTER DATABASE " + DbName + @" SET SINGLE_USER WITH ROLLBACK IMMEDIATE;";
                 using (SqlCommand sqlCommandSingleUser = new SqlCommand(sqlCommandTextSingleUser, con))
                 {
                     sqlCommandSingleUser.ExecuteNonQuery();
                 }
                 String sqlCommandTextDeleteDB = @"
                 USE Master;
-                DROP DATABASE [" + "StaffDb" + "]";
+                DROP DATABASE [" + DbName + "]";
                 using (SqlCommand sqlCommandDeleteDB = new SqlCommand(sqlCommandTextDeleteDB, con))
                 {
                     sqlCommandDeleteDB.ExecuteNonQuery();

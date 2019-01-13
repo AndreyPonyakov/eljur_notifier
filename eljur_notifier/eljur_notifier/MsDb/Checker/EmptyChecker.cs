@@ -16,11 +16,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS
  
         public Boolean IsTableEmpty(String TableName)
         {
-            var ConStrMsDBvar = ConfigurationManager.ConnectionStrings["StaffContext"].ToString();
-            if (nameOfConnectionString == "StaffContextTests")
-            {
-                ConStrMsDBvar = ConfigurationManager.ConnectionStrings["StaffContextTests"].ToString();
-            }
+            var ConStrMsDBvar = ConfigurationManager.ConnectionStrings[nameOfConnectionString].ToString();
             
             using (this.dbcon = new SqlConnection(ConStrMsDBvar))
             {

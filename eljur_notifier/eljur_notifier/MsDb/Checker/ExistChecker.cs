@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using eljur_notifier.AppCommonNS;
+using System.Configuration;
 
 namespace eljur_notifier.MsDbNS.CheckerNS
 {
@@ -9,13 +10,14 @@ namespace eljur_notifier.MsDbNS.CheckerNS
         internal protected String nameOfConnectionString { get; set; }
 
         public ExistChecker(String NameOfConnectionString = "StaffContext") 
-            : base(new Message(), new Config(), new SqlConnection()) {
+            : base(new Message(), new SqlConnection()) {
             this.nameOfConnectionString = NameOfConnectionString;
         }
   
         public Boolean IsTableExist(String TableName)
         {
-            using (this.dbcon = new SqlConnection(nameOfConnectionString))
+            var ConStrMsDBvar = ConfigurationManager.ConnectionStrings[nameOfConnectionString].ToString();
+            using (this.dbcon = new SqlConnection(ConStrMsDBvar))
             {
                 dbcon.Open();
                 using (SqlCommand sqlCommand = new SqlCommand("SELECT 'TableExist' FROM (SELECT name FROM sys.tables UNION SELECT name FROM sys.views) T WHERE name = @Name", dbcon))
