@@ -14,6 +14,7 @@ namespace eljur_notifier.MsDbNS.UpdaterNS
    
         public void UpdateSchedulesDb()
         {
+            msDbCleaner.clearAllTablesBesidesPupils();
             scheduleFiller.FillSchedulesDb();
         }
 

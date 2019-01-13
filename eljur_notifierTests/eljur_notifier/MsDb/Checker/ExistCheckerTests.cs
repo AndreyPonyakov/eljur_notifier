@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using eljur_notifier.MsDbNS.DestructorNS;
 using eljur_notifier.MsDbNS.FillerNS;
 using eljur_notifier.MsDbNS.CleanerNS;
 
