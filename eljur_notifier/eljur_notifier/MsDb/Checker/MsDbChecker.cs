@@ -5,10 +5,9 @@ namespace eljur_notifier.MsDbNS.CheckerNS
 {
     public class MsDbChecker : EljurBaseClass
     {
-        public MsDbChecker()
-            : base(new Message(), new ExistChecker()) { }
+        public MsDbChecker(String NameOfConnectionString = "StaffContext")
+            : base(new Message(), new ExistChecker(NameOfConnectionString)) { }
      
-
         public Boolean CheckMsDb()
         {
             if (existChecker.IsTableExist("Pupils") && existChecker.IsTableExist("Schedules"))

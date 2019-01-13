@@ -68,6 +68,7 @@
     <Compile Include="eljur_notifier\MsDb\Catcher\MsDbCatcherLastPassTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Checker\EmptyCheckerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Checker\ExistCheckerTests.cs" />
+    <Compile Include="eljur_notifier\MsDb\Checker\MsDbCheckerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Cleaner\MsDbCleanerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Filler\MsDbFillerTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Filler\ScheduleFillerTests.cs" />
