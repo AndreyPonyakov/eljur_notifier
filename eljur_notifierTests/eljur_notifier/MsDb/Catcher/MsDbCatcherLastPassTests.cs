@@ -9,13 +9,14 @@ namespace eljur_notifier.MsDbNS.CatcherNS.Tests
     public class MsDbCatcherLastPassTests
     {
         [TestMethod()]
-        public void catchLastPassTest()
+        public void catchLastPassTest() //This Test works only after 00:15:10
         {
             PrepareTestEvent();
             MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass("name=StaffContextTests");
             var PupilIdOldAndTimeRows = msDbCatcherLastPass.catchLastPass();
             foreach (var PupilIdOldAndTime in PupilIdOldAndTimeRows)
             {
+                Assert.IsTrue(DateTime.Now.TimeOfDay > TimeSpan.Parse("00:15:11"));
                 Assert.IsTrue(Convert.ToInt32(PupilIdOldAndTime[0]) == 5000);
                 Assert.IsTrue(PupilIdOldAndTime[1].ToString() == "00:00:10");
             }
