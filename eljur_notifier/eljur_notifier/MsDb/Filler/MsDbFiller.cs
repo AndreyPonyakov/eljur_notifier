@@ -14,9 +14,9 @@ namespace eljur_notifier.MsDbNS.FillerNS
         public MsDbFiller(String NameorConnectionString = "name=StaffContext") 
             : base(new StaffFiller(NameorConnectionString), new ScheduleFiller(NameorConnectionString)) { }
   
-        public void FillOnlySchedules()
+        public void FillOnlySchedules(List<object[]> AllClasses)
         {
-            scheduleFiller.FillSchedulesDb();
+            scheduleFiller.FillSchedulesDb(AllClasses);
         }
 
         public void FillOnlyPupils(List<object[]> AllStaff)
@@ -24,10 +24,10 @@ namespace eljur_notifier.MsDbNS.FillerNS
             staffFiller.FillStaffDb(AllStaff);
         }
 
-        public void FillMsDb(List<object[]> AllStaff)
+        public void FillMsDb(List<object[]> AllStaff, List<object[]> AllClasses)
         {
             FillOnlyPupils(AllStaff);
-            FillOnlySchedules();
+            FillOnlySchedules(AllClasses);
         }
 
     }

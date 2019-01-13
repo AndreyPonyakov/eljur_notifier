@@ -12,10 +12,10 @@ namespace eljur_notifier.MsDbNS.UpdaterNS
         public MsDbUpdater(String NameorConnectionString = "name=StaffContext") 
             : base(new ScheduleFiller(NameorConnectionString), new MainStaffUpdater(NameorConnectionString), new MsDbCleaner(NameorConnectionString)) { }
    
-        public void UpdateSchedulesDb()
+        public void UpdateSchedulesDb(List<object[]> AllClasses)
         {
             msDbCleaner.clearAllTablesBesidesPupils();
-            scheduleFiller.FillSchedulesDb();
+            scheduleFiller.FillSchedulesDb(AllClasses);
         }
 
         public void UpdateStaffDb(List<object[]> AllStaff)
@@ -23,11 +23,11 @@ namespace eljur_notifier.MsDbNS.UpdaterNS
             mainStaffUpdater.MainUpdateStaff(AllStaff);
         }
 
-        public void UpdateMsDb(List<object[]> AllStaff)
+        public void UpdateMsDb(List<object[]> AllStaff, List<object[]> AllClasses)
         {
             UpdateStaffDb(AllStaff);
             msDbCleaner.clearAllTablesBesidesPupils();
-            UpdateSchedulesDb();
+            UpdateSchedulesDb(AllClasses);
         }
 
     }

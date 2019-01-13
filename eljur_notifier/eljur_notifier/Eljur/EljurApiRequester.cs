@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using eljur_notifier.AppCommonNS;
 using Newtonsoft.Json;
@@ -10,6 +11,23 @@ namespace eljur_notifier.EljurNS
     public class EljurApiRequester : EljurBaseClass
     {
         public EljurApiRequester() : base(new Message()) { }
+
+
+        //NEED REALISATION OF THIS REQUEST
+        public List<object[]> getClasesObjects()
+        {
+            var ReturnedList = new List<object[]>();
+            String[] ClasesArr = this.getClases();
+            foreach (String clas in ClasesArr)
+            {
+                var ReturnedObj = new object[3];
+                ReturnedObj[0] = clas;
+                ReturnedObj[1] = this.getStartTimeLessonsByClas(clas);
+                ReturnedObj[2] = this.getEndTimeLessonsByClas(clas);
+                ReturnedList.Add(ReturnedObj);
+            }
+            return ReturnedList;
+        }
 
         //NEED REALISATION OF THIS REQUEST
         public String[] getClases()

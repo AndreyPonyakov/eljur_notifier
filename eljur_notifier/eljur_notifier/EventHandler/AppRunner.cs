@@ -30,7 +30,9 @@ namespace eljur_notifier.EventHandlerNS
                 var AllStaff = new List<object[]>();
                 AllStaff = firebird.getAllStaff();
                 AllStaff = allStaffAdder.AddClassAndEljurId(AllStaff);
-                msDbUpdater.UpdateMsDb(AllStaff);
+                var AllClasses = new List<object[]>();
+                AllClasses = eljurApiRequester.getClasesObjects();
+                msDbUpdater.UpdateMsDb(AllStaff, AllClasses);
             }
             var GetDataFb = eventHandlerEljur.GetDataFb(cancellationTokenSource.Token);
 
@@ -46,7 +48,9 @@ namespace eljur_notifier.EventHandlerNS
                 var AllStaff = new List<object[]>();
                 AllStaff = firebird.getAllStaff();
                 AllStaff = allStaffAdder.AddClassAndEljurId(AllStaff);
-                msDbUpdater.UpdateMsDb(AllStaff);
+                var AllClasses = new List<object[]>();
+                AllClasses = eljurApiRequester.getClasesObjects();
+                msDbUpdater.UpdateMsDb(AllStaff, AllClasses);
                 Task.Delay(TimeSpan.FromMilliseconds(config.IntervalSleepBeforeReset));
                 //restart 
                 AppRunner appRunner = new AppRunner();

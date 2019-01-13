@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using eljur_notifier.StaffModel;
 using eljur_notifier.EljurNS;
 using eljur_notifier.AppCommonNS;
@@ -14,7 +15,7 @@ namespace eljur_notifier.MsDbNS.FillerNS
             this.nameorConnectionString = NameorConnectionString;
         }
    
-        public void FillSchedulesDb()
+        public void FillSchedulesDb(List<object[]> AllClasses)
         {
             using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {

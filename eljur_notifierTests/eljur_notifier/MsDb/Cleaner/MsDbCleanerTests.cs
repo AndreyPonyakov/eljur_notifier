@@ -2,6 +2,7 @@
 using eljur_notifier.MsDbNS.CheckerNS;
 using eljur_notifier.MsDbNS.FillerNS;
 using System.Collections.Generic;
+using System;
 
 namespace eljur_notifier.MsDbNS.CleanerNS.Tests
 {
@@ -40,7 +41,8 @@ namespace eljur_notifier.MsDbNS.CleanerNS.Tests
             msDbCleaner.clearTableDb("Events");
             MsDbFiller msDbFiller = new MsDbFiller("name=StaffContextTests");
             var AllStaff = getStaffListTest();
-            msDbFiller.FillMsDb(AllStaff);
+            var AllClasses = getClassesListTest();
+            msDbFiller.FillMsDb(AllStaff, AllClasses);
 
         }
 
@@ -75,6 +77,25 @@ namespace eljur_notifier.MsDbNS.CleanerNS.Tests
             student3[20] = 666;
             AllStaff.Add(student3);
             return AllStaff;
+        }
+        public List<object[]> getClassesListTest()
+        {
+            var AllClasses = new List<object[]>();
+            object[] clas1 = new object[3];
+            clas1[0] = 5000;
+            clas1[1] = TimeSpan.Parse("07:00:00");
+            clas1[2] = TimeSpan.Parse("13:00:00");
+            object[] clas2 = new object[3];
+            clas2[0] = 5000;
+            clas2[1] = TimeSpan.Parse("07:00:00");
+            clas2[2] = TimeSpan.Parse("13:00:00");
+            AllClasses.Add(clas2);
+            object[] clas3 = new object[3];
+            clas3[0] = 5000;
+            clas3[1] = TimeSpan.Parse("07:00:00");
+            clas3[2] = TimeSpan.Parse("13:00:00");
+            AllClasses.Add(clas3);
+            return AllClasses;
         }
 
     }
