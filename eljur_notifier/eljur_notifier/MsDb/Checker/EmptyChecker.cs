@@ -7,17 +7,17 @@ namespace eljur_notifier.MsDbNS.CheckerNS
 {
     public class EmptyChecker : EljurBaseClass
     {
-        internal protected String NameOfConnectionString { get; set; }
+        internal protected String nameOfConnectionString { get; set; }
 
         public EmptyChecker(String NameOfConnectionString = "StaffContext") 
             : base(new Message(), new SqlConnection()) {
-            this.NameOfConnectionString = NameOfConnectionString;
+            this.nameOfConnectionString = NameOfConnectionString;
         }
  
         public Boolean IsTableEmpty(String TableName)
         {
             var ConStrMsDBvar = ConfigurationManager.ConnectionStrings["StaffContext"].ToString();
-            if (NameOfConnectionString == "StaffContextTests")
+            if (nameOfConnectionString == "StaffContextTests")
             {
                 ConStrMsDBvar = ConfigurationManager.ConnectionStrings["StaffContextTests"].ToString();
             }

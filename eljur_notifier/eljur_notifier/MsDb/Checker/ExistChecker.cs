@@ -6,11 +6,16 @@ namespace eljur_notifier.MsDbNS.CheckerNS
 {
     public class ExistChecker : EljurBaseClass
     {
-        public ExistChecker() : base(new Message(), new Config(), new SqlConnection()) { }
+        internal protected String nameOfConnectionString { get; set; }
+
+        public ExistChecker(String NameOfConnectionString = "StaffContext") 
+            : base(new Message(), new Config(), new SqlConnection()) {
+            this.nameOfConnectionString = NameOfConnectionString;
+        }
   
         public Boolean IsTableExist(String TableName)
         {
-            using (this.dbcon = new SqlConnection(config.ConStrMsDB))
+            using (this.dbcon = new SqlConnection(nameOfConnectionString))
             {
                 dbcon.Open();
                 using (SqlCommand sqlCommand = new SqlCommand("SELECT 'TableExist' FROM (SELECT name FROM sys.tables UNION SELECT name FROM sys.views) T WHERE name = @Name", dbcon))

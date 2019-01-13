@@ -92,6 +92,12 @@ namespace eljur_notifier.AppCommonNS
             this.mainStaffUpdater = new MainStaffUpdater();
         }
 
+        public EljurBaseClass(Message Message, ExistChecker ExistChecker)
+        {
+            this.message = Message;
+            this.existChecker = ExistChecker;
+        }
+
         public EljurBaseClass(Message Message, Config Config, StaffContext StaffContext)
         {
             this.message = Message;
@@ -105,6 +111,9 @@ namespace eljur_notifier.AppCommonNS
             this.config = Config;
             this.dbcon = SqlConnection;
         }
+
+
+
 
         public EljurBaseClass(Message Message, MsDbRequester MsDbRequester, MsDbSetter MsDbSetter)
         {

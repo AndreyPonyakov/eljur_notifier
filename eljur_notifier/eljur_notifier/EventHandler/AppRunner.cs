@@ -23,6 +23,13 @@ namespace eljur_notifier.EventHandlerNS
 
         public void Run(string[] args)
         {
+            Boolean IsDbExist = msDbChecker.CheckMsDb();
+            if (!IsDbExist)
+            {
+                var AllStaff = new List<object[]>();
+                AllStaff = firebird.getAllStaff();
+                msDbFiller.FillMsDb(AllStaff);
+            }
             var GetDataFb = eventHandlerEljur.GetDataFb(cancellationTokenSource.Token);
 
             var CatchEventFirstPass = eventHandlerEljur.CatchEventFirstPass(cancellationTokenSource.Token);
@@ -36,7 +43,7 @@ namespace eljur_notifier.EventHandlerNS
                 msDbCleaner.clearAllTablesBesidesPupils();
                 var AllStaff = new List<object[]>();
                 AllStaff = firebird.getAllStaff();
-                msDbUpdater.UpdateStaffDb(AllStaff);
+                msDbUpdater.UpdateMsDb(AllStaff);
                 Task.Delay(TimeSpan.FromMilliseconds(config.IntervalSleepBeforeReset));
                 //restart 
                 AppRunner appRunner = new AppRunner();
