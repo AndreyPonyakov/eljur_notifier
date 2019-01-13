@@ -1,22 +1,20 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using eljur_notifier.MsDbNS.CleanerNS;
-using eljur_notifier.MsDbNS.UpdaterNS;
-using eljur_notifier.MsDbNS.RequesterNS;
+using MsDbLibraryNS.MsDbNS.CleanerNS;
+using MsDbLibraryNS.MsDbNS.UpdaterNS;
+using MsDbLibraryNS.MsDbNS.RequesterNS;
 
-namespace eljur_notifier.MsDbNS.CheckerNS.Tests
+namespace MsDbLibraryNS.MsDbNS.CheckerNS.Tests
 {
     [TestClass()]
     public class TimeCheckerTests
     {
+        public TestContext TestContext { get; set; }
+
         [TestMethod()]
         public void TimeCheckerTest()
         {
-            TimeChecker timeChecker = new TimeChecker();
-            Assert.IsTrue(timeChecker.timeFromDel == timeChecker.config.timeFromDel);
-            Assert.IsTrue(timeChecker.timeToDel == timeChecker.config.timeToDel);
-
             TimeSpan now = DateTime.Now.TimeOfDay;
             TimeSpan nowPlusMinute = now.Add(new TimeSpan(0, 1, 0));
             TimeChecker timeCheckerWithParam = new TimeChecker(now, nowPlusMinute);
@@ -30,7 +28,8 @@ namespace eljur_notifier.MsDbNS.CheckerNS.Tests
         {
             TimeSpan now = DateTime.Now.TimeOfDay;
             TimeSpan nowPlusMinute = now.Add(new TimeSpan(0, 1, 0));
-            TimeChecker timeCheckerWithParam = new TimeChecker(now, nowPlusMinute);
+            TimeSpan nowMinusMinute = now.Add(new TimeSpan(0, -1, 0));
+            TimeChecker timeCheckerWithParam = new TimeChecker(nowMinusMinute, nowPlusMinute);
             timeCheckerWithParam.CheckTime(new Action(delegate {
 
                 MsDbCleaner msDbCleaner = new MsDbCleaner("name=StaffContextTests");
@@ -41,7 +40,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS.Tests
                 AllStaff = getStaffListTest();
                 var AllClasses = getClassesListTest();
                 msDbUpdater.UpdateMsDb(AllStaff, AllClasses);
-    
+
             }));
 
             MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
@@ -108,3 +107,4 @@ namespace eljur_notifier.MsDbNS.CheckerNS.Tests
 
     }
 }
+

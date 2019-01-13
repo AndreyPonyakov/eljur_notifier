@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using eljur_notifier.MsDbNS.RequesterNS;
+using MsDbLibraryNS.MsDbNS.RequesterNS;
 
-namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
+namespace MsDbLibraryNS.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
 {
     [TestClass()]
     public class NewStaffAdderTests
@@ -37,3 +37,4 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
 
     }
 }
+

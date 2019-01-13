@@ -1,35 +1,49 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MsDbLibraryNS.MsDbNS.CheckerNS;
+using MsDbLibraryNS.MsDbNS.FillerNS;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using eljur_notifier.MsDbNS.FillerNS;
-using eljur_notifier.MsDbNS.CleanerNS;
+using System;
 
-namespace eljur_notifier.MsDbNS.CheckerNS.Tests
+namespace MsDbLibraryNS.MsDbNS.CleanerNS.Tests
 {
     [TestClass()]
-    public class ExistCheckerTests
+    public class MsDbCleanerTests
     {
         [TestMethod()]
-        public void IsTableExistTest()
+        public void clearTableDbTest()
         {
-            Boolean IsTableExist = false;
-            ExistChecker existChecker = new ExistChecker("StaffContextTests");
-           
-            MsDbFiller msDbFiller = new MsDbFiller("name=StaffContextTests");
-            var AllStaff = getStaffListTest();
-            var AllClasses = getClassesListTest();
-            msDbFiller.FillMsDb(AllStaff, AllClasses);
-            IsTableExist = existChecker.IsTableExist("Pupils");
-            Assert.IsTrue(IsTableExist == true);
-            IsTableExist = existChecker.IsTableExist("Events");
-            Assert.IsTrue(IsTableExist == true);
-            IsTableExist = existChecker.IsTableExist("Schedules");
-            Assert.IsTrue(IsTableExist == true);
+            MsDbCleaner msDbCleaner = new MsDbCleaner("name=StaffContextTests");
+            msDbCleaner.clearTableDb("Schedules");
 
+            EmptyChecker emptyChecker = new EmptyChecker("StaffContextTests");
+            Assert.IsTrue(true == emptyChecker.IsTableEmpty("Schedules"));
+        }
+
+        [TestMethod()]
+        public void clearAllTablesBesidesPupilsTest()
+        {
+            PrepareTest();
+            MsDbCleaner msDbCleaner = new MsDbCleaner("name=StaffContextTests");
+            msDbCleaner.clearTableDb("Schedules");
+            msDbCleaner.clearTableDb("Events");
+
+            EmptyChecker emptyChecker = new EmptyChecker("StaffContextTests");
+            Assert.IsTrue(true == emptyChecker.IsTableEmpty("Schedules"));
+            Assert.IsTrue(true == emptyChecker.IsTableEmpty("Events"));
+            Assert.IsTrue(false == emptyChecker.IsTableEmpty("Pupils"));
+        }
+
+        public void PrepareTest()
+        {
             MsDbCleaner msDbCleaner = new MsDbCleaner("name=StaffContextTests");
             msDbCleaner.clearTableDb("Pupils");
             msDbCleaner.clearTableDb("Schedules");
             msDbCleaner.clearTableDb("Events");
+            MsDbFiller msDbFiller = new MsDbFiller("name=StaffContextTests");
+            var AllStaff = getStaffListTest();
+            var AllClasses = getClassesListTest();
+            msDbFiller.FillMsDb(AllStaff, AllClasses);
+
         }
 
         public List<object[]> getStaffListTest()
@@ -50,7 +64,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS.Tests
             student2[2] = "Петр";
             student2[3] = "Петрович";
             student2[22] = "Петров Петр Петрович";
-            student2[21] = "1Б";
+            student2[21] = "1А";
             student2[20] = 666;
             AllStaff.Add(student2);
             object[] student3 = new object[23];
@@ -59,12 +73,11 @@ namespace eljur_notifier.MsDbNS.CheckerNS.Tests
             student3[2] = "Сидор";
             student3[3] = "Сидорович";
             student3[22] = "Сидоров Сидор Сидорович";
-            student3[21] = "1В";
+            student3[21] = "1А";
             student3[20] = 666;
             AllStaff.Add(student3);
             return AllStaff;
         }
-
         public List<object[]> getClassesListTest()
         {
             var AllClasses = new List<object[]>();
@@ -84,5 +97,7 @@ namespace eljur_notifier.MsDbNS.CheckerNS.Tests
             AllClasses.Add(clas3);
             return AllClasses;
         }
+
     }
 }
+

@@ -1,20 +1,35 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using eljur_notifier.MsDbNS.RequesterNS;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Data.Entity.SqlServer;
+using MsDbLibraryNS.MsDbNS.RequesterNS;
+using MsDbLibraryNS.MsDbNS.CleanerNS;
 
-namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
+namespace MsDbLibraryNS.MsDbNS.FillerNS.Tests
 {
     [TestClass()]
-    public class MainStaffUpdaterTests
+    public class StaffFillerTests
     {
-        [TestMethod()]
-        public void MainUpdateStaffTest()
-        {
-            MainStaffUpdater mainStaffUpdater = new MainStaffUpdater("name=StaffContextTests");
-            var AllStaff = getStaffListTest();
-            mainStaffUpdater.MainUpdateStaff(AllStaff);
+        public TestContext TestContext { get; set; }
 
+        public void FixEfProviderServicesProblem()
+        {
+            //The Entity Framework provider type 'System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer'
+            //for the 'System.Data.SqlClient' ADO.NET provider could not be loaded. 
+            //Make sure the provider assembly is available to the running application. 
+            //See http://go.microsoft.com/fwlink/?LinkId=260882 for more information.
+
+            var instance = SqlProviderServices.Instance;
+        }
+
+
+        [TestMethod()]
+        public void FillStaffDbTest()
+        {
+            PrepareTest();
+            StaffFiller staffFiller = new StaffFiller("name=StaffContextTests");
+            var AllStaff = getStaffListTest();
+            staffFiller.FillStaffDb(AllStaff);
             MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
             String FullFIO1 = msDbRequester.getFullFIOByPupilIdOld(5000);
             String FullFIO2 = msDbRequester.getFullFIOByPupilIdOld(5001);
@@ -57,5 +72,13 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             return AllStaff;
         }
 
+        void PrepareTest()
+        {
+            MsDbCleaner msDbCleaner = new MsDbCleaner("name=StaffContextTests");
+            msDbCleaner.clearTableDb("Pupils");
+        }
+
+
     }
 }
+

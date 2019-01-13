@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using eljur_notifier.MsDbNS.CheckerNS;
 using System;
-using eljur_notifier.StaffModel;
-using eljur_notifier.MsDbNS.SetterNS;
+using MsDbLibraryNS.StaffModel;
+using MsDbLibraryNS.MsDbNS.SetterNS;
 
-namespace eljur_notifier.MsDbNS.CheckerNS.Tests
+
+namespace MsDbLibraryNS.MsDbNS.CheckerNS.Tests
 {
     [TestClass()]
     public class EmptyCheckerTests

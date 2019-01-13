@@ -1,35 +1,30 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Data.Entity.SqlServer;
-using eljur_notifier.MsDbNS.RequesterNS;
-using eljur_notifier.MsDbNS.CleanerNS;
+using MsDbLibraryNS.MsDbNS.RequesterNS;
+using MsDbLibraryNS.MsDbNS.CheckerNS;
 
-namespace eljur_notifier.MsDbNS.FillerNS.Tests
+
+namespace MsDbLibraryNS.MsDbNS.UpdaterNS.Tests
 {
     [TestClass()]
-    public class StaffFillerTests
+    public class MsDbUpdaterTests
     {
-        public TestContext TestContext { get; set; }
-
-        public void FixEfProviderServicesProblem()
+        [TestMethod()]
+        public void UpdateSchedulesDbTest()
         {
-            //The Entity Framework provider type 'System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer'
-            //for the 'System.Data.SqlClient' ADO.NET provider could not be loaded. 
-            //Make sure the provider assembly is available to the running application. 
-            //See http://go.microsoft.com/fwlink/?LinkId=260882 for more information.
-
-            var instance = SqlProviderServices.Instance;
+            MsDbUpdater msDbUpdater = new MsDbUpdater("name=StaffContextTests");
+            var AllClasses = getClassesListTest();
+            msDbUpdater.UpdateSchedulesDb(AllClasses);
         }
 
-
         [TestMethod()]
-        public void FillStaffDbTest()
+        public void UpdateStaffDbTest()
         {
-            PrepareTest();
-            StaffFiller staffFiller = new StaffFiller("name=StaffContextTests");
+            MsDbUpdater msDbUpdater = new MsDbUpdater("name=StaffContextTests");
             var AllStaff = getStaffListTest();
-            staffFiller.FillStaffDb(AllStaff);
+            msDbUpdater.UpdateStaffDb(AllStaff);
+
             MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
             String FullFIO1 = msDbRequester.getFullFIOByPupilIdOld(5000);
             String FullFIO2 = msDbRequester.getFullFIOByPupilIdOld(5001);
@@ -37,6 +32,20 @@ namespace eljur_notifier.MsDbNS.FillerNS.Tests
             Assert.IsTrue(FullFIO1 == "Иванов Иван Иванович");
             Assert.IsTrue(FullFIO2 == "Петров Петр Петрович");
             Assert.IsTrue(FullFIO3 == "Сидоров Сидор Сидорович");
+            EmptyChecker emptyChecker = new EmptyChecker("StaffContextTests");
+            Assert.IsTrue(false == emptyChecker.IsTableEmpty("Schedules"));
+        }
+
+        [TestMethod()]
+        public void UpdateMsDbTest()
+        {
+            MsDbUpdater msDbUpdater = new MsDbUpdater("name=StaffContextTests");
+            var AllStaff = getStaffListTest();
+            var AllClasses = getClassesListTest();
+            msDbUpdater.UpdateMsDb(AllStaff, AllClasses);
+
+            EmptyChecker emptyChecker = new EmptyChecker("StaffContextTests");
+            Assert.IsTrue(false == emptyChecker.IsTableEmpty("Schedules"));
         }
 
         public List<object[]> getStaffListTest()
@@ -71,13 +80,26 @@ namespace eljur_notifier.MsDbNS.FillerNS.Tests
             AllStaff.Add(student3);
             return AllStaff;
         }
-
-        void PrepareTest()
+        public List<object[]> getClassesListTest()
         {
-            MsDbCleaner msDbCleaner = new MsDbCleaner("name=StaffContextTests");
-            msDbCleaner.clearTableDb("Pupils");
+            var AllClasses = new List<object[]>();
+            object[] clas1 = new object[3];
+            clas1[0] = 5000;
+            clas1[1] = TimeSpan.Parse("07:00:00");
+            clas1[2] = TimeSpan.Parse("13:00:00");
+            object[] clas2 = new object[3];
+            clas2[0] = 5000;
+            clas2[1] = TimeSpan.Parse("07:00:00");
+            clas2[2] = TimeSpan.Parse("13:00:00");
+            AllClasses.Add(clas2);
+            object[] clas3 = new object[3];
+            clas3[0] = 5000;
+            clas3[1] = TimeSpan.Parse("07:00:00");
+            clas3[2] = TimeSpan.Parse("13:00:00");
+            AllClasses.Add(clas3);
+            return AllClasses;
         }
-
 
     }
 }
+

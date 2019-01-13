@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data.Entity.SqlServer;
-using eljur_notifier.StaffModel;
-using eljur_notifier.MsDbNS.SetterNS;
+using MsDbLibraryNS.StaffModel;
+using MsDbLibraryNS.MsDbNS.SetterNS;
 
-namespace eljur_notifier.MsDbNS.RequesterNS.Tests
+namespace MsDbLibraryNS.MsDbNS.RequesterNS.Tests
 {
     [TestClass()]
     public class MsDbRequesterTests
@@ -133,3 +133,4 @@ namespace eljur_notifier.MsDbNS.RequesterNS.Tests
 
     }
 }
+

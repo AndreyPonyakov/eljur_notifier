@@ -1,12 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using eljur_notifier.MsDbNS.CheckerNS;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace eljur_notifier.MsDbNS.CheckerNS.Tests
+
+namespace MsDbLibraryNS.MsDbNS.CheckerNS.Tests
 {
     [TestClass()]
     public class MsDbCheckerTests
@@ -20,3 +16,5 @@ namespace eljur_notifier.MsDbNS.CheckerNS.Tests
         }
     }
 }
+
+

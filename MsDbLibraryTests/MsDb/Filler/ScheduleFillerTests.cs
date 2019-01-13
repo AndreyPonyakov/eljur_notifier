@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using eljur_notifier.MsDbNS.CheckerNS;
+using MsDbLibraryNS.MsDbNS.CheckerNS;
 using System.Collections.Generic;
 using System;
 
-namespace eljur_notifier.MsDbNS.FillerNS.Tests
+namespace MsDbLibraryNS.MsDbNS.FillerNS.Tests
 {
     [TestClass()]
     public class ScheduleFillerTests
@@ -42,3 +42,4 @@ namespace eljur_notifier.MsDbNS.FillerNS.Tests
 
     }
 }
+

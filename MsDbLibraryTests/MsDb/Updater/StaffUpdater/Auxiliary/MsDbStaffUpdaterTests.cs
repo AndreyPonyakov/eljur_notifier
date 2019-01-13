@@ -1,15 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS;
+using MsDbLibraryNS.MsDbNS.UpdaterNS.StaffUpdaterNS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using eljur_notifier.MsDbNS.RequesterNS;
-using eljur_notifier.MsDbNS.CleanerNS;
-using eljur_notifier.MsDbNS.FillerNS;
+using MsDbLibraryNS.MsDbNS.RequesterNS;
+using MsDbLibraryNS.MsDbNS.CleanerNS;
+using MsDbLibraryNS.MsDbNS.FillerNS;
 
-namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
+namespace MsDbLibraryNS.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
 {
     [TestClass()]
     public class MsDbStaffUpdaterTests
@@ -107,3 +107,4 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
 
     }
 }
+

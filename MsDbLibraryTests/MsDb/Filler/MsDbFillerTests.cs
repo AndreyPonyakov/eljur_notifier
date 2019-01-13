@@ -1,35 +1,52 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using eljur_notifier.MsDbNS.CheckerNS;
-using eljur_notifier.MsDbNS.FillerNS;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using MsDbLibraryNS.MsDbNS.CheckerNS;
+using MsDbLibraryNS.MsDbNS.RequesterNS;
+using MsDbLibraryNS.MsDbNS.CleanerNS;
 
-namespace eljur_notifier.MsDbNS.CleanerNS.Tests
+namespace MsDbLibraryNS.MsDbNS.FillerNS.Tests
 {
     [TestClass()]
-    public class MsDbCleanerTests
+    public class MsDbFillerTests
     {
         [TestMethod()]
-        public void clearTableDbTest()
+        public void FillOnlySchedulesTest()
         {
-            MsDbCleaner msDbCleaner = new MsDbCleaner("name=StaffContextTests");
-            msDbCleaner.clearTableDb("Schedules");
+            MsDbFiller msDbFiller = new MsDbFiller("name=StaffContextTests");
+            var AllClasses = getClassesListTest();
+            msDbFiller.FillOnlySchedules(AllClasses);
 
             EmptyChecker emptyChecker = new EmptyChecker("StaffContextTests");
-            Assert.IsTrue(true == emptyChecker.IsTableEmpty("Schedules"));
+            Assert.IsTrue(false == emptyChecker.IsTableEmpty("Schedules"));
         }
 
         [TestMethod()]
-        public void clearAllTablesBesidesPupilsTest()
+        public void FillOnlyPupilsTest()
         {
             PrepareTest();
-            MsDbCleaner msDbCleaner = new MsDbCleaner("name=StaffContextTests");
-            msDbCleaner.clearTableDb("Schedules");
-            msDbCleaner.clearTableDb("Events");
+            MsDbFiller msDbFiller = new MsDbFiller("name=StaffContextTests");
+            var AllStaff = getStaffListTest();
+            msDbFiller.FillOnlyPupils(AllStaff);
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            String FullFIO1 = msDbRequester.getFullFIOByPupilIdOld(5000);
+            String FullFIO2 = msDbRequester.getFullFIOByPupilIdOld(5001);
+            String FullFIO3 = msDbRequester.getFullFIOByPupilIdOld(5002);
+            Assert.IsTrue(FullFIO1 == "Иванов Иван Иванович");
+            Assert.IsTrue(FullFIO2 == "Петров Петр Петрович");
+            Assert.IsTrue(FullFIO3 == "Сидоров Сидор Сидорович");
+        }
 
+        [TestMethod()]
+        public void FillMsDbTest()
+        {
+            PrepareTest();
+            MsDbFiller msDbFiller = new MsDbFiller("name=StaffContextTests");
+            var AllStaff = getStaffListTest();
+            var AllClasses = getClassesListTest();
+            msDbFiller.FillMsDb(AllStaff, AllClasses);
             EmptyChecker emptyChecker = new EmptyChecker("StaffContextTests");
-            Assert.IsTrue(true == emptyChecker.IsTableEmpty("Schedules"));
-            Assert.IsTrue(true == emptyChecker.IsTableEmpty("Events"));
+            Assert.IsTrue(false == emptyChecker.IsTableEmpty("Schedules"));
             Assert.IsTrue(false == emptyChecker.IsTableEmpty("Pupils"));
         }
 
@@ -39,10 +56,6 @@ namespace eljur_notifier.MsDbNS.CleanerNS.Tests
             msDbCleaner.clearTableDb("Pupils");
             msDbCleaner.clearTableDb("Schedules");
             msDbCleaner.clearTableDb("Events");
-            MsDbFiller msDbFiller = new MsDbFiller("name=StaffContextTests");
-            var AllStaff = getStaffListTest();
-            var AllClasses = getClassesListTest();
-            msDbFiller.FillMsDb(AllStaff, AllClasses);
 
         }
 
@@ -98,5 +111,7 @@ namespace eljur_notifier.MsDbNS.CleanerNS.Tests
             return AllClasses;
         }
 
+
     }
 }
+

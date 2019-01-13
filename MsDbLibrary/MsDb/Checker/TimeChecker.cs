@@ -10,11 +10,8 @@ namespace MsDbLibraryNS.MsDbNS.CheckerNS
 
         public TimeChecker(TimeSpan TimeFromDel = default(TimeSpan), TimeSpan TimeToDel = default(TimeSpan)) 
             : base(new Message()) {
-            if (TimeFromDel == default(TimeSpan) || TimeToDel == default(TimeSpan))
-            {
-                this.timeFromDel = TimeFromDel;
-                this.timeToDel = TimeToDel;
-            }         
+            this.timeFromDel = TimeFromDel;
+            this.timeToDel = TimeToDel;   
         }
 
         public void CheckTime(Action actionAtMidnight)

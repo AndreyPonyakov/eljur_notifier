@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8D4375CA-28D5-41B1-94B8-1A760F02C721}</ProjectGuid>
+    <ProjectGuid>{994A839E-710B-48BD-B381-D471B9DC537C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>eljur_notifierTests</RootNamespace>
-    <AssemblyName>eljur_notifierTests</AssemblyName>
+    <RootNamespace>MsDbLibraryTests</RootNamespace>
+    <AssemblyName>MsDbLibraryTests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -53,7 +53,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -64,7 +64,24 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="eljur_notifier\Eljur\AllStaffAdderTests.cs" />
+    <Compile Include="MsDb\Catcher\MsDbCatcherFirstPassTests.cs" />
+    <Compile Include="MsDb\Catcher\MsDbCatcherLastPassTests.cs" />
+    <Compile Include="MsDb\Checker\EmptyCheckerTests.cs" />
+    <Compile Include="MsDb\Checker\ExistCheckerTests.cs" />
+    <Compile Include="MsDb\Checker\MsDbCheckerTests.cs" />
+    <Compile Include="MsDb\Checker\TimeCheckerTests.cs" />
+    <Compile Include="MsDb\Cleaner\MsDbCleanerTests.cs" />
+    <Compile Include="MsDb\Filler\MsDbFillerTests.cs" />
+    <Compile Include="MsDb\Filler\ScheduleFillerTests.cs" />
+    <Compile Include="MsDb\Filler\StaffFillerTests.cs" />
+    <Compile Include="MsDb\MsDbTests.cs" />
+    <Compile Include="MsDb\Requester\MsDbRequesterTests.cs" />
+    <Compile Include="MsDb\Setter\MsDbSetterTests.cs" />
+    <Compile Include="MsDb\Updater\MsDbUpdaterTests.cs" />
+    <Compile Include="MsDb\Updater\StaffUpdater\Auxiliary\MsDbStaffUpdaterTests.cs" />
+    <Compile Include="MsDb\Updater\StaffUpdater\Auxiliary\NewStaffAdderTests.cs" />
+    <Compile Include="MsDb\Updater\StaffUpdater\Auxiliary\OldStaffCleanerTests.cs" />
+    <Compile Include="MsDb\Updater\StaffUpdater\MainStaffUpdaterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -72,9 +89,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\eljur_notifier\eljur_notifier.csproj">
-      <Project>{437B18D1-FFC4-4F7B-AC4E-35FC2C7BD46A}</Project>
-      <Name>eljur_notifier</Name>
+    <ProjectReference Include="..\MsDbLibrary\MsDbLibrary.csproj">
+      <Project>{7B58A963-28E2-411D-9BC4-35275D5C539D}</Project>
+      <Name>MsDbLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

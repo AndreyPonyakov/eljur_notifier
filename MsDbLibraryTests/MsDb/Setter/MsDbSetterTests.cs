@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data.Entity.SqlServer;
-using eljur_notifier.MsDbNS.RequesterNS;
-using eljur_notifier.StaffModel;
+using MsDbLibraryNS.MsDbNS.RequesterNS;
+using MsDbLibraryNS.StaffModel;
 
-namespace eljur_notifier.MsDbNS.SetterNS.Tests
+namespace MsDbLibraryNS.MsDbNS.SetterNS.Tests
 {
     [TestClass()]
     public class MsDbSetterTests
@@ -42,7 +42,7 @@ namespace eljur_notifier.MsDbNS.SetterNS.Tests
         public void SetStatusWentHomeTooEarlyTest()
         {
             PrepareTestEvent();
-            MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests");;
+            MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests"); ;
             msDbSetter.SetStatusWentHomeTooEarly(5000);
 
             MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
@@ -107,3 +107,4 @@ namespace eljur_notifier.MsDbNS.SetterNS.Tests
 
     }
 }
+

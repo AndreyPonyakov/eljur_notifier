@@ -1,51 +1,35 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using eljur_notifier.MsDbNS.RequesterNS;
-using eljur_notifier.MsDbNS.CheckerNS;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MsDbLibraryNS.MsDbNS.FillerNS;
+using MsDbLibraryNS.MsDbNS.CleanerNS;
 
-
-namespace eljur_notifier.MsDbNS.UpdaterNS.Tests
+namespace MsDbLibraryNS.MsDbNS.CheckerNS.Tests
 {
     [TestClass()]
-    public class MsDbUpdaterTests
+    public class ExistCheckerTests
     {
         [TestMethod()]
-        public void UpdateSchedulesDbTest()
+        public void IsTableExistTest()
         {
-            MsDbUpdater msDbUpdater = new MsDbUpdater("name=StaffContextTests");
-            var AllClasses = getClassesListTest();
-            msDbUpdater.UpdateSchedulesDb(AllClasses);
-        }
+            Boolean IsTableExist = false;
+            ExistChecker existChecker = new ExistChecker("StaffContextTests");
 
-        [TestMethod()]
-        public void UpdateStaffDbTest()
-        {
-            MsDbUpdater msDbUpdater = new MsDbUpdater("name=StaffContextTests");
-            var AllStaff = getStaffListTest();
-            msDbUpdater.UpdateStaffDb(AllStaff);
-
-            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
-            String FullFIO1 = msDbRequester.getFullFIOByPupilIdOld(5000);
-            String FullFIO2 = msDbRequester.getFullFIOByPupilIdOld(5001);
-            String FullFIO3 = msDbRequester.getFullFIOByPupilIdOld(5002);
-            Assert.IsTrue(FullFIO1 == "Иванов Иван Иванович");
-            Assert.IsTrue(FullFIO2 == "Петров Петр Петрович");
-            Assert.IsTrue(FullFIO3 == "Сидоров Сидор Сидорович");
-            EmptyChecker emptyChecker = new EmptyChecker("StaffContextTests");
-            Assert.IsTrue(false == emptyChecker.IsTableEmpty("Schedules"));
-        }
-
-        [TestMethod()]
-        public void UpdateMsDbTest()
-        {
-            MsDbUpdater msDbUpdater = new MsDbUpdater("name=StaffContextTests");
+            MsDbFiller msDbFiller = new MsDbFiller("name=StaffContextTests");
             var AllStaff = getStaffListTest();
             var AllClasses = getClassesListTest();
-            msDbUpdater.UpdateMsDb(AllStaff, AllClasses);
+            msDbFiller.FillMsDb(AllStaff, AllClasses);
+            IsTableExist = existChecker.IsTableExist("Pupils");
+            Assert.IsTrue(IsTableExist == true);
+            IsTableExist = existChecker.IsTableExist("Events");
+            Assert.IsTrue(IsTableExist == true);
+            IsTableExist = existChecker.IsTableExist("Schedules");
+            Assert.IsTrue(IsTableExist == true);
 
-            EmptyChecker emptyChecker = new EmptyChecker("StaffContextTests");
-            Assert.IsTrue(false == emptyChecker.IsTableEmpty("Schedules"));
+            MsDbCleaner msDbCleaner = new MsDbCleaner("name=StaffContextTests");
+            msDbCleaner.clearTableDb("Pupils");
+            msDbCleaner.clearTableDb("Schedules");
+            msDbCleaner.clearTableDb("Events");
         }
 
         public List<object[]> getStaffListTest()
@@ -66,7 +50,7 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.Tests
             student2[2] = "Петр";
             student2[3] = "Петрович";
             student2[22] = "Петров Петр Петрович";
-            student2[21] = "1А";
+            student2[21] = "1Б";
             student2[20] = 666;
             AllStaff.Add(student2);
             object[] student3 = new object[23];
@@ -75,11 +59,12 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.Tests
             student3[2] = "Сидор";
             student3[3] = "Сидорович";
             student3[22] = "Сидоров Сидор Сидорович";
-            student3[21] = "1А";
+            student3[21] = "1В";
             student3[20] = 666;
             AllStaff.Add(student3);
             return AllStaff;
         }
+
         public List<object[]> getClassesListTest()
         {
             var AllClasses = new List<object[]>();
@@ -99,6 +84,5 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.Tests
             AllClasses.Add(clas3);
             return AllClasses;
         }
-
     }
 }

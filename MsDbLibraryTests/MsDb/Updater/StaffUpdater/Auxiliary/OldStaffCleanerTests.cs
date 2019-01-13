@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using eljur_notifier.MsDbNS.CheckerNS;
+using MsDbLibraryNS.MsDbNS.CheckerNS;
 
-namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
+namespace MsDbLibraryNS.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
 {
     [TestClass()]
     public class OldStaffCleanerTests
