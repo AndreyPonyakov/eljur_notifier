@@ -26,6 +26,7 @@ namespace eljur_notifier.AppCommonNS
         internal protected EljurApiSender eljurApiSender { get; set; }
         internal protected MsDbRequester msDbRequester { get; set; }
         internal protected Firebird firebird { get; set; }
+        internal protected AllStaffAdder allStaffAdder { get; set; }      
         internal protected MsDb msDb { get; set; }
         internal protected EventHandlerEljur eventHandlerEljur { get; set; }
         internal protected MsDbCleaner msDbCleaner { get; set; }
@@ -60,6 +61,12 @@ namespace eljur_notifier.AppCommonNS
         {
             this.message = Message;
             this.config = Config;
+        }
+        
+        public EljurBaseClass(Message Message, EljurApiRequester EljurApiRequester)
+        {
+            this.message = Message;
+            this.eljurApiRequester = EljurApiRequester;
         }
 
         public EljurBaseClass(StaffContext StaffContext, MsDbSetter MsDbSetter)
@@ -177,11 +184,12 @@ namespace eljur_notifier.AppCommonNS
             this.msDbSetter = MsDbSetter;
         }
 
-        public EljurBaseClass(Message Message, Config Config, Firebird Firebird, MsDb MsDb, MsDbChecker MsDbChecker, MsDbUpdater MsDbUpdater, MsDbCleaner MsDbCleaner, EventHandlerEljur EventHandlerEljur)
+        public EljurBaseClass(Message Message, Config Config, Firebird Firebird, AllStaffAdder allStaffAdder, MsDb MsDb, MsDbChecker MsDbChecker, MsDbUpdater MsDbUpdater, MsDbCleaner MsDbCleaner, EventHandlerEljur EventHandlerEljur)
         {
             this.message = new Message();
             this.config = new Config();
             this.firebird = new Firebird();
+            this.allStaffAdder = new AllStaffAdder();
             this.msDb = new MsDb();
             this.msDbChecker = new MsDbChecker();
             this.msDbUpdater = new MsDbUpdater();

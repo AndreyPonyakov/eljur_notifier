@@ -134,6 +134,7 @@
     <Compile Include="eljur_notifier\AppCommon\SMTP.cs" />
     <Compile Include="eljur_notifier\DbCommon\DbCommon.cs" />
     <Compile Include="eljur_notifier\DbCommon\DbCommonCommunicationInf.cs" />
+    <Compile Include="eljur_notifier\Eljur\AllStaffAdder.cs" />
     <Compile Include="eljur_notifier\Eljur\EljurApiSender.cs" />
     <Compile Include="eljur_notifier\EventHandler\AppRunner.cs" />
     <Compile Include="eljur_notifier\EventHandler\EventHandler.cs" />
