@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.SqlClient;
-using eljur_notifier.AppCommonNS;
 using System.Configuration;
 
 namespace MsDbLibraryNS.MsDbNS.DestructorNS

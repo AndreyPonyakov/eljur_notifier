@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using eljur_notifier.AppCommonNS;
-using MsDbLibraryNS.MsDbNS.SetterNS;
 using MsDbLibraryNS.StaffModel;
 
 namespace MsDbLibraryNS.MsDbNS.CatcherNS

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MsDbLibraryNS.StaffModel;
-using eljur_notifier.AppCommonNS;
+
 
 namespace MsDbLibraryNS.MsDbNS.UpdaterNS.StaffUpdaterNS
 {

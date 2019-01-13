@@ -57,6 +57,9 @@
     <Reference Include="FirebirdSql.Data.FirebirdClient, Version=6.4.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
       <HintPath>packages\FirebirdSql.Data.FirebirdClient.6.4.0\lib\net452\FirebirdSql.Data.FirebirdClient.dll</HintPath>
     </Reference>
+    <Reference Include="MsDbLibrary">
+      <HintPath>..\MsDbLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -140,69 +143,13 @@
     <Compile Include="eljur_notifier\EventHandler\EventHandler.cs" />
     <Compile Include="eljur_notifier\FireBird\Firebird.cs" />
     <Compile Include="eljur_notifier\Eljur\EljurApiRequester.cs" />
-    <Compile Include="eljur_notifier\MsDb\Checker\EmptyChecker.cs" />
-    <Compile Include="eljur_notifier\MsDb\Checker\ExistChecker.cs" />
-    <Compile Include="eljur_notifier\MsDb\Checker\TimeChecker.cs" />
-    <Compile Include="eljur_notifier\MsDb\Cleaner\MsDbCleaner.cs" />
-    <Compile Include="eljur_notifier\MsDb\Destructor\MsDbDestructor.cs" />
-    <Compile Include="eljur_notifier\MsDb\Filler\MsDbFiller.cs" />
-    <Compile Include="eljur_notifier\MsDb\Filler\ScheduleFiller.cs" />
-    <Compile Include="eljur_notifier\MsDb\Filler\StaffFiller.cs" />
-    <Compile Include="eljur_notifier\MsDb\MsDb.cs" />
-    <Compile Include="eljur_notifier\MsDb\Catcher\MsDbCatcherFirstPass.cs" />
-    <Compile Include="eljur_notifier\MsDb\Catcher\MsDbCatcherLastPass.cs" />
-    <Compile Include="eljur_notifier\MsDb\Checker\MsDbChecker.cs" />
-    <Compile Include="eljur_notifier\MsDb\Requester\MsDbRequester.cs" />
-    <Compile Include="eljur_notifier\MsDb\Setter\MsDbSetter.cs" />
-    <Compile Include="eljur_notifier\MsDb\Updater\MsDbUpdater.cs" />
-    <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\MainStaffUpdater.cs" />
-    <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\MsDbStaffUpdater.cs" />
-    <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\NewStaffAdder.cs" />
-    <Compile Include="eljur_notifier\MsDb\Updater\StaffUpdater\Auxiliary\OldStaffCleaner.cs" />
     <Compile Include="eljur_notifier\Program.cs" />
-    <Compile Include="Migrations\201812191123066_InitialCreate.cs" />
-    <Compile Include="Migrations\201812191123066_InitialCreate.Designer.cs">
-      <DependentUpon>201812191123066_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812191701034_change_struct1.cs" />
-    <Compile Include="Migrations\201812191701034_change_struct1.Designer.cs">
-      <DependentUpon>201812191701034_change_struct1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812192126564_change_struct2.cs" />
-    <Compile Include="Migrations\201812192126564_change_struct2.Designer.cs">
-      <DependentUpon>201812192126564_change_struct2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812201132516_addOldPupilId.cs" />
-    <Compile Include="Migrations\201812201132516_addOldPupilId.Designer.cs">
-      <DependentUpon>201812201132516_addOldPupilId.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812201358278_EventTime.cs" />
-    <Compile Include="Migrations\201812201358278_EventTime.Designer.cs">
-      <DependentUpon>201812201358278_EventTime.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812261558108_EljurAccount_to_EljurAccountId.cs" />
-    <Compile Include="Migrations\201812261558108_EljurAccount_to_EljurAccountId.Designer.cs">
-      <DependentUpon>201812261558108_EljurAccount_to_EljurAccountId.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201812262325177_Schedule_was_added.cs" />
-    <Compile Include="Migrations\201812262325177_Schedule_was_added.Designer.cs">
-      <DependentUpon>201812262325177_Schedule_was_added.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901071030212_delEnables.cs" />
-    <Compile Include="Migrations\201901071030212_delEnables.Designer.cs">
-      <DependentUpon>201901071030212_delEnables.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="StaffModel\Event.cs" />
-    <Compile Include="StaffModel\Pupil.cs" />
-    <Compile Include="StaffModel\Schedule.cs" />
-    <Compile Include="StaffModel\StaffContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
@@ -231,32 +178,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201812191123066_InitialCreate.resx">
-      <DependentUpon>201812191123066_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812191701034_change_struct1.resx">
-      <DependentUpon>201812191701034_change_struct1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812192126564_change_struct2.resx">
-      <DependentUpon>201812192126564_change_struct2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812201132516_addOldPupilId.resx">
-      <DependentUpon>201812201132516_addOldPupilId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812201358278_EventTime.resx">
-      <DependentUpon>201812201358278_EventTime.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812261558108_EljurAccount_to_EljurAccountId.resx">
-      <DependentUpon>201812261558108_EljurAccount_to_EljurAccountId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201812262325177_Schedule_was_added.resx">
-      <DependentUpon>201812262325177_Schedule_was_added.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901071030212_delEnables.resx">
-      <DependentUpon>201901071030212_delEnables.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

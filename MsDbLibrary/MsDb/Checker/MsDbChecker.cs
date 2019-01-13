@@ -1,5 +1,4 @@
-﻿using eljur_notifier.AppCommonNS;
-using System;
+﻿using System;
 
 namespace MsDbLibraryNS.MsDbNS.CheckerNS
 {

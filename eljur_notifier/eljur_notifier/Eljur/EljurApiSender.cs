@@ -1,7 +1,7 @@
 ﻿using System;
 using eljur_notifier.AppCommonNS;
-using eljur_notifier.MsDbNS.RequesterNS;
-using eljur_notifier.MsDbNS.SetterNS;
+using MsDbLibraryNS.MsDbNS.RequesterNS;
+using MsDbLibraryNS.MsDbNS.SetterNS;
 
 namespace eljur_notifier.EljurNS
 {

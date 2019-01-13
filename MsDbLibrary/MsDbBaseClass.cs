@@ -9,7 +9,7 @@ using MsDbLibraryNS.MsDbNS.FillerNS;
 using System.Data.SqlClient;
 using MsDbLibraryNS.MsDbNS.UpdaterNS.StaffUpdaterNS;
 using MsDbLibraryNS.MsDbNS.CatcherNS;
-using eljur_notifier.AppCommonNS;
+using MsDbLibraryNS;
 
 namespace MsDbLibraryNS
 {

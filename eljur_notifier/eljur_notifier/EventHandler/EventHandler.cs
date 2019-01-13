@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using eljur_notifier.FirebirdNS;
-using eljur_notifier.MsDbNS;
-using eljur_notifier.MsDbNS.CheckerNS;
+using MsDbLibraryNS.MsDbNS;
+using MsDbLibraryNS.MsDbNS.CheckerNS;
 using eljur_notifier.AppCommonNS;
-using eljur_notifier.MsDbNS.CatcherNS;
+using MsDbLibraryNS.MsDbNS.CatcherNS;
 using eljur_notifier.EljurNS;
-using eljur_notifier.MsDbNS.SetterNS;
+using MsDbLibraryNS.MsDbNS.SetterNS;
 
 namespace eljur_notifier.EventHandlerNS
 {

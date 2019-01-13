@@ -1,6 +1,5 @@
 ﻿using System;
 using MsDbLibraryNS.StaffModel;
-using eljur_notifier.AppCommonNS;
 
 
 namespace MsDbLibraryNS.MsDbNS.CleanerNS

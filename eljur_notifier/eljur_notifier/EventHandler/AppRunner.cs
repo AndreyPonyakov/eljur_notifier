@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading;
 using eljur_notifier.FirebirdNS;
-using eljur_notifier.MsDbNS;
-using eljur_notifier.MsDbNS.CheckerNS;
+using MsDbLibraryNS.MsDbNS.CheckerNS;
 using eljur_notifier.AppCommonNS;
-using eljur_notifier.MsDbNS.CleanerNS;
-using eljur_notifier.MsDbNS.UpdaterNS;
+using MsDbLibraryNS.MsDbNS.CleanerNS;
+using MsDbLibraryNS.MsDbNS.UpdaterNS;
 using eljur_notifier.EljurNS;
 
 namespace eljur_notifier.EventHandlerNS
@@ -17,7 +16,8 @@ namespace eljur_notifier.EventHandlerNS
         internal protected CancellationTokenSource cancellationTokenSource { get; set; }     
         internal protected Action actionBeforeClosing { get; set; }
 
-        public AppRunner() : base(new Message(), new Config(), new Firebird(), new AllStaffAdder(), new MsDb(), new MsDbChecker(), new MsDbUpdater(), new MsDbCleaner(), new EventHandlerEljur())
+        public AppRunner() 
+            : base(new Message(), new Config(), new Firebird(), new AllStaffAdder(), new MsDbChecker(), new MsDbUpdater(), new MsDbCleaner(), new EventHandlerEljur())
         {
             this.cancellationTokenSource = new CancellationTokenSource();
         }
@@ -27,12 +27,7 @@ namespace eljur_notifier.EventHandlerNS
             Boolean IsDbExist = msDbChecker.CheckMsDb();
             if (!IsDbExist)
             {
-                var AllStaff = new List<object[]>();
-                AllStaff = firebird.getAllStaff();
-                AllStaff = allStaffAdder.AddClassAndEljurId(AllStaff);
-                var AllClasses = new List<object[]>();
-                AllClasses = eljurApiRequester.getClasesObjects();
-                msDbUpdater.UpdateMsDb(AllStaff, AllClasses);
+                CreateNewMsDbThroughUpdating();
             }
             var GetDataFb = eventHandlerEljur.GetDataFb(cancellationTokenSource.Token);
 
@@ -45,22 +40,25 @@ namespace eljur_notifier.EventHandlerNS
                 cancellationTokenSource.Cancel();
                 Task.WaitAll(GetDataFb, CatchEventFirstPass, CatchEventLastPass);
                 msDbCleaner.clearAllTablesBesidesPupils();
-                var AllStaff = new List<object[]>();
-                AllStaff = firebird.getAllStaff();
-                AllStaff = allStaffAdder.AddClassAndEljurId(AllStaff);
-                var AllClasses = new List<object[]>();
-                AllClasses = eljurApiRequester.getClasesObjects();
-                msDbUpdater.UpdateMsDb(AllStaff, AllClasses);
+                CreateNewMsDbThroughUpdating();
                 Task.Delay(TimeSpan.FromMilliseconds(config.IntervalSleepBeforeReset));
                 //restart 
                 AppRunner appRunner = new AppRunner();
                 appRunner.Run(args);
             }));
 
-
-
-
             while (true) { }
+        }
+
+
+        public void CreateNewMsDbThroughUpdating()
+        {
+            var AllStaff = new List<object[]>();
+            AllStaff = firebird.getAllStaff();
+            AllStaff = allStaffAdder.AddClassAndEljurId(AllStaff);
+            var AllClasses = new List<object[]>();
+            AllClasses = eljurApiRequester.getClasesObjects();
+            msDbUpdater.UpdateMsDb(AllStaff, AllClasses);
         }
 
     }

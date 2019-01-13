@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Data.SqlClient;
-using eljur_notifier.AppCommonNS;
 using System.Configuration;
+using MsDbLibraryNS;
 
 namespace MsDbLibraryNS.MsDbNS.CheckerNS
 {
-    public class ExistChecker : EljurBaseClass
+    public class ExistChecker : MsDbBaseClass
     {
         internal protected String nameOfConnectionString { get; set; }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using eljur_notifier.AppCommonNS;
 using System.Data.SqlClient;
 using System.Configuration;
 
