@@ -12,7 +12,7 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
         internal protected String nameorConnectionString { get; set; }
 
         public MsDbStaffUpdater(String NameorConnectionString = "name=StaffContext")
-            : base(new Message(), new StaffContext(NameorConnectionString), new EljurApiRequester()) {
+            : base(new Message(), new StaffContext(NameorConnectionString)) {
             this.nameorConnectionString = NameorConnectionString;
         }
  
@@ -31,12 +31,8 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
                         result.MiddleName = row[3].ToString();
                         result.FullFIO = row[22].ToString();
                         result.FirstName = row[2].ToString();
-
-                        String clas = eljurApiRequester.getClasByFullFIO(row[22].ToString());
-                        result.Clas = clas;
-
-                        int eljurAccountId = eljurApiRequester.getEljurAccountIdByFullFIO(row[22].ToString());
-                        result.EljurAccountId = eljurAccountId;                     
+                        result.Clas = row[21].ToString();
+                        result.EljurAccountId = Convert.ToInt32(row[20]);
                     }
 
                 }

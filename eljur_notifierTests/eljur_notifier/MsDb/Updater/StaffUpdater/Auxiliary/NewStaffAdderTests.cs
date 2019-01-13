@@ -29,6 +29,8 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             student1[2] = "Новый";
             student1[3] = "Новович";
             student1[22] = "Новиков Новый Новович";
+            student1[21] = "1А";
+            student1[20] = 666;
             AllStaff.Add(student1);
             return AllStaff;
         }

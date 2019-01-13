@@ -25,34 +25,11 @@ namespace eljur_notifier.EventHandlerNS
         public void Run(string[] args)
         {
             Boolean IsDbExist = msDbChecker.CheckMsDb();
-            if (IsDbExist)
+            if (!IsDbExist)
             {
                 var AllStaff = new List<object[]>();
                 AllStaff = firebird.getAllStaff();
-                foreach (object[] row in AllStaff)
-                {
-                    Console.WriteLine(row[0]);
-                    Console.WriteLine(row[1]);
-                    Console.WriteLine(row[2]);
-                    Console.WriteLine(row[3]);
-                    Console.WriteLine(row[4]);
-                    Console.WriteLine(row[22]);
-                    break;
-                }
                 AllStaff = allStaffAdder.AddClassAndEljurId(AllStaff);
-                foreach (object[] row in AllStaff)
-                {
-                    Console.WriteLine(row[0]);
-                    Console.WriteLine(row[1]);
-                    Console.WriteLine(row[2]);
-                    Console.WriteLine(row[3]);
-                    Console.WriteLine(row[4]);
-                    Console.WriteLine(row[20]);
-                    Console.WriteLine(row[21]);
-                    Console.WriteLine(row[22]);
-                    Console.ReadKey();
-                    break;
-                }
                 msDbUpdater.UpdateMsDb(AllStaff);
             }
             var GetDataFb = eventHandlerEljur.GetDataFb(cancellationTokenSource.Token);
@@ -68,7 +45,7 @@ namespace eljur_notifier.EventHandlerNS
                 msDbCleaner.clearAllTablesBesidesPupils();
                 var AllStaff = new List<object[]>();
                 AllStaff = firebird.getAllStaff();
-                //NEED AllStaffAdder!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                AllStaff = allStaffAdder.AddClassAndEljurId(AllStaff);
                 msDbUpdater.UpdateMsDb(AllStaff);
                 Task.Delay(TimeSpan.FromMilliseconds(config.IntervalSleepBeforeReset));
                 //restart 

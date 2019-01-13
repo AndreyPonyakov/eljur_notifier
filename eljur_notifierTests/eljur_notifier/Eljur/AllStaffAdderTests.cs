@@ -1,28 +1,29 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using eljur_notifier.EljurNS;
 using System;
 using System.Collections.Generic;
-using eljur_notifier.MsDbNS.RequesterNS;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
+namespace eljur_notifier.EljurNS.Tests
 {
     [TestClass()]
-    public class MainStaffUpdaterTests
+    public class AllStaffAdderTests
     {
         [TestMethod()]
-        public void MainUpdateStaffTest()
+        public void AddClassAndEljurIdTest()
         {
-            MainStaffUpdater mainStaffUpdater = new MainStaffUpdater("name=StaffContextTests");
+            AllStaffAdder allStaffAdder = new AllStaffAdder();
             var AllStaff = getStaffListTest();
-            mainStaffUpdater.MainUpdateStaff(AllStaff);
-
-            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
-            String FullFIO1 = msDbRequester.getFullFIOByPupilIdOld(5000);
-            String FullFIO2 = msDbRequester.getFullFIOByPupilIdOld(5001);
-            String FullFIO3 = msDbRequester.getFullFIOByPupilIdOld(5002);
-            Assert.IsTrue(FullFIO1 == "Иванов Иван Иванович");
-            Assert.IsTrue(FullFIO2 == "Петров Петр Петрович");
-            Assert.IsTrue(FullFIO3 == "Сидоров Сидор Сидорович");
+            AllStaff = allStaffAdder.AddClassAndEljurId(AllStaff);
+            foreach (object[] row in AllStaff)
+            {
+                Assert.IsTrue( false == String.IsNullOrEmpty(row[21].ToString()));
+                Assert.IsTrue(Int32.TryParse(row[20].ToString(), out int number));
+            }
         }
+
 
         public List<object[]> getStaffListTest()
         {
@@ -33,8 +34,6 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             student1[2] = "Иван";
             student1[3] = "Иванович";
             student1[22] = "Иванов Иван Иванович";
-            student1[21] = "1А";
-            student1[20] = 666;
             AllStaff.Add(student1);
             object[] student2 = new object[23];
             student2[0] = 5001;
@@ -42,8 +41,6 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             student2[2] = "Петр";
             student2[3] = "Петрович";
             student2[22] = "Петров Петр Петрович";
-            student2[21] = "1А";
-            student2[20] = 666;
             AllStaff.Add(student2);
             object[] student3 = new object[23];
             student3[0] = 5002;
@@ -51,8 +48,6 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             student3[2] = "Сидор";
             student3[3] = "Сидорович";
             student3[22] = "Сидоров Сидор Сидорович";
-            student3[21] = "1А";
-            student3[20] = 666;
             AllStaff.Add(student3);
             return AllStaff;
         }

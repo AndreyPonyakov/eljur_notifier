@@ -40,6 +40,8 @@ namespace eljur_notifier.MsDbNS.CheckerNS.Tests
             student1[2] = "Иван";
             student1[3] = "Иванович";
             student1[22] = "Иванов Иван Иванович";
+            student1[21] = "1А";
+            student1[20] = 666;
             AllStaff.Add(student1);
             object[] student2 = new object[23];
             student2[0] = 5001;
@@ -47,6 +49,8 @@ namespace eljur_notifier.MsDbNS.CheckerNS.Tests
             student2[2] = "Петр";
             student2[3] = "Петрович";
             student2[22] = "Петров Петр Петрович";
+            student2[21] = "1Б";
+            student2[20] = 666;
             AllStaff.Add(student2);
             object[] student3 = new object[23];
             student3[0] = 5002;
@@ -54,6 +58,8 @@ namespace eljur_notifier.MsDbNS.CheckerNS.Tests
             student3[2] = "Сидор";
             student3[3] = "Сидорович";
             student3[22] = "Сидоров Сидор Сидорович";
+            student3[21] = "1В";
+            student3[20] = 666;
             AllStaff.Add(student3);
             return AllStaff;
         }

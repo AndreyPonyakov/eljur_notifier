@@ -39,6 +39,8 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             student1[2] = "Ивана";
             student1[3] = "Ивановна";
             student1[22] = "Иванова Ивана Ивановна";
+            student1[21] = "1А";
+            student1[20] = 666;
             AllStaff.Add(student1);
             object[] student2 = new object[23];
             student2[0] = 5001;
@@ -46,6 +48,8 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             student2[2] = "Петра";
             student2[3] = "Петровна";
             student2[22] = "Петрова Петра Петровна";
+            student2[21] = "1А";
+            student2[20] = 666;
             AllStaff.Add(student2);
             object[] student3 = new object[23];
             student3[0] = 5002;
@@ -53,6 +57,8 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             student3[2] = "Сидора";
             student3[3] = "Сидоровна";
             student3[22] = "Сидорова Сидора Сидоровна";
+            student3[21] = "1А";
+            student3[20] = 666;
             AllStaff.Add(student3);
             return AllStaff;
         }
@@ -66,6 +72,8 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             student1[2] = "Иван";
             student1[3] = "Иванович";
             student1[22] = "Иванов Иван Иванович";
+            student1[21] = "1А";
+            student1[20] = 666;
             AllStaff.Add(student1);
             object[] student2 = new object[23];
             student2[0] = 5001;
@@ -73,6 +81,8 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             student2[2] = "Петр";
             student2[3] = "Петрович";
             student2[22] = "Петров Петр Петрович";
+            student2[21] = "1А";
+            student2[20] = 666;
             AllStaff.Add(student2);
             object[] student3 = new object[23];
             student3[0] = 5002;
@@ -80,6 +90,8 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS.Tests
             student3[2] = "Сидор";
             student3[3] = "Сидорович";
             student3[22] = "Сидоров Сидор Сидорович";
+            student3[21] = "1А";
+            student3[20] = 666;
             AllStaff.Add(student3);
             return AllStaff;
         }

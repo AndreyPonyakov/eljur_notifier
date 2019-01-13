@@ -64,6 +64,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="eljur_notifier\Eljur\AllStaffAdderTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Catcher\MsDbCatcherFirstPassTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Catcher\MsDbCatcherLastPassTests.cs" />
     <Compile Include="eljur_notifier\MsDb\Checker\EmptyCheckerTests.cs" />

@@ -12,7 +12,7 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
         internal protected String nameorConnectionString { get; set; }
 
         public NewStaffAdder(String NameorConnectionString = "name=StaffContext") 
-            : base(new Message(), new StaffContext(NameorConnectionString), new EljurApiRequester()) {
+            : base(new Message(), new StaffContext(NameorConnectionString)) {
             this.nameorConnectionString = NameorConnectionString;
         }
 
@@ -33,10 +33,8 @@ namespace eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS
                         Student.LastName = row[1].ToString();
                         Student.MiddleName = row[3].ToString();
                         Student.FullFIO = row[22].ToString();
-                        String clas = eljurApiRequester.getClasByFullFIO(Student.FullFIO);
-                        Student.Clas = clas;
-                        int eljurAccountId = eljurApiRequester.getEljurAccountIdByFullFIO(Student.FullFIO);
-                        Student.EljurAccountId = eljurAccountId;
+                        Student.Clas = row[21].ToString();
+                        Student.EljurAccountId = Convert.ToInt32(row[20]);                    
                         PupilsToAdd.Add(Student);                      
                     }
                 }
