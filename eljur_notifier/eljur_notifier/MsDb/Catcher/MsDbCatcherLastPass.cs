@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using eljur_notifier.AppCommonNS;
 using eljur_notifier.EljurNS;
@@ -9,15 +10,20 @@ namespace eljur_notifier.MsDbNS.CatcherNS
 {
     public class MsDbCatcherLastPass : EljurBaseClass
     {
-        public MsDbCatcherLastPass() : base(new Message(), new StaffContext(), new MsDbSetter(), new EljurApiSender()) { }
+        internal protected String nameorConnectionString { get; set; }
 
-        public void catchLastPass()
+        public MsDbCatcherLastPass(String NameorConnectionString = "name=StaffContext") 
+            : base(new StaffContext(NameorConnectionString)) {
+            this.nameorConnectionString = NameorConnectionString;
+        }
+
+        public List<object[]> catchLastPass()
         {
-
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
                 TimeSpan timeNow = DateTime.Now.TimeOfDay;
                 TimeSpan EventTimeNowSubstract15Min = timeNow.Add(new TimeSpan(0, -15, 0));
+                var returnedList = new List<object[]>();
                 var PupilIdOldAndTimeRows = from e in StaffCtx.Events
                                             where e.NotifyWasSend == false && e.EventName == "Вышел" && e.EventTime < EventTimeNowSubstract15Min
                                             orderby e.EventTime
@@ -31,18 +37,10 @@ namespace eljur_notifier.MsDbNS.CatcherNS
                     var PupilIdOldAndTimeMassObjects = new object[2];
                     PupilIdOldAndTimeMassObjects[0] = PupilIdOldAndTime.PupilIdOld;
                     PupilIdOldAndTimeMassObjects[1] = PupilIdOldAndTime.EventTime;
-                    Boolean result = eljurApiSender.SendNotifyLastPass(PupilIdOldAndTimeMassObjects);
-                    if (result == true)
-                    {
-                        msDbSetter.SetStatusNotifyWasSend(Convert.ToInt32(PupilIdOldAndTime.PupilIdOld));
-                    }
+                    returnedList.Add(PupilIdOldAndTimeMassObjects);
                 }
-
+                return returnedList;               
             }
-
-
         }
-
-
     }
 }

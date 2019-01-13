@@ -7,12 +7,16 @@ using eljur_notifier.MsDbNS;
 using eljur_notifier.MsDbNS.CheckerNS;
 using eljur_notifier.AppCommonNS;
 using eljur_notifier.MsDbNS.CatcherNS;
+using eljur_notifier.EljurNS;
+using eljur_notifier.MsDbNS.SetterNS;
 
 namespace eljur_notifier.EventHandlerNS
 {
     public class EventHandlerEljur : EljurBaseClass
     {
-        public EventHandlerEljur() : base(new Message(), new Config(), new MsDb(), new Firebird(), new TimeChecker()) { }
+        public EventHandlerEljur() 
+            : base(new Message(), new Config(), new MsDb(), new Firebird(), new TimeChecker(), 
+                  new EljurApiSender(), new MsDbCatcherFirstPass(), new MsDbCatcherLastPass(), new MsDbSetter()) { }
  
         public async Task GetDataFb(CancellationToken cancellationToken) 
         {
@@ -60,8 +64,15 @@ namespace eljur_notifier.EventHandlerNS
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    MsDbCatcherFirstPass msDbCatcherFirstPass = new MsDbCatcherFirstPass();
-                    msDbCatcherFirstPass.catchFirstPass();
+                    var PupilIdOldAndTimeRows = msDbCatcherFirstPass.catchFirstPass();
+                    foreach (var PupilIdOldAndTime in PupilIdOldAndTimeRows)
+                    {
+                        Boolean result = eljurApiSender.SendNotifyFirstPass(PupilIdOldAndTime);
+                        if (result == true)
+                        {
+                            msDbSetter.SetStatusNotifyWasSend(Convert.ToInt32(PupilIdOldAndTime[0]));
+                        }
+                    }
                     await Task.Delay(10000);
                 }
             }
@@ -77,8 +88,16 @@ namespace eljur_notifier.EventHandlerNS
             {
                 while (!cancellationToken.IsCancellationRequested)
                 {
-                    MsDbCatcherLastPass msDbCatcherLastPass = new MsDbCatcherLastPass();
-                    msDbCatcherLastPass.catchLastPass();
+                    var PupilIdOldAndTimeRows = msDbCatcherLastPass.catchLastPass();
+
+                    foreach (var PupilIdOldAndTime in PupilIdOldAndTimeRows)
+                    {
+                        Boolean result = eljurApiSender.SendNotifyLastPass(PupilIdOldAndTime);
+                        if (result == true)
+                        {
+                            msDbSetter.SetStatusNotifyWasSend(Convert.ToInt32(PupilIdOldAndTime[0]));
+                        }
+                    }
                     await Task.Delay(10000);
                 }
             }

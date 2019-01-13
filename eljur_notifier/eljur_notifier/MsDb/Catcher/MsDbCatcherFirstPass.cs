@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using eljur_notifier.AppCommonNS;
 using eljur_notifier.EljurNS;
@@ -9,12 +10,18 @@ namespace eljur_notifier.MsDbNS.CatcherNS
 {
     public class MsDbCatcherFirstPass : EljurBaseClass
     {
-        public MsDbCatcherFirstPass() : base(new Message(), new StaffContext(), new MsDbSetter(), new EljurApiSender()) { }
+        internal protected String nameorConnectionString { get; set; }
+
+        public MsDbCatcherFirstPass(String NameorConnectionString = "name=StaffContext") 
+            : base(new StaffContext(NameorConnectionString)) {
+            this.nameorConnectionString = NameorConnectionString;
+        }
    
-        public void catchFirstPass()
+        public List<object[]> catchFirstPass()
         {
-            using (this.StaffCtx = new StaffContext())
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
             {
+                var returnedList = new List<object[]>();
                 var PupilIdOldAndTimeRows = from e in StaffCtx.Events
                                             where e.NotifyWasSend == false && e.EventName == "Первый проход"
                                             orderby e.EventTime
@@ -28,12 +35,9 @@ namespace eljur_notifier.MsDbNS.CatcherNS
                     var PupilIdOldAndTimeMassObjects = new object[2];
                     PupilIdOldAndTimeMassObjects[0] = PupilIdOldAndTime.PupilIdOld;
                     PupilIdOldAndTimeMassObjects[1] = PupilIdOldAndTime.EventTime;
-                    Boolean result = eljurApiSender.SendNotifyFirstPass(PupilIdOldAndTimeMassObjects);
-                    if (result == true)
-                    {
-                        msDbSetter.SetStatusNotifyWasSend(Convert.ToInt32(PupilIdOldAndTime.PupilIdOld));
-                    }
+                    returnedList.Add(PupilIdOldAndTimeMassObjects);
                 }
+                return returnedList;
 
             }
 

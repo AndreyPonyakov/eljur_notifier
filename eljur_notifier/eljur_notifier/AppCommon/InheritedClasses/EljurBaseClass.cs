@@ -12,6 +12,7 @@ using eljur_notifier.DbCommonNS;
 using eljur_notifier.MsDbNS.FillerNS;
 using System.Data.SqlClient;
 using eljur_notifier.MsDbNS.UpdaterNS.StaffUpdaterNS;
+using eljur_notifier.MsDbNS.CatcherNS;
 
 
 namespace eljur_notifier.AppCommonNS
@@ -42,16 +43,29 @@ namespace eljur_notifier.AppCommonNS
         internal protected NewStaffAdder newStaffAdder { get; set; }
         internal protected OldStaffCleaner oldStaffCleaner { get; set; }
         internal protected TimeChecker timeChecker { get; set; }
+        internal protected MsDbCatcherFirstPass msDbCatcherFirstPass { get; set; }
+        internal protected MsDbCatcherLastPass msDbCatcherLastPass { get; set; }
 
         public EljurBaseClass(Message Message)
         {
             this.message = Message;
         }
 
+        public EljurBaseClass(StaffContext StaffContext)
+        {
+            this.StaffCtx = StaffContext;
+        }
+
         public EljurBaseClass(Message Message, Config Config)
         {
             this.message = Message;
             this.config = Config;
+        }
+
+        public EljurBaseClass(StaffContext StaffContext, MsDbSetter MsDbSetter)
+        {
+            this.StaffCtx = StaffContext;
+            this.msDbSetter = MsDbSetter;
         }
 
         public EljurBaseClass(StaffFiller StaffFiller, ScheduleFiller ScheduleFiller)
@@ -138,13 +152,19 @@ namespace eljur_notifier.AppCommonNS
             this.msDbCleaner = MsDbCleaner;
         }
 
-        public EljurBaseClass(Message Message, Config Config, MsDb MsDb, Firebird Firebird, TimeChecker TimeChecker)
+        public EljurBaseClass(Message Message, Config Config, MsDb MsDb, Firebird Firebird, 
+            TimeChecker TimeChecker, EljurApiSender EljurApiSender, MsDbCatcherFirstPass MsDbCatcherFirstPass, MsDbCatcherLastPass MsDbCatcherLastPass,
+            MsDbSetter MsDbSetter)
         {
             this.message = Message;
             this.config = Config;
             this.msDb = MsDb;
             this.firebird = Firebird;
             this.timeChecker = TimeChecker;
+            this.eljurApiSender = EljurApiSender;
+            this.msDbCatcherFirstPass = MsDbCatcherFirstPass;
+            this.msDbCatcherLastPass = MsDbCatcherLastPass;
+            this.msDbSetter = MsDbSetter;
         }
 
         public EljurBaseClass(Message Message, Config Config, Firebird Firebird, MsDb MsDb, MsDbChecker MsDbChecker, MsDbUpdater MsDbUpdater, MsDbCleaner MsDbCleaner, EventHandlerEljur EventHandlerEljur)
