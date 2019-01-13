@@ -10,17 +10,12 @@ namespace eljur_notifier.MsDbNS.CheckerNS
         public  TimeSpan timeToDel { get; set; }
 
         public TimeChecker(TimeSpan TimeFromDel = default(TimeSpan), TimeSpan TimeToDel = default(TimeSpan)) 
-            : base(new Message(), new Config()) {
+            : base(new Message()) {
             if (TimeFromDel == default(TimeSpan) || TimeToDel == default(TimeSpan))
-            {
-                this.timeFromDel = config.timeFromDel;
-                this.timeToDel = config.timeToDel;
-            }
-            else
             {
                 this.timeFromDel = TimeFromDel;
                 this.timeToDel = TimeToDel;
-            }            
+            }         
         }
 
         public void CheckTime(Action actionAtMidnight)

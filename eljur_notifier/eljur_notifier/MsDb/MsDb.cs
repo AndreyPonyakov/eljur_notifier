@@ -9,7 +9,18 @@ namespace eljur_notifier.MsDbNS
 {
     public class MsDb : EljurBaseClass
     {
-        public MsDb() : base(new Message(), new Config(), new StaffContext()) { }
+        internal protected int treeIdResourceOutput1 { get; set; }
+        internal protected int treeIdResourceOutput2 { get; set; }
+        internal protected int treeIdResourceInput1 { get; set; }
+        internal protected int treeIdResourceInput2 { get; set; }
+
+        public MsDb(int TreeIdResourceOutput1 = 8564, int TreeIdResourceOutput2 = 9369, int TreeIdResourceInput1 = 8677, int TreeIdResourceInput2 = 9256) 
+            : base(new Message(), new StaffContext()) {
+            this.treeIdResourceOutput1 = TreeIdResourceOutput1;
+            this.treeIdResourceOutput2 = TreeIdResourceOutput2;
+            this.treeIdResourceInput1 = TreeIdResourceInput1;
+            this.treeIdResourceInput2 = TreeIdResourceInput2;
+        }
      
         public void CheckEventsDb(List<object[]> curEvents)
         {
@@ -31,7 +42,7 @@ namespace eljur_notifier.MsDbNS
                         if (result.EventName == "Первый проход" || result.EventName == "Вернулся" || result.EventName == "Опоздал")
                         {
                             //register only OUTPUT configs_tree_id_resource
-                            if (row[3].ToString() == config.ConfigsTreeIdResourceOutput1.ToString() || row[3].ToString() == config.ConfigsTreeIdResourceOutput2.ToString())
+                            if (row[3].ToString() == treeIdResourceOutput1.ToString() || row[3].ToString() == treeIdResourceOutput2.ToString())
                             {
                                 result.EventName = "Вышел";
                                 result.EventTime = TimeSpan.Parse(row[0].ToString());
@@ -44,7 +55,7 @@ namespace eljur_notifier.MsDbNS
                         else if (result.EventName == "Вышел" || result.EventName == "Прогул")
                         {
                             //register only INPUT configs_tree_id_resource
-                            if (row[3].ToString() == config.ConfigsTreeIdResourceInput1.ToString() || row[3].ToString() == config.ConfigsTreeIdResourceInput2.ToString())
+                            if (row[3].ToString() == treeIdResourceInput1.ToString() || row[3].ToString() == treeIdResourceInput2.ToString())
                             {                   
                                 result.EventName = "Вернулся";
                                 result.EventTime = TimeSpan.Parse(row[0].ToString());
@@ -57,7 +68,7 @@ namespace eljur_notifier.MsDbNS
                     else
                     {
                         //register only INPUT configs_tree_id_resource
-                        if (row[3].ToString() == config.ConfigsTreeIdResourceInput1.ToString() || row[3].ToString() == config.ConfigsTreeIdResourceInput2.ToString())
+                        if (row[3].ToString() == treeIdResourceInput1.ToString() || row[3].ToString() == treeIdResourceInput2.ToString())
                         {
                             Event Event = new Event();
                             Event.PupilIdOld = PupilIdOld;

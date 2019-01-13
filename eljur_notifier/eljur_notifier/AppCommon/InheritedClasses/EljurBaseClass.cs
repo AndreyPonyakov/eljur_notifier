@@ -175,9 +175,9 @@ namespace eljur_notifier.AppCommonNS
         {
             this.message = Message;
             this.config = Config;
-            this.msDb = MsDb;
+            this.msDb = new MsDb(config.ConfigsTreeIdResourceOutput1, config.ConfigsTreeIdResourceOutput2, config.ConfigsTreeIdResourceInput1, config.ConfigsTreeIdResourceInput2);
             this.firebird = Firebird;
-            this.timeChecker = TimeChecker;
+            this.timeChecker = new TimeChecker(config.timeFromDel, config.timeToDel);
             this.eljurApiSender = EljurApiSender;
             this.msDbCatcherFirstPass = MsDbCatcherFirstPass;
             this.msDbCatcherLastPass = MsDbCatcherLastPass;
@@ -190,7 +190,7 @@ namespace eljur_notifier.AppCommonNS
             this.config = new Config();
             this.firebird = new Firebird();
             this.allStaffAdder = new AllStaffAdder();
-            this.msDb = new MsDb();
+            this.msDb = new MsDb(config.ConfigsTreeIdResourceOutput1, config.ConfigsTreeIdResourceOutput2, config.ConfigsTreeIdResourceInput1, config.ConfigsTreeIdResourceInput2);
             this.msDbChecker = new MsDbChecker();
             this.msDbUpdater = new MsDbUpdater();
             this.msDbCleaner = new MsDbCleaner();
