@@ -31,7 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\eljur_notifier\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\eljur_notifier\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -41,8 +49,100 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="MsDbBaseClass.cs" />
+    <Compile Include="Migrations\201812191123066_InitialCreate.cs" />
+    <Compile Include="Migrations\201812191123066_InitialCreate.Designer.cs">
+      <DependentUpon>201812191123066_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812191701034_change_struct1.cs" />
+    <Compile Include="Migrations\201812191701034_change_struct1.Designer.cs">
+      <DependentUpon>201812191701034_change_struct1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812192126564_change_struct2.cs" />
+    <Compile Include="Migrations\201812192126564_change_struct2.Designer.cs">
+      <DependentUpon>201812192126564_change_struct2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812201132516_addOldPupilId.cs" />
+    <Compile Include="Migrations\201812201132516_addOldPupilId.Designer.cs">
+      <DependentUpon>201812201132516_addOldPupilId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812201358278_EventTime.cs" />
+    <Compile Include="Migrations\201812201358278_EventTime.Designer.cs">
+      <DependentUpon>201812201358278_EventTime.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812261558108_EljurAccount_to_EljurAccountId.cs" />
+    <Compile Include="Migrations\201812261558108_EljurAccount_to_EljurAccountId.Designer.cs">
+      <DependentUpon>201812261558108_EljurAccount_to_EljurAccountId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201812262325177_Schedule_was_added.cs" />
+    <Compile Include="Migrations\201812262325177_Schedule_was_added.Designer.cs">
+      <DependentUpon>201812262325177_Schedule_was_added.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901071030212_delEnables.cs" />
+    <Compile Include="Migrations\201901071030212_delEnables.Designer.cs">
+      <DependentUpon>201901071030212_delEnables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="MsDb\Catcher\MsDbCatcherFirstPass.cs" />
+    <Compile Include="MsDb\Catcher\MsDbCatcherLastPass.cs" />
+    <Compile Include="MsDb\Checker\EmptyChecker.cs" />
+    <Compile Include="MsDb\Checker\ExistChecker.cs" />
+    <Compile Include="MsDb\Checker\MsDbChecker.cs" />
+    <Compile Include="MsDb\Checker\TimeChecker.cs" />
+    <Compile Include="MsDb\Cleaner\MsDbCleaner.cs" />
+    <Compile Include="MsDb\Destructor\MsDbDestructor.cs" />
+    <Compile Include="MsDb\Filler\MsDbFiller.cs" />
+    <Compile Include="MsDb\Filler\ScheduleFiller.cs" />
+    <Compile Include="MsDb\Filler\StaffFiller.cs" />
+    <Compile Include="MsDb\MsDb.cs" />
+    <Compile Include="MsDb\Requester\MsDbRequester.cs" />
+    <Compile Include="MsDb\Setter\MsDbSetter.cs" />
+    <Compile Include="MsDb\Updater\MsDbUpdater.cs" />
+    <Compile Include="MsDb\Updater\StaffUpdater\Auxiliary\MsDbStaffUpdater.cs" />
+    <Compile Include="MsDb\Updater\StaffUpdater\Auxiliary\NewStaffAdder.cs" />
+    <Compile Include="MsDb\Updater\StaffUpdater\Auxiliary\OldStaffCleaner.cs" />
+    <Compile Include="MsDb\Updater\StaffUpdater\MainStaffUpdater.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StaffModel\Event.cs" />
+    <Compile Include="StaffModel\Pupil.cs" />
+    <Compile Include="StaffModel\Schedule.cs" />
+    <Compile Include="StaffModel\StaffContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201812191123066_InitialCreate.resx">
+      <DependentUpon>201812191123066_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812191701034_change_struct1.resx">
+      <DependentUpon>201812191701034_change_struct1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812192126564_change_struct2.resx">
+      <DependentUpon>201812192126564_change_struct2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812201132516_addOldPupilId.resx">
+      <DependentUpon>201812201132516_addOldPupilId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812201358278_EventTime.resx">
+      <DependentUpon>201812201358278_EventTime.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812261558108_EljurAccount_to_EljurAccountId.resx">
+      <DependentUpon>201812261558108_EljurAccount_to_EljurAccountId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201812262325177_Schedule_was_added.resx">
+      <DependentUpon>201812262325177_Schedule_was_added.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901071030212_delEnables.resx">
+      <DependentUpon>201901071030212_delEnables.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\eljur_notifier\eljur_notifier.csproj">
+      <Project>{437b18d1-ffc4-4f7b-ac4e-35fc2c7bd46a}</Project>
+      <Name>eljur_notifier</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
