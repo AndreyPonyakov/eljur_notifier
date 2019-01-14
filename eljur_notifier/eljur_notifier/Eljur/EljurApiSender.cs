@@ -8,9 +8,10 @@ namespace eljur_notifier.EljurNS
 {
     public class EljurApiSender : EljurBaseClass
     {
-        public EljurApiSender() : base(new Message(), new MsDbRequester(), new MsDbSetter()) { }
+        public EljurApiSender(String NameorConnectionString = "name=StaffContext") 
+            : base(new Message(), new MsDbRequester(NameorConnectionString), new MsDbSetter(NameorConnectionString)) { }
 
-
+        //NEED REALISATION OF THIS METHOD
         public Boolean SendNotifyFirstPass(object[] PupilIdOldAndTime)
         {           
             int EljurAccountId = msDbRequester.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));          
@@ -31,6 +32,7 @@ namespace eljur_notifier.EljurNS
             return true;
         }
 
+        
         public Boolean SendNotifyLastPass(object[] PupilIdOldAndTime)
         {
             int EljurAccountId = msDbRequester.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
@@ -67,6 +69,7 @@ namespace eljur_notifier.EljurNS
 
         }
 
+        //NEED REALISATION OF THIS METHOD
         public Boolean SendNotify(String NotifyString, Boolean NotifyEnable)
         {
             if (NotifyEnable)
@@ -74,7 +77,8 @@ namespace eljur_notifier.EljurNS
                 return true;
             }
             else
-            {
+            {   
+                //In this case need always return true!!!
                 return true;
             }
                      
