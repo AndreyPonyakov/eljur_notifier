@@ -11,25 +11,30 @@ namespace eljur_notifier.EljurNS
         public EljurApiSender(String NameorConnectionString = "name=StaffContext") 
             : base(new Message(), new MsDbRequester(NameorConnectionString), new MsDbSetter(NameorConnectionString)) { }
 
-        //NEED REALISATION OF THIS METHOD
+        
         public Boolean SendNotifyFirstPass(object[] PupilIdOldAndTime)
         {           
             int EljurAccountId = msDbRequester.getEljurAccountIdByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));          
             String FullFIO = msDbRequester.getFullFIOByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
             String Clas = msDbRequester.getClasByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
             TimeSpan StartTimeLessons = msDbRequester.getStartTimeLessonsByClas(Clas);
+            Boolean NotifyEnable = msDbRequester.getNotifyEnableByPupilIdOld(Convert.ToInt32(PupilIdOldAndTime[0]));
 
             var EventTime = TimeSpan.Parse(PupilIdOldAndTime[1].ToString());
             if (EventTime > StartTimeLessons)
             {
                 msDbSetter.SetStatusCameTooLate(Convert.ToInt32(PupilIdOldAndTime[0]));
-                message.Display("Notify about student " + FullFIO + " who came too late was sent to " + EljurAccountId + " EljurAccountId", "Warn");
+                String NotifyString = "Notify about student " + FullFIO + " who came too late was sent to " + EljurAccountId + " EljurAccountId";
+                message.Display(NotifyString, "Warn");
+                return SendNotify(NotifyString, NotifyEnable);
             }
             else
             {
-                message.Display("Notify about FirstPass by student " + FullFIO + " was sent to " + EljurAccountId + " EljurAccountId", "Warn");
-            }             
-            return true;
+                String NotifyString = "Notify about FirstPass by student " + FullFIO + " was sent to " + EljurAccountId + " EljurAccountId";
+                message.Display(NotifyString, "Warn");
+                return SendNotify(NotifyString, NotifyEnable);
+            }
+            
         }
 
         

@@ -1,19 +1,42 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using eljur_notifier.EljurNS;
+﻿using eljur_notifier.EljurNS;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MsDbLibraryNS.MsDbNS.RequesterNS;
 using MsDbLibraryNS.StaffModel;
 using MsDbLibraryNS.MsDbNS.SetterNS;
+using MsDbLibraryNS.MsDbNS.RequesterNS;
+
 
 namespace eljur_notifier.EljurNS.Tests
 {
     [TestClass()]
     public class EljurApiSenderTests
     {
+        [TestMethod()]
+        public void SendNotifyFirstPassTest()
+        {
+            PrepareTestPupil();
+            PrepareTestEvent();
+            PrepareTestSchedule();
+            var TestObject1 = PrepareTestObject5MinPast();
+            var TestObject2 = PrepareTestObject5MinFuture();
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests");
+            EljurApiSender EljurApiSender = new EljurApiSender("name=StaffContextTests");
+
+            var result = EljurApiSender.SendNotifyFirstPass(TestObject1);
+            Assert.IsTrue(result);
+            String EventName = msDbRequester.getEventNameByPupilIdOld(5000);      
+            Assert.IsTrue(EventName == "Первый проход");
+       
+            result = EljurApiSender.SendNotifyFirstPass(TestObject2);
+            Assert.IsTrue(result);
+      
+            EventName = msDbRequester.getEventNameByPupilIdOld(5000);
+            msDbSetter.SetDelAllEventsForTesting();
+            Assert.IsTrue(EventName == "Опоздал");          
+        }
+
+
         [TestMethod()]
         public void SendNotifyLastPassTest()
         {
@@ -37,7 +60,7 @@ namespace eljur_notifier.EljurNS.Tests
         {
             var TestObject = new object[2];
             TestObject[0] = 5000;
-            TimeSpan TestTime = DateTime.Now.TimeOfDay; 
+            TimeSpan TestTime = DateTime.Now.TimeOfDay;
             TestTime = TestTime.Add(new TimeSpan(0, -16, 0));
             TestObject[1] = TestTime;
             return TestObject;
@@ -53,6 +76,29 @@ namespace eljur_notifier.EljurNS.Tests
             return TestObject;
         }
 
+        object[] PrepareTestObject5MinFuture()
+        {
+            var TestObject = new object[2];
+            TestObject[0] = 5000;
+            TimeSpan TestTime = DateTime.Now.TimeOfDay;
+            TestTime = TestTime.Add(new TimeSpan(0, 5, 0));
+            TestObject[1] = TestTime;
+            return TestObject;
+        }
+
+        void PrepareTestSchedule()
+        {
+            MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests");
+            Schedule TestSchedule = new Schedule();
+            TestSchedule.Clas = "1Б";
+            TestSchedule.StartTimeLessons = DateTime.Now.TimeOfDay;
+            TestSchedule.EndTimeLessons = DateTime.Now.TimeOfDay;
+
+            msDbSetter.SetDelAllSchedulesForTesting();
+            msDbSetter.SetTestScheduleForTesting(TestSchedule);
+
+        }
+
         void PrepareTestEvent()
         {
             MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests");
@@ -60,7 +106,7 @@ namespace eljur_notifier.EljurNS.Tests
             TestEvent.PupilIdOld = 5000;
             TestEvent.EventTime = DateTime.Now.TimeOfDay;
             TestEvent.NotifyWasSend = false;
-            TestEvent.EventName = "Вышел";
+            TestEvent.EventName = "Первый проход";
             msDbSetter.SetDelAllEventsForTesting();
             msDbSetter.SetOneFullEventForTesting(TestEvent);
 
@@ -97,6 +143,7 @@ namespace eljur_notifier.EljurNS.Tests
             msDbSetter.SetDelAllPupilsForTesting();
             msDbSetter.SetOneTestPupilForTesting(TestPupil);
         }
+
 
     }
 }
