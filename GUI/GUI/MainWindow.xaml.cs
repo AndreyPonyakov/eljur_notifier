@@ -42,6 +42,11 @@ namespace GUI
 
             PupulsDataGrid.ItemsSource = table.DefaultView;
 
+            DataGridCheckBoxColumn dchek = new DataGridCheckBoxColumn();
+            dchek.Header = "CheckBox";
+
+            PupulsDataGrid.Columns.Add(dchek);
+
         }
 
         public void CreateTable(DataTable table, List<Pupil> allPupils)
