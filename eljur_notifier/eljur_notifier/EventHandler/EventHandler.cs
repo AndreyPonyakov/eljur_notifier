@@ -18,7 +18,8 @@ namespace eljur_notifier.EventHandlerNS
         public EventHandlerEljur() 
             : base(new Message(), new Config(), new MsDb(), new Firebird(), new TimeChecker(), 
                   new EljurApiSender(), new MsDbCatcherFirstPass(), new MsDbCatcherLastPass(), new MsDbSetter()) { }
- 
+
+
         public async Task GetDataFb(CancellationToken cancellationToken) 
         {
             try
@@ -40,9 +41,7 @@ namespace eljur_notifier.EventHandlerNS
                 message.Display("An unprocessed error has occurred in Task GetDataFb. See log for more information.", "Error", ex);
             }
         }        
-
-      
-
+    
         public async Task CheckTimekMsDb(CancellationToken cancellationToken, Action actionAtMidnight)
         {
             try

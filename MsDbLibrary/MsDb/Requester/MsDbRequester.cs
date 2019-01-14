@@ -146,6 +146,19 @@ namespace MsDbLibraryNS.MsDbNS.RequesterNS
             }
         }
 
+        public List<Pupil> getListAllPupils()
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                var query = from p in StaffCtx.Pupils
+                            select p;
+                var list = new List<Pupil>();
+                list = query.ToList();
+                return list;
+            }
+
+        }
+
 
     }
 }
