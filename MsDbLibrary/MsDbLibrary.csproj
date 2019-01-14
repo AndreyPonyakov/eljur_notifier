@@ -102,7 +102,6 @@
     <Compile Include="MsDb\Filler\MsDbFiller.cs" />
     <Compile Include="MsDb\Filler\ScheduleFiller.cs" />
     <Compile Include="MsDb\Filler\StaffFiller.cs" />
-    <Compile Include="MsDb\MsDb.cs" />
     <Compile Include="MsDb\Requester\MsDbRequester.cs" />
     <Compile Include="MsDb\Setter\MsDbSetter.cs" />
     <Compile Include="MsDb\Updater\MsDbUpdater.cs" />

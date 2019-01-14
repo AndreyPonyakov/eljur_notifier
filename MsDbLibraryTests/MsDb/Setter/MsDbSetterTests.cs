@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using MsDbLibraryNS.MsDbNS.SetterNS;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data.Entity.SqlServer;
 using MsDbLibraryNS.MsDbNS.RequesterNS;
@@ -105,6 +106,32 @@ namespace MsDbLibraryNS.MsDbNS.SetterNS.Tests
             msDbSetter.SetOneTestPupilForTesting(TestPupil);
         }
 
+        [TestMethod()]
+        public void SetUpdatedEventTest()
+        {
+            PrepareTestEvent();
+            Event UpdatedEvent = new Event();
+            UpdatedEvent.PupilIdOld = 5000;
+            UpdatedEvent.EventTime = TimeSpan.FromMilliseconds(1000);
+            UpdatedEvent.NotifyWasSend = false;
+            UpdatedEvent.EventName = "Ушёл не слишком рано";
+            MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests"); ;
+            msDbSetter.SetUpdatedEvent(UpdatedEvent);
+
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            String EventName = msDbRequester.getEventNameByPupilIdOld(5000);
+            msDbSetter.SetDelAllEventsForTesting();
+            Assert.IsTrue(EventName == "Ушёл не слишком рано");
+        }
+
+        [TestMethod()]
+        public void SetOneFullEventForTestingTest()
+        {
+            PrepareTestEvent();
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            String EventName = msDbRequester.getEventNameByPupilIdOld(5000);
+            Assert.IsTrue(EventName == "Ушёл слишком рано");
+        }
     }
 }
 

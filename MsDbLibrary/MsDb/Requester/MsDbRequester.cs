@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using MsDbLibraryNS.StaffModel;
+using System.Collections.Generic;
+
 
 
 
@@ -21,6 +23,18 @@ namespace MsDbLibraryNS.MsDbNS.RequesterNS
             const string chars = "АБВ";
             return new string(Enumerable.Repeat(chars, length)
               .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        public Event getEventdByPupilIdOld(int PupilIdOld)
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                var query = from e in StaffCtx.Events
+                            where e.PupilIdOld == PupilIdOld
+                            select e;
+                Event retEvent = query.SingleOrDefault();
+                return retEvent;
+            }
         }
 
         public int getPupilIdOldByFullFio(String FullFIO)

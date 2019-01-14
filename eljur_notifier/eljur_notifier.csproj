@@ -57,8 +57,9 @@
     <Reference Include="FirebirdSql.Data.FirebirdClient, Version=6.4.0.0, Culture=neutral, PublicKeyToken=3750abcc3150b00c, processorArchitecture=MSIL">
       <HintPath>packages\FirebirdSql.Data.FirebirdClient.6.4.0\lib\net452\FirebirdSql.Data.FirebirdClient.dll</HintPath>
     </Reference>
-    <Reference Include="MsDbLibrary">
-      <HintPath>..\MsDbLibrary.dll</HintPath>
+    <Reference Include="MsDbLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MsDbLibrary\bin\Debug\MsDbLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -133,8 +134,6 @@
   <ItemGroup>
     <Compile Include="eljur_notifier\AppCommon\Config.cs" />
     <Compile Include="eljur_notifier\AppCommon\InheritedClasses\EljurBaseClass.cs" />
-    <Compile Include="eljur_notifier\AppCommon\Message.cs" />
-    <Compile Include="eljur_notifier\AppCommon\SMTP.cs" />
     <Compile Include="eljur_notifier\DbCommon\DbCommon.cs" />
     <Compile Include="eljur_notifier\DbCommon\DbCommonCommunicationInf.cs" />
     <Compile Include="eljur_notifier\Eljur\AllStaffAdder.cs" />
@@ -143,6 +142,7 @@
     <Compile Include="eljur_notifier\EventHandler\EventHandler.cs" />
     <Compile Include="eljur_notifier\FireBird\Firebird.cs" />
     <Compile Include="eljur_notifier\Eljur\EljurApiRequester.cs" />
+    <Compile Include="eljur_notifier\MsDb\MsDb.cs" />
     <Compile Include="eljur_notifier\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">

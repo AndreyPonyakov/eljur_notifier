@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using MsDbLibraryNS.MsDbNS.RequesterNS;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Data.Entity.SqlServer;
 using MsDbLibraryNS.StaffModel;
@@ -130,7 +131,14 @@ namespace MsDbLibraryNS.MsDbNS.RequesterNS.Tests
             msDbSetter.SetTestScheduleForTesting(TestSchedule);
         }
 
-
+        [TestMethod()]
+        public void getEventdByPupilIdOldTest()
+        {
+            PrepareTestEvent();
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            Event retEvent = msDbRequester.getEventdByPupilIdOld(5000);
+            Assert.IsTrue(retEvent.EventName == "Ушёл слишком рано");
+        }
     }
 }
 

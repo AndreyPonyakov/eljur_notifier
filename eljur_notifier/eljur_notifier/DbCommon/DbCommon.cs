@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using eljur_notifier.AppCommonNS;
+using MsDbLibraryNS;
 
 namespace eljur_notifier.DbCommonNS
 {

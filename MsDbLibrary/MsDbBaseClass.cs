@@ -19,7 +19,6 @@ namespace MsDbLibraryNS
         internal protected StaffContext StaffCtx { get; set; }
         internal protected MsDbSetter msDbSetter { get; set; }
         internal protected MsDbRequester msDbRequester { get; set; }
-        internal protected MsDb msDb { get; set; }
         internal protected MsDbCleaner msDbCleaner { get; set; }
         internal protected MsDbChecker msDbChecker { get; set; }
         internal protected MsDbUpdater msDbUpdater { get; set; }

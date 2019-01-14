@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using eljur_notifier.AppCommonNS;
+using MsDbLibraryNS;
 
 namespace eljur_notifier.EljurNS
 {

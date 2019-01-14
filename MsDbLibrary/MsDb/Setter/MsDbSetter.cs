@@ -73,6 +73,22 @@ namespace MsDbLibraryNS.MsDbNS.SetterNS
             }
         }
 
+        public void SetUpdatedEvent(Event UpdatedEvent)
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                var result = StaffCtx.Events.SingleOrDefault(e => e.PupilIdOld == UpdatedEvent.PupilIdOld);
+                if (result != null)
+                {
+                    result.EventName = UpdatedEvent.EventName;
+                    result.EventTime = UpdatedEvent.EventTime;
+                    result.NotifyWasSend = UpdatedEvent.NotifyWasSend;
+                    StaffCtx.SaveChanges();
+                    message.Display("UpdatedEvent success updated", "Warn");
+                }
+            }
+        }
+
         public void SetOneFullEventForTesting(Event TestEvent)
         {
             using (this.StaffCtx = new StaffContext(nameorConnectionString))
