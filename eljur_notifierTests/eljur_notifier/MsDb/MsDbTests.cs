@@ -5,12 +5,15 @@ using System.Collections.Generic;
 using MsDbLibraryNS.StaffModel;
 using MsDbLibraryNS.MsDbNS.SetterNS;
 using MsDbLibraryNS.MsDbNS.RequesterNS;
+using System.Linq;
 
 namespace eljur_notifier.MsDbNS.Tests
 {
     [TestClass()]
     public class MsDbTests
     {
+        public TestContext TestContext { get; set; }
+
         [TestMethod()]
         public void CheckEventsDbTest()
         {
@@ -43,49 +46,115 @@ namespace eljur_notifier.MsDbNS.Tests
         [TestMethod()]
         public void CheckCurEventTest()
         {
-            Assert.Fail();
+            PrepareTestEvent();
+            var TestListEvents = new List<object[]>();
+            TestListEvents = PrepareTestListEvents(1);
+            MsDb msDb = new MsDb("name=StaffContextTests");
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            var curEvent = msDbRequester.getEventdByPupilIdOld(5000);
+            msDb.CheckCurEvent(curEvent, TestListEvents.First(), 5000);
+            String EventName = msDbRequester.getEventNameByPupilIdOld(5000);
+            Assert.IsTrue(EventName == "Первый проход");
         }
 
         [TestMethod()]
         public void RegisterOutputEventTest()
         {
-            Assert.Fail();
+            PrepareTestEvent();
+            var TestListEvents = new List<object[]>();
+            TestListEvents = PrepareTestListEvents(1);
+            MsDb msDb = new MsDb("name=StaffContextTests");
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            var curEvent = msDbRequester.getEventdByPupilIdOld(5000);
+            msDb.RegisterOutputEvent(curEvent, TestListEvents.First(), 5000);
+            String EventName = msDbRequester.getEventNameByPupilIdOld(5000);
+            Assert.IsTrue(EventName == "Вышел");
         }
 
         [TestMethod()]
         public void RegisterInputEventTest()
         {
-            Assert.Fail();
+            PrepareTestEvent();
+            var TestListEvents = new List<object[]>();
+            TestListEvents = PrepareTestListEvents(1);
+            MsDb msDb = new MsDb("name=StaffContextTests");
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            var curEvent = msDbRequester.getEventdByPupilIdOld(5000);
+            msDb.RegisterInputEvent(curEvent, TestListEvents.First(), 5000);
+            String EventName = msDbRequester.getEventNameByPupilIdOld(5000);
+            Assert.IsTrue(EventName == "Вернулся");
         }
 
         [TestMethod()]
         public void AddNewEventTest()
         {
-            Assert.Fail();
+            PrepareTestEvent();
+            MsDbSetter msDbSetter = new MsDbSetter("name=StaffContextTests");
+            msDbSetter.SetDelAllEventsForTesting();
+            var TestListEvents = new List<object[]>();
+            TestListEvents = PrepareTestListEvents(1);
+            MsDb msDb = new MsDb("name=StaffContextTests");
+            MsDbRequester msDbRequester = new MsDbRequester("name=StaffContextTests");
+            msDb.AddNewEvent(TestListEvents.First(), 5000);
+            String EventName = msDbRequester.getEventNameByPupilIdOld(5000);
+            Assert.IsTrue(EventName == "Первый проход");
+
+            msDbSetter.SetDelAllEventsForTesting();
+            TestListEvents = PrepareTestListEvents(3);
+            msDb.AddNewEvent(TestListEvents.First(), 5000);
+            EventName = msDbRequester.getEventNameByPupilIdOld(5000);
+            TestContext.WriteLine(EventName);
+            Assert.IsTrue(EventName == null);
         }
 
         [TestMethod()]
         public void IsInputPassTest()
         {
-            Assert.Fail();
+            MsDb msDb = new MsDb("name=StaffContextTests");
+            Boolean pass = msDb.IsInputPass(8677);
+            Assert.IsTrue(pass);
+            pass = msDb.IsInputPass(9256);
+            Assert.IsTrue(pass);
+            pass = msDb.IsInputPass(8564);
+            Assert.IsFalse(pass);
         }
 
         [TestMethod()]
         public void IsOutputPassTest()
         {
-            Assert.Fail();
+            MsDb msDb = new MsDb("name=StaffContextTests");
+            Boolean pass = msDb.IsOutputPass(8564);
+            Assert.IsTrue(pass);
+            pass = msDb.IsOutputPass(9369);
+            Assert.IsTrue(pass);
+            pass = msDb.IsOutputPass(8677);
+            Assert.IsFalse(pass);
         }
 
         [TestMethod()]
         public void IsInputEventNameTest()
         {
-            Assert.Fail();
+            MsDb msDb = new MsDb("name=StaffContextTests");
+            Boolean res = msDb.IsInputEventName("Первый проход");
+            Assert.IsTrue(res);
+            res = msDb.IsInputEventName("Вернулся");
+            Assert.IsTrue(res);
+            res = msDb.IsInputEventName("Опоздал");
+            Assert.IsTrue(res);
+            res = msDb.IsInputEventName("ПРОСТО СТРОКА");
+            Assert.IsFalse(res);
         }
 
         [TestMethod()]
         public void IsOutPutEventNameTest()
         {
-            Assert.Fail();
+            MsDb msDb = new MsDb("name=StaffContextTests");
+            Boolean res = msDb.IsOutPutEventName("Вышел");
+            Assert.IsTrue(res);
+            res = msDb.IsOutPutEventName("Прогул");
+            Assert.IsTrue(res);
+            res = msDb.IsOutPutEventName("ПРОСТО СТРОКА");
+            Assert.IsFalse(res);
         }
 
 
