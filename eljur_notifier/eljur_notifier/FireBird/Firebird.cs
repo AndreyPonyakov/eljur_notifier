@@ -9,8 +9,8 @@ namespace eljur_notifier.FirebirdNS
     public class Firebird : EljurBaseClass
     {
         internal protected FbConnection dbcon { get; set; }
-        internal protected DateTime beforeDt { get; set; }
-        internal protected DateTime afterDt { get; set; }
+        public DateTime beforeDt { get; set; }
+        public DateTime afterDt { get; set; }
 
         public Firebird() : base(new Message(), new Config())
         {
@@ -75,13 +75,21 @@ namespace eljur_notifier.FirebirdNS
         }
 
 
-        public List<object[]> getStaffByTimeStamp()
+        public List<object[]> getEventsByIntervalRequest(String dateOnlyStr = "today")
         {
             TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(config.IntervalRequest);
             var staff = new List<object[]>();
             SetBeforeDtAndAfterDt(IntervalRequest);
-            String dateOnlyStr = DateTime.Now.ToShortDateString();
-            dateOnlyStr = "01.10.2018"; //NEED COMMENT OUT THIS!!!!!!!!!!!!!!!
+            if (dateOnlyStr == "today")
+            {
+                dateOnlyStr = DateTime.Now.ToShortDateString();
+                dateOnlyStr = "01.10.2018"; //NEED COMMENT OUT THIS!!!!!!!!!!!!!!!
+            }
+            else
+            {
+                dateOnlyStr = "01.10.2018"; //NEED COMMENT OUT THIS!!!!!!!!!!!!!!!
+            }
+              
             String beforeStr = this.beforeDt.ToLongTimeString();
             String afterStr = this.afterDt.ToLongTimeString();
 

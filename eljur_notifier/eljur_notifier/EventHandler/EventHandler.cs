@@ -26,7 +26,7 @@ namespace eljur_notifier.EventHandlerNS
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     DateTime startTime = DateTime.Now;
-                    List<object[]> curEvents = firebird.getStaffByTimeStamp();
+                    List<object[]> curEvents = firebird.getEventsByIntervalRequest();
                     msDb.CheckEventsDb(curEvents);       
                     TimeSpan deltaTime = DateTime.Now - startTime;
                     TimeSpan IntervalRequest = TimeSpan.FromMilliseconds(config.IntervalRequest);
