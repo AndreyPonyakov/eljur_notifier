@@ -17,8 +17,8 @@ namespace eljur_notifier.MsDbNS
         internal protected int treeIdResourceInput1 { get; set; }
         internal protected int treeIdResourceInput2 { get; set; }
 
-        public MsDb(int TreeIdResourceOutput1 = 8564, int TreeIdResourceOutput2 = 9369, int TreeIdResourceInput1 = 8677, int TreeIdResourceInput2 = 9256) 
-            : base(new Message(), new MsDbRequester(), new MsDbSetter()) {
+        public MsDb(String NameorConnectionString = "name=StaffContext", int TreeIdResourceOutput1 = 8564, int TreeIdResourceOutput2 = 9369, int TreeIdResourceInput1 = 8677, int TreeIdResourceInput2 = 9256) 
+            : base(new Message(), new MsDbRequester(NameorConnectionString), new MsDbSetter(NameorConnectionString)) {
             this.treeIdResourceOutput1 = TreeIdResourceOutput1;
             this.treeIdResourceOutput2 = TreeIdResourceOutput2;
             this.treeIdResourceInput1 = TreeIdResourceInput1;
@@ -32,59 +32,137 @@ namespace eljur_notifier.MsDbNS
             {
                 if (row[1] == DBNull.Value)
                 {
+                    message.Display("DBNULL value was skipped", "Warn");
                     continue;
                 }
+
                 var PupilIdOld = Convert.ToInt32(row[1]);
                 message.Display("Событие проход школьника с id " + PupilIdOld.ToString() + " в " + row[0].ToString(), "Trace");
 
                 var result = msDbRequester.getEventdByPupilIdOld(PupilIdOld);      
                 if (result != null)
                 {
-                    if (result.EventName == "Первый проход" || result.EventName == "Вернулся" || result.EventName == "Опоздал")
-                    {
-                        //register only OUTPUT configs_tree_id_resource
-                        if (row[3].ToString() == treeIdResourceOutput1.ToString() || row[3].ToString() == treeIdResourceOutput2.ToString())
-                        {
-                            result.EventName = "Вышел";
-                            result.EventTime = TimeSpan.Parse(row[0].ToString());
-                            result.NotifyWasSend = false;
-                            msDbSetter.SetUpdatedEvent(result);
-                            message.Display("Школьник с id " + PupilIdOld + " вышел из школы в " + row[0].ToString(), "Trace");
-                        }
-
-                    }
-                    else if (result.EventName == "Вышел" || result.EventName == "Прогул")
-                    {
-                        //register only INPUT configs_tree_id_resource
-                        if (row[3].ToString() == treeIdResourceInput1.ToString() || row[3].ToString() == treeIdResourceInput2.ToString())
-                        {                   
-                            result.EventName = "Вернулся";
-                            result.EventTime = TimeSpan.Parse(row[0].ToString());
-                            result.NotifyWasSend = false;
-                            msDbSetter.SetUpdatedEvent(result);
-                            message.Display("Школьник с id " + PupilIdOld + "  вернулся в школу в " + row[0].ToString(), "Trace");
-                        }
-                    }
+                    CheckCurEvent(result, row, PupilIdOld);
                 }
                 else
                 {
-                    //register only INPUT configs_tree_id_resource
-                    if (row[3].ToString() == treeIdResourceInput1.ToString() || row[3].ToString() == treeIdResourceInput2.ToString())
-                    {
-                        Event Event = new Event();
-                        Event.PupilIdOld = PupilIdOld;
-                        Event.EventTime = TimeSpan.Parse(row[0].ToString());
-                        Event.EventName = "Первый проход";
-                        msDbSetter.SetOneFullEventForTesting(Event);
-                        message.Display("Школьник с id " + PupilIdOld + "  пришёл в школу в " + row[0].ToString(), "Trace");
-                    }
+                    AddNewEvent(row, PupilIdOld);
                 }
             }
             
         }
 
-          
-       
+
+        public void CheckCurEvent(Event curEvent, object[] row, int PupilIdOld)
+        {
+            if (IsInputEventName(curEvent.EventName))
+            {
+                //register only OUTPUT configs_tree_id_resource
+                if (IsOutputPass(row[3]))
+                {
+                    RegisterOutputEvent(curEvent, row, PupilIdOld);
+                }
+
+            }
+            else if (IsOutPutEventName(curEvent.EventName))
+            {
+                //register only INPUT configs_tree_id_resource
+                if (IsInputPass(row[3]))
+                {
+                    RegisterInputEvent(curEvent, row, PupilIdOld);
+                }
+            }
+
+        }
+
+        public void RegisterOutputEvent(Event CurEvent, object[] row, int PupilIdOld)
+        {
+            CurEvent.EventName = "Вышел";
+            CurEvent.EventTime = TimeSpan.Parse(row[0].ToString());
+            CurEvent.NotifyWasSend = false;
+            msDbSetter.SetUpdatedEvent(CurEvent);
+            message.Display("Школьник с id " + PupilIdOld + " вышел из школы в " + row[0].ToString(), "Trace");
+        }
+
+        public void RegisterInputEvent(Event CurEvent, object[] row, int PupilIdOld)
+        {
+            CurEvent.EventName = "Вернулся";
+            CurEvent.EventTime = TimeSpan.Parse(row[0].ToString());
+            CurEvent.NotifyWasSend = false;
+            msDbSetter.SetUpdatedEvent(CurEvent);
+            message.Display("Школьник с id " + PupilIdOld + "  вернулся в школу в " + row[0].ToString(), "Trace");
+        }
+
+
+        public void AddNewEvent(object[] row, int PupilIdOld)
+        {
+            //register only INPUT configs_tree_id_resource
+            if (IsInputPass(row[3]))
+            {
+                Event Event = new Event();
+                Event.PupilIdOld = PupilIdOld;
+                Event.EventTime = TimeSpan.Parse(row[0].ToString());
+                Event.EventName = "Первый проход";
+                msDbSetter.SetOneFullEventForTesting(Event);
+                message.Display("Школьник с id " + PupilIdOld + "  пришёл в школу в " + row[0].ToString(), "Trace");
+            }
+
+        }
+
+        public Boolean IsInputPass(object CurTreeIdResource)
+        {
+            if (CurTreeIdResource.ToString() == treeIdResourceInput1.ToString() || CurTreeIdResource.ToString() == treeIdResourceInput2.ToString())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Boolean IsOutputPass(object CurTreeIdResource)
+        {
+            if (CurTreeIdResource.ToString() == treeIdResourceOutput1.ToString() || CurTreeIdResource.ToString() == treeIdResourceOutput2.ToString())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Boolean IsInputEventName(String CurEventName)
+        {
+            if (CurEventName == "Первый проход" || CurEventName == "Вернулся" || CurEventName == "Опоздал")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public Boolean IsOutPutEventName(String CurEventName)
+        {
+            if (CurEventName == "Вышел" || CurEventName == "Прогул")
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+
+
+
+
+
 
     }
 }

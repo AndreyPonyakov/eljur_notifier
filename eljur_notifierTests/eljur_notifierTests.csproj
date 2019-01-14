@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="eljur_notifier\Eljur\AllStaffAdderTests.cs" />
     <Compile Include="eljur_notifier\Eljur\EljurApiSenderTests.cs" />
+    <Compile Include="eljur_notifier\MsDb\MsDbTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
