@@ -48,8 +48,9 @@ namespace eljur_notifier.EventHandlerNS
                 appRunner.Run(args);
             }));
 
-            Console.ReadKey();
-            //while (true) { }
+            //Console.ReadKey();
+            //while (true) { };
+            while (true) {Console.ReadKey();}
         }
 
 
