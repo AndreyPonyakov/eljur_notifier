@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Data;
 using MsDbLibraryNS.MsDbNS.RequesterNS;
+using MsDbLibraryNS.MsDbNS.SetterNS;
 using MsDbLibraryNS.StaffModel;
 using System.Threading;
 
@@ -29,7 +30,6 @@ namespace GUI
             InitializeComponent();
 
         }
-
 
         //Загрузка содержимого таблицы
         private void DataGrid_Loaded(object sender, RoutedEventArgs e)
@@ -70,76 +70,29 @@ namespace GUI
 
         }
 
+        //Запись в базу
         private void cellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-
-            //MessageBox.Show("ddsjkfgsd");
-            //Only handles cases where the cell contains a TextBox
             var editedCheckbox = e.EditingElement as CheckBox;
-
+           
             if (editedCheckbox != null)
             {
                 bool flag = editedCheckbox.IsChecked.Value;
 
-                MessageBox.Show(flag.ToString());
-                //MessageBox.Show("Value after edit: " + editedCheckbox.Content.ToString());
-                //MessageBox.Show("Value after edit: " + editedCheckbox.ToString());
+                DataGridRow CurRow = e.Row;
+                object data = CurRow.Item;
+                DataRowView drv = data as DataRowView;
+
+                //MessageBox.Show(drv[3].ToString());
+                //MessageBox.Show(flag.ToString());
+
+                MsDbSetter MsDbSetter = new MsDbSetter();
+                MsDbSetter.SetNotifyEnableByPupilIdOld(Convert.ToInt32(drv[3]), flag);
             }
                 
         }
 
-
-        private void PupulsDataGrid_GotFocus(object sender, RoutedEventArgs e)
-        {
-            DataGridCell cell = e.OriginalSource as DataGridCell;
-            if (cell != null && cell.Column is DataGridCheckBoxColumn)
-            {
-                PupulsDataGrid.BeginEdit();
-                CheckBox chkBox = cell.Content as CheckBox;
-                if (chkBox != null)
-                {
-                    chkBox.IsChecked = !chkBox.IsChecked;
-                    MessageBox.Show(chkBox.IsChecked.ToString());
-                }
-            }
-        }
-
-
-
-
-        //private void PupulsDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        //{
-
-        //    MessageBox.Show(e.RowIndex.ToString() + " and " + e.ColumnIndex.ToString());
-
-        //}
-
-
-        //void DataGrid_CurrentCellChanged(object sender, DataGridViewCellEventArgs e)
-        //{
-        //    DataRowView drv = PupulsDataGrid.CurrentCell.Item as DataRowView;
-        //    if (drv != null)
-        //    {
-        //        MessageBox.Show(drv[4].ToString());
-        //    }
-
-        //}
-
-
-
-        private void PupulsDataGrid_CurrentCellChanged(object sender, EventArgs e)
-        {
-            DataRowView drv = PupulsDataGrid.CurrentCell.Item as DataRowView;
-            if (drv != null)
-            {
-                //MessageBox.Show(drv[4].ToString());
-                //textBox1.Text = drv.Row[0].ToString();
-                //textBox2.Text = drv.Row[1].ToString();
-            }
-        }
-
-
-        //good
+        //Запрет редактирования всех полей кроме чекбоксов
         private static void DataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             //Actual content of the DataGridCell
@@ -154,17 +107,10 @@ namespace GUI
 
         }
 
-
-        //Получаем данные из таблицы
-        private void DataGrid_MouseUp(object sender, SelectionChangedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            DataRowView drv = PupulsDataGrid.CurrentCell.Item as DataRowView;
-            DataTable path = PupulsDataGrid.SelectedItem as DataTable;
-            //MessageBox.Show(" ИдЭлЖур: " + path.Rows[0] + "\n ФИО: " + path.Rows[0] + "\n Класс: " + path.Rows[0]
-            //    + "\n СкудИД: " + path.Rows[0] + "\n Уведомления: " + path.Rows[0]);
-            //MessageBox.Show(drv[4].ToString());
+            MessageBox.Show("Данные успешно сохранены");
         }
-
     }
 
     class MyTable

@@ -167,6 +167,21 @@ namespace MsDbLibraryNS.MsDbNS.SetterNS
         }
 
 
+        public void SetNotifyEnableByPupilIdOld(int PupilIdOld, bool NotifyEnable)
+        {
+            using (this.StaffCtx = new StaffContext(nameorConnectionString))
+            {
+                var result = StaffCtx.Pupils.SingleOrDefault(p => p.PupilIdOld == PupilIdOld);
+                if (result != null)
+                {
+                    result.NotifyEnable = NotifyEnable;
+                    StaffCtx.SaveChanges();
+                    message.Display("Status NotifyWasSend to " + PupilIdOld + " PupilIdOld was set", "Trace");
+                }
+            }
+        }
+
+
 
     }
 }
