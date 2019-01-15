@@ -111,6 +111,11 @@ namespace GUI
         {
             MessageBox.Show("Данные успешно сохранены");
         }
+
+        private void PupulsDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 
     class MyTable
