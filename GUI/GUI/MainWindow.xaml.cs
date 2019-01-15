@@ -70,7 +70,76 @@ namespace GUI
 
         }
 
+        private void cellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
 
+            //MessageBox.Show("ddsjkfgsd");
+            //Only handles cases where the cell contains a TextBox
+            var editedCheckbox = e.EditingElement as CheckBox;
+
+            if (editedCheckbox != null)
+            {
+                bool flag = editedCheckbox.IsChecked.Value;
+
+                MessageBox.Show(flag.ToString());
+                //MessageBox.Show("Value after edit: " + editedCheckbox.Content.ToString());
+                //MessageBox.Show("Value after edit: " + editedCheckbox.ToString());
+            }
+                
+        }
+
+
+        private void PupulsDataGrid_GotFocus(object sender, RoutedEventArgs e)
+        {
+            DataGridCell cell = e.OriginalSource as DataGridCell;
+            if (cell != null && cell.Column is DataGridCheckBoxColumn)
+            {
+                PupulsDataGrid.BeginEdit();
+                CheckBox chkBox = cell.Content as CheckBox;
+                if (chkBox != null)
+                {
+                    chkBox.IsChecked = !chkBox.IsChecked;
+                    MessageBox.Show(chkBox.IsChecked.ToString());
+                }
+            }
+        }
+
+
+
+
+        //private void PupulsDataGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        //{
+
+        //    MessageBox.Show(e.RowIndex.ToString() + " and " + e.ColumnIndex.ToString());
+
+        //}
+
+
+        //void DataGrid_CurrentCellChanged(object sender, DataGridViewCellEventArgs e)
+        //{
+        //    DataRowView drv = PupulsDataGrid.CurrentCell.Item as DataRowView;
+        //    if (drv != null)
+        //    {
+        //        MessageBox.Show(drv[4].ToString());
+        //    }
+
+        //}
+
+
+
+        private void PupulsDataGrid_CurrentCellChanged(object sender, EventArgs e)
+        {
+            DataRowView drv = PupulsDataGrid.CurrentCell.Item as DataRowView;
+            if (drv != null)
+            {
+                //MessageBox.Show(drv[4].ToString());
+                //textBox1.Text = drv.Row[0].ToString();
+                //textBox2.Text = drv.Row[1].ToString();
+            }
+        }
+
+
+        //good
         private static void DataGrid_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             //Actual content of the DataGridCell
@@ -78,19 +147,22 @@ namespace GUI
             //MessageBox.Show(content.GetType().ToString());
             string type = content.GetType().ToString();
 
-            if (type!="System.Windows.Controls.CheckBox")
+            if (type != "System.Windows.Controls.CheckBox")
             {
                 e.Cancel = true;
-            }
+            }     
+
         }
 
 
         //Получаем данные из таблицы
         private void DataGrid_MouseUp(object sender, SelectionChangedEventArgs e)
         {
+            DataRowView drv = PupulsDataGrid.CurrentCell.Item as DataRowView;
             DataTable path = PupulsDataGrid.SelectedItem as DataTable;
             //MessageBox.Show(" ИдЭлЖур: " + path.Rows[0] + "\n ФИО: " + path.Rows[0] + "\n Класс: " + path.Rows[0]
             //    + "\n СкудИД: " + path.Rows[0] + "\n Уведомления: " + path.Rows[0]);
+            //MessageBox.Show(drv[4].ToString());
         }
 
     }
